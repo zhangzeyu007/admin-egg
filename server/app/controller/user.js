@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-10 15:19:23
+ * @LastEditTime: 2021-02-10 18:00:16
  */
 'use strict';
 const BaseController = require('./base');
@@ -19,7 +19,10 @@ const getUserListRule = {
   },
 };
 
+const delUserRule = {};
+
 class UserController extends BaseController {
+  // 添加用户
   async addAdminUser() {
     const { ctx, app, service } = this;
     // 校验传递的参数
@@ -42,10 +45,9 @@ class UserController extends BaseController {
   // 获取用户列表
   async getUserList() {
     const { ctx, app, service } = this;
-
     // 校验传递的参数
     const errors = app.validator.validate(getUserListRule, ctx.request.body);
-    console.log(errors);
+
     if (errors) {
       return this.error('参数校验失败', -1, errors);
     }
@@ -55,6 +57,22 @@ class UserController extends BaseController {
     // 查询结果
     const response = await service.user.getUserList(payload);
     this.success(response);
+  }
+  // 删除用户
+  async delUser() {
+    const { ctx, app, service } = this;
+    // 校验传递的参数
+    const errors = app.validator.validate(delUserRule, ctx.request.body);
+
+    if (errors) {
+      return this.error('参数校验失败', -1, errors);
+    }
+
+    // 组装参数
+    const payload = ctx.request.body || {};
+    // 查询结果
+    const response = await service.user.delUser(payload);
+
   }
 }
 

@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:21:47
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-09 22:05:00
+ * @LastEditTime: 2021-02-10 17:53:54
  */
 'use strict';
 
@@ -16,4 +16,5 @@ module.exports = app => {
   router.get('/user/captcha', controller.util.captcha);
   router.post('/user/adduser', controller.user.addAdminUser);
   router.post('/user/getuserlist', controller.user.getUserList);
+  router.post('/user/deluser', controller.user.delUser);
 };
