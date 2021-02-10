@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-10 09:55:58
+ * @LastEditTime: 2021-02-10 15:19:23
  */
 'use strict';
 const BaseController = require('./base');
@@ -14,7 +14,7 @@ const addUserRule = {
   role: { required: true, type: 'string' },
 };
 const getUserListRule = {
-  currentPage: {
+  pageNum: {
     required: true, type: 'string',
   },
 };

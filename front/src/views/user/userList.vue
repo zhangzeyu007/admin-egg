@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 10:16:53
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-10 12:39:15
+ * @LastEditTime: 2021-02-10 17:42:24
 -->
 <template>
   <div class="userList">
@@ -32,17 +32,25 @@
           prop="roleName"
           align="center"
         ></el-table-column>
+        <el-table-column label="创建时间" align="center">
+          <template slot-scope="tableData">
+            {{ tableData.row.createdAt | formate }}
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-              >编辑</el-button
-            >
             <el-button
               size="mini"
+              type="primary"
+              icon="el-icon-edit"
+              @click="handleEdit(scope.$index, scope.row)"
+            ></el-button>
+            <el-button
+              icon="el-icon-delete"
+              size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)"
-              >删除</el-button
-            >
+              @click="handleDelete(scope.row)"
+            ></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -51,7 +59,7 @@
           style="width: 100%"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="pages.currentPage"
+          :current-page="pages.pageNum"
           :page-sizes="[5, 10, 20, 50]"
           :page-size="pages.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
@@ -110,6 +118,7 @@
 
 <script>
 import { Message } from "element-ui";
+import moment from "moment";
 export default {
   data() {
     return {
@@ -157,7 +166,7 @@ export default {
       pages: {
         totalPage: 10,
         pageSize: 10,
-        currentPage: 1,
+        pageNum: 1,
       },
       tableData: [],
     };
@@ -165,17 +174,25 @@ export default {
   created() {
     this.getUserListData();
   },
+  filters: {
+    formate(v) {
+      return moment(v).format("YYYY-MM-DD HH:mm");
+    },
+  },
   methods: {
     handleSizeChange(val) {
       this.pages.pageSize = val;
+      this.pageNum = 1;
       this.getUserListData();
     },
     handleCurrentChange(val) {
-      this.pages.currentPage = val;
+      this.pages.pageNum = val;
       this.getUserListData();
     },
     handleEdit() {},
-    handleDelete() {},
+    handleDelete(item) {
+      console.log(item._id);
+    },
     addUserComfirm() {
       this.$refs.addFormRules.validate((valid) => {
         if (valid) {
