@@ -1,0 +1,241 @@
+<!--
+ * @Description: 组件
+ * @Author: 海象
+ * @Date: 2021-02-04 12:14:06
+ * @LastEditors: 海象
+ * @LastEditTime: 2021-02-09 19:30:05
+-->
+<template>
+  <div id="login">
+    <div class="login-main">
+      <div class="avatar-box">
+        <img src="../assets/logo.jpg" alt="" />
+      </div>
+      <div class="login-form">
+        <el-form ref="loginForm" :model="form" label-width="60px">
+          <el-form-item label="用户名">
+            <el-input
+              v-model="form.userName"
+              prefix-icon="el-icon-user-solid"
+              clearable
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input
+              v-model="form.password"
+              prefix-icon="el-icon-unlock"
+              clearable
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="captcha" label="验证码" class="captcha-container">
+            <el-row>
+              <el-col :span="16">
+                <el-input
+                  v-model="form.captcha"
+                  placeholder="请输入验证码"
+                ></el-input>
+              </el-col>
+              <el-col :span="4">
+                <div class="captcha">
+                  <div v-html="captcha" @click="resetCaptcha"></div>
+                </div>
+              </el-col>
+            </el-row>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div class="login-button">
+        <div class="login-info">
+          <el-checkbox v-model="checked">记住密码</el-checkbox>
+        </div>
+        <div class="login-footer">
+          <el-row>
+            <el-col :span="12"></el-col>
+            <el-col :span="12">
+              <el-button
+                type="primary"
+                icon="el-icon-mobile-phone"
+                size="medium"
+                >登录</el-button
+              >
+              <el-button type="info" icon="el-icon-refresh" size="medium"
+                >重置</el-button
+              >
+            </el-col>
+          </el-row>
+        </div>
+      </div>
+      <!-- <div class="register" @click="goRegister">注册</div> -->
+    </div>
+    <video
+      id="video"
+      src="../assets/video_back.mp4"
+      autoplay="autoplay"
+      muted
+      loop
+    ></video>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      form: {
+        userName: "",
+        password: "",
+        captcha: "",
+      },
+      captcha: "",
+      checked: true,
+    };
+  },
+  created() {
+    this.resetCaptcha();
+  },
+  methods: {
+    goRegister() {
+      this.$router.push("/register");
+    },
+    resetCaptcha() {
+      this.$api.user
+        .getCaptcha()
+        .then((response) => {
+          this.captcha = response;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+};
+</script>
+
+<style  lang="less" scoped>
+#login {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.el-col {
+  border: 1px solid transparent;
+}
+.login-main {
+  width: 450px;
+  height: 350px;
+  background-color: #fff;
+  opacity: 0.9;
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 25px rgb(197, 197, 197);
+  z-index: 1000;
+  .avatar-box {
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+    border-radius: 50%;
+    border: 1px solid #eeee;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgb(197, 197, 197);
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+  }
+}
+.login-form {
+  padding: 0px 20px;
+  margin-top: 70px;
+  box-sizing: border-box;
+}
+.login-button {
+  margin-top: 15px;
+}
+.btn {
+  font-size: 16px;
+  padding: 15px 80px;
+  box-sizing: border-box;
+}
+#video {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  transform: scaleX(1.4);
+  z-index: -100;
+}
+@media (max-width: 1250px) {
+  .login-main {
+    display: none;
+  }
+  #video {
+    width: 100%;
+    height: 100%;
+    transform: scale(1.5);
+    z-index: -100;
+  }
+}
+@media (max-width: 846px) {
+  .login-main {
+    display: none;
+  }
+  #video {
+    width: 100%;
+    height: 100%;
+    transform: scale(3);
+    z-index: -100;
+  }
+}
+@media (max-width: 378px) {
+  .login-main {
+    display: none;
+  }
+  #video {
+    width: 100%;
+    height: 100%;
+    transform: scale(5);
+    z-index: -100;
+  }
+}
+@media (max-height: 600px) {
+  #video {
+    width: 100%;
+    height: 100%;
+    transform: scale(2);
+    z-index: -100;
+  }
+}
+@media (max-height: 400px) {
+  #video {
+    width: 100%;
+    height: 100%;
+    transform: scale(5);
+    z-index: -100;
+  }
+}
+.login-info {
+  padding: 0 35px;
+  box-sizing: border-box;
+}
+.login-footer {
+  // margin-top: 5px;
+}
+.register {
+  position: absolute;
+  right: 50px;
+  bottom: 50px;
+  color: #409eff;
+}
+.captcha-icon {
+  width: 100px;
+  height: 40px;
+}
+</style>
