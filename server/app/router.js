@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:21:47
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-10 17:53:54
+ * @LastEditTime: 2021-02-10 22:20:13
  */
 'use strict';
 
@@ -17,4 +17,5 @@ module.exports = app => {
   router.post('/user/adduser', controller.user.addAdminUser);
   router.post('/user/getuserlist', controller.user.getUserList);
   router.post('/user/deluser', controller.user.delUser);
+  router.post('/user/updateuser', controller.user.updateUser);
 };

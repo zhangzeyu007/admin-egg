@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-10 20:16:26
+ * @LastEditTime: 2021-02-10 23:53:17
  */
 'use strict';
 
@@ -61,7 +61,13 @@ class UserService extends Service {
   }
   // 删除用户
   async delUser(payLoad) {
-    console.log(payLoad);
+    const { ctx } = this;
+    return await ctx.model.AdminUser.findByIdAndDelete(payLoad.userid);
+
+  }
+  async updateUser(payLoad) {
+    const { ctx } = this;
+    return await ctx.model.AdminUser.findById(payLoad.userid).update({ role: payLoad.role, password: payLoad.password });
   }
 }
 

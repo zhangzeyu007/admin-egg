@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 10:16:53
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-10 17:42:24
+ * @LastEditTime: 2021-02-10 23:56:02
 -->
 <template>
   <div class="userList">
@@ -43,7 +43,7 @@
               size="mini"
               type="primary"
               icon="el-icon-edit"
-              @click="handleEdit(scope.$index, scope.row)"
+              @click="handleEdit(scope.row)"
             ></el-button>
             <el-button
               icon="el-icon-delete"
@@ -68,7 +68,7 @@
         </el-pagination>
       </div>
     </el-card>
-    <!-- 弹窗 -->
+    <!-- 添加用户弹窗 -->
     <el-dialog
       title="添加用户"
       :visible.sync="addUserDialog"
@@ -113,12 +113,59 @@
         <el-button type="primary" @click="addUserComfirm">确 定 </el-button>
       </span>
     </el-dialog>
+    <!-- 修改弹窗 -->
+    <el-dialog
+      title="修改用户信息"
+      :visible.sync="editUserDialog"
+      width="35%"
+      close-on-click-modal
+    >
+      <el-form
+        ref="editFormRules"
+        :model="editForm"
+        label-width="100px"
+        :rules="editUserRules"
+      >
+        <el-form-item label="用户名" prop="username">
+          <el-input
+            v-model="editForm.username"
+            prefix-icon="el-icon-user-solid"
+            clearable
+            disabled
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input
+            v-model="editForm.password"
+            type="password"
+            prefix-icon="el-icon-unlock"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="角色" prop="role">
+          <el-select v-model="editForm.role" placeholder="请选择">
+            <el-option
+              v-for="item in roleOptions"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editUserDialog = false"> 取 消 </el-button>
+        <el-button type="primary" @click="editUserComfirm">确 定 </el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { Message } from "element-ui";
 import moment from "moment";
+// import md5 from "md5";
 export default {
   data() {
     return {
@@ -128,7 +175,41 @@ export default {
         password: "",
         role: "",
       },
+      editForm: {
+        username: "",
+        password: "",
+        role: "",
+      },
       addUserRules: {
+        username: [
+          {
+            required: true,
+            message: "请输入用户名",
+            trigger: "change",
+          },
+          {
+            min: 3,
+            max: 20,
+            message: "长度在 3 到 20个字符",
+            trigger: "change",
+          },
+        ],
+        password: [
+          {
+            required: true,
+            message: "请输入密码",
+            trigger: "change",
+          },
+        ],
+        role: [
+          {
+            required: true,
+            message: "请选择用户身份",
+            trigger: "change",
+          },
+        ],
+      },
+      editUserRules: {
         username: [
           {
             required: true,
@@ -163,12 +244,14 @@ export default {
         { name: "客服", value: "2" },
       ],
       addUserDialog: false,
+      editUserDialog: false,
       pages: {
         totalPage: 10,
         pageSize: 10,
         pageNum: 1,
       },
       tableData: [],
+      userid: "",
     };
   },
   created() {
@@ -189,9 +272,49 @@ export default {
       this.pages.pageNum = val;
       this.getUserListData();
     },
-    handleEdit() {},
+    handleEdit(item) {
+      this.editUserDialog = true;
+      this.userid = item._id;
+      this.editForm.username = item.username;
+      this.editForm.role = String(item.role);
+    },
+    // 修改提交
+    editUserComfirm() {
+      this.$refs.editFormRules.validate((valid) => {
+        if (valid) {
+          this.$api.user
+            .updateUser({ userid: this.userid, ...this.editForm })
+            .then((res) => {
+              console.log(res.code);
+              if (res.code == 200) {
+                Message({
+                  message: "修改成功",
+                  type: "success",
+                });
+                this.resetForm("edit");
+                this.getUserListData();
+              }
+              if (res.code == -1) {
+                Message({
+                  message: "修改失败",
+                  type: "warning",
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      });
+    },
     handleDelete(item) {
       console.log(item._id);
+      this.$api.user.delUser({ userid: item._id }).then((res) => {
+        console.log(res);
+        if (res.code == 200) {
+          this.getUserListData();
+        }
+      });
     },
     addUserComfirm() {
       this.$refs.addFormRules.validate((valid) => {
@@ -204,7 +327,7 @@ export default {
                   message: res.message,
                   type: "success",
                 });
-                this.resetForm();
+                this.resetForm("add");
                 this.getUserListData();
               }
               if (res.code == -1) {
@@ -221,13 +344,24 @@ export default {
       });
     },
     // 重置form表单
-    resetForm() {
-      this.addUserDialog = false;
-      this.addForm.username = "";
-      this.addForm.password = "";
-      this.addForm.role = "";
-      this.$refs["addFormRules"].resetFields();
+    resetForm(name) {
+      if (name === "add") {
+        this.addUserDialog = false;
+        this.addForm.username = "";
+        this.addForm.password = "";
+        this.addForm.role = "";
+        this.$refs["addFormRules"].resetFields();
+      }
+      if (name === "edit") {
+        this.editUserDialog = false;
+        this.editForm.username = "";
+        this.editForm.password = "";
+        this.editForm.role = "";
+        this.$refs["editFormRules"].resetFields();
+      }
     },
+
+    // 获取table数据
     getUserListData() {
       this.$api.user
         .getUserList(this.pages)
