@@ -3,45 +3,19 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-06 19:46:33
+ * @LastEditTime: 2021-02-12 14:25:33
  */
+
 import Vue from "vue";
 import VueRouter from "vue-router";
+import menuRouteList from './menu/menuRoutes.js'
+import goodsRouteList from './goods/goodsRoutes.js'
+import userRouteList from './user/userRoutes.js'
 
 Vue.use(VueRouter);
 // 2.声明一个路由表
 // 通用页面: 不需要守卫, 可以直接访问
 export const constRoutes = [
-  {
-    path: "/",
-    name: "Home",
-    meta: {
-      title: "Home" // 导航菜单项标题
-    },
-    component: () => import("@/views/Home"),
-    children: [
-      {
-        path: "/goodslist",
-        name: "GoodsList",
-        component: () => import("@/views/goods/goodsList.vue")
-      },
-      {
-        path: "/goodsdetail",
-        name: "GoodsDetail",
-        component: () => import("@/views/goods/goodsDetail.vue")
-      },
-      {
-        path: "/userlist",
-        name: "UserList",
-        component: () => import("@/views/user/userList.vue")
-      },
-      {
-        path: "/userrole",
-        name: "UserRole",
-        component: () => import("@/views/user/userRole.vue")
-      },
-    ]
-  },
   {
     path: "/login",
     name: "Login",
@@ -56,7 +30,19 @@ export const constRoutes = [
     },
     component: () => import("@/views/Register")
   },
-
+  {
+    path: "/",
+    name: "Home",
+    meta: {
+      title: "Home" // 导航菜单项标题
+    },
+    component: () => import("@/views/Home"),
+    children: [
+      ...goodsRouteList.routes,
+      ...menuRouteList.routes,
+      ...userRouteList.routes
+    ]
+  }
 ];
 // 权限页面: 受保护的页面, 要求用户登录并拥有访问权限的角色才能访问
 export const asyncRoutes = [
@@ -71,6 +57,7 @@ export const asyncRoutes = [
     // component: () => import("@/views/About")
   }
 ];
+console.log(constRoutes);
 
 export default new VueRouter({
   mode: "history",

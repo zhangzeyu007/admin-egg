@@ -3,13 +3,31 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-10 23:53:17
+ * @LastEditTime: 2021-02-12 14:55:23
  */
 'use strict';
 
 const Service = require('egg').Service;
 
 class UserService extends Service {
+  async Login(payLoad) {
+    // const { ctx } = this;
+    // const result = {
+    //   code: '',
+    // };
+    // payLoad.password = await ctx.genHash(payLoad.password);
+
+    // const isEmpty = await ctx.model.AdminUser.findOne({
+    //   $or: [
+    //     { username: payLoad.username },
+    //     { password: payLoad.password },
+    //   ],
+    // });
+    // if (isEmpty) { }
+
+
+    // return result;
+  }
   // 添加用户
   async addUser(payLoad) {
     const { ctx } = this;
@@ -65,10 +83,18 @@ class UserService extends Service {
     return await ctx.model.AdminUser.findByIdAndDelete(payLoad.userid);
 
   }
+  // 更新用户接口
   async updateUser(payLoad) {
     const { ctx } = this;
     return await ctx.model.AdminUser.findById(payLoad.userid).update({ role: payLoad.role, password: payLoad.password });
   }
+
+  // 查询接口
+  async searchUser(payLoad) {
+    const { ctx } = this;
+    return await ctx.model.AdminUser.find({ username: payLoad.username });
+  }
+
 }
 
 module.exports = UserService;

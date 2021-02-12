@@ -3,16 +3,18 @@
  * @Author: 海象
  * @Date: 2021-02-06 10:16:53
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-10 23:56:02
+ * @LastEditTime: 2021-02-12 12:13:05
 -->
 <template>
   <div class="userList">
     <el-card>
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input placeholder="请输入内容" v-model="search">
-            <el-button slot="append" icon="el-icon-search"></el-button>
-          </el-input>
+          <el-form>
+            <el-form-item label="查询" label-width="80px">
+              <el-input placeholder="请输用户名" v-model="search"> </el-input>
+            </el-form-item>
+          </el-form>
         </el-col>
         <el-col :span="4">
           <el-button type="primary" @click="addUserDialog = true"
@@ -21,7 +23,12 @@
         </el-col>
       </el-row>
       <!-- table内容区 -->
-      <el-table :data="tableData" style="margin-top: 20px" border size="medium">
+      <el-table
+        :data="tableDatas"
+        style="margin-top: 20px"
+        border
+        size="medium"
+      >
         <el-table-column
           label="用户名"
           prop="username"
@@ -262,6 +269,18 @@ export default {
       return moment(v).format("YYYY-MM-DD HH:mm");
     },
   },
+  computed: {
+    tableDatas() {
+      const search = String(this.search).toLowerCase();
+      if (search) {
+        return this.tableData.filter((data) => {
+          return String(data.username).toLowerCase().indexOf(search) > -1;
+        });
+      }
+
+      return this.tableData;
+    },
+  },
   methods: {
     handleSizeChange(val) {
       this.pages.pageSize = val;
@@ -272,6 +291,7 @@ export default {
       this.pages.pageNum = val;
       this.getUserListData();
     },
+    // 修改按钮
     handleEdit(item) {
       this.editUserDialog = true;
       this.userid = item._id;
@@ -307,8 +327,8 @@ export default {
         }
       });
     },
+    // 删除按钮
     handleDelete(item) {
-      console.log(item._id);
       this.$api.user.delUser({ userid: item._id }).then((res) => {
         console.log(res);
         if (res.code == 200) {
@@ -316,6 +336,7 @@ export default {
         }
       });
     },
+    // 添加用户提交
     addUserComfirm() {
       this.$refs.addFormRules.validate((valid) => {
         if (valid) {
@@ -360,7 +381,6 @@ export default {
         this.$refs["editFormRules"].resetFields();
       }
     },
-
     // 获取table数据
     getUserListData() {
       this.$api.user

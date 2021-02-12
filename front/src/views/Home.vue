@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-10 10:50:29
+ * @LastEditTime: 2021-02-12 12:46:13
 -->
 <template>
   <el-container>
@@ -105,9 +105,9 @@ export default {
         },
         {
           id: "201",
-          authName: "权限管理",
+          authName: "用户管理",
           path: "",
-          icon: "jigouguanli",
+          icon: "gangweiguanli",
           children: [
             {
               id: "202",
@@ -120,6 +120,20 @@ export default {
               authName: "权限",
               path: "userrole",
               icon: "quanxianguanli",
+            },
+          ],
+        },
+        {
+          id: "301",
+          authName: "菜单管理",
+          path: "",
+          icon: "fenleiguanli",
+          children: [
+            {
+              id: "302",
+              authName: "菜单列表",
+              path: "menulist",
+              icon: "jixiaoguanli",
             },
           ],
         },

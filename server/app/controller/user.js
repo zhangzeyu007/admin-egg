@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-10 23:00:18
+ * @LastEditTime: 2021-02-12 13:06:00
  */
 'use strict';
 const BaseController = require('./base');
@@ -14,6 +14,7 @@ const addUserRule = {
   username: { required: true, type: 'string' },
   role: { required: true, type: 'string' },
 };
+
 const getUserListRule = {
   pageNum: {
     required: true, type: 'string',
@@ -34,6 +35,19 @@ const updateUserRule = {
 };
 
 class UserController extends BaseController {
+  async Login() {
+    const { ctx, app, service } = this;
+    // 校验传递的参数
+    const errors = app.validator.validate(addUserRule, ctx.request.body);
+    if (errors) {
+      return this.error('参数校验失败', -1, errors);
+    }
+    // 组装参数
+    const payload = ctx.request.body || {};
+    const res = await service.user.Login(payload);
+
+
+  }
   // 添加用户
   async addAdminUser() {
     const { ctx, app, service } = this;
@@ -87,6 +101,7 @@ class UserController extends BaseController {
     this.success(response);
 
   }
+  // 更新用户接口
   async updateUser() {
     const { ctx, app, service } = this;
     // 校验传递的参数
@@ -105,6 +120,22 @@ class UserController extends BaseController {
     } else {
       this.fail(response);
     }
+  }
+  // 查询接口
+  async searchUser() {
+    const { ctx, app, service } = this;
+    // 校验传递的参数
+    const errors = app.validator.validate(updateUserRule, ctx.request.body);
+
+    if (errors) {
+      return this.error('参数校验失败', -1, errors);
+    }
+    // 组装参数
+    const payload = ctx.request.body || {};
+    // 查询结果
+    const response = await service.user.searchUser(payload);
+    this.success(response);
+
   }
 }
 
