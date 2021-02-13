@@ -3,13 +3,13 @@
  * @Author: 海象
  * @Date: 2021-01-24 15:52:03
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-12 10:11:45
+ * @LastEditTime: 2021-02-13 10:04:42
  */
 
 import axios from '../http'
 
-function Login(url, params) {
-    return axios.post('/user' + url, params)
+function Login(params) {
+    return axios.post('/user/login', params)
 }
 
 function getCaptcha() {

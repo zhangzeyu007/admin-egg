@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-09 19:30:05
+ * @LastEditTime: 2021-02-13 10:28:20
 -->
 <template>
   <div id="login">
@@ -56,9 +56,14 @@
                 type="primary"
                 icon="el-icon-mobile-phone"
                 size="medium"
+                @click="goLogin"
                 >登录</el-button
               >
-              <el-button type="info" icon="el-icon-refresh" size="medium"
+              <el-button
+                type="info"
+                icon="el-icon-refresh"
+                size="medium"
+                @click="restForm"
                 >重置</el-button
               >
             </el-col>
@@ -86,6 +91,35 @@ export default {
         password: "",
         captcha: "",
       },
+      loginRules: {
+        username: [
+          {
+            required: true,
+            message: "请输入用户名",
+            trigger: "change",
+          },
+          {
+            min: 3,
+            max: 20,
+            message: "长度在 3 到 20个字符",
+            trigger: "change",
+          },
+        ],
+        password: [
+          {
+            required: true,
+            message: "请输入密码",
+            trigger: "change",
+          },
+        ],
+        captcha: [
+          {
+            required: true,
+            message: "请输入校验码",
+            trigger: "change",
+          },
+        ],
+      },
       captcha: "",
       checked: true,
     };
@@ -94,8 +128,22 @@ export default {
     this.resetCaptcha();
   },
   methods: {
-    goRegister() {
-      this.$router.push("/register");
+    goLogin() {
+      this.$refs.loginForm.validate((valid) => {
+        if (valid) {
+          this.$api.user
+            .Login(this.form)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      });
+    },
+    resetForm() {
+      this.$refs["loginForm"].resetFields();
     },
     resetCaptcha() {
       this.$api.user

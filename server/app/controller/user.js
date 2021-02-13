@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-12 13:06:00
+ * @LastEditTime: 2021-02-13 09:58:57
  */
 'use strict';
 const BaseController = require('./base');
@@ -45,7 +45,7 @@ class UserController extends BaseController {
     // 组装参数
     const payload = ctx.request.body || {};
     const res = await service.user.Login(payload);
-
+    console.log(res);
 
   }
   // 添加用户

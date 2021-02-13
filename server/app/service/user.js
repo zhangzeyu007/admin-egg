@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-12 19:18:54
+ * @LastEditTime: 2021-02-13 09:58:21
  */
 'use strict';
 
@@ -23,6 +23,7 @@ class UserService extends Service {
         { password: payLoad.password },
       ],
     });
+    console.log(this.ctx.session.captcha);
     if (isEmpty) {
 
     }
