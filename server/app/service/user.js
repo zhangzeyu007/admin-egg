@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-12 14:55:23
+ * @LastEditTime: 2021-02-12 19:18:54
  */
 'use strict';
 
@@ -11,22 +11,22 @@ const Service = require('egg').Service;
 
 class UserService extends Service {
   async Login(payLoad) {
-    // const { ctx } = this;
-    // const result = {
-    //   code: '',
-    // };
-    // payLoad.password = await ctx.genHash(payLoad.password);
+    const { ctx } = this;
+    const result = {
+      code: '',
+    };
+    payLoad.password = await ctx.genHash(payLoad.password);
 
-    // const isEmpty = await ctx.model.AdminUser.findOne({
-    //   $or: [
-    //     { username: payLoad.username },
-    //     { password: payLoad.password },
-    //   ],
-    // });
-    // if (isEmpty) { }
+    const isEmpty = await ctx.model.AdminUser.findOne({
+      $or: [
+        { username: payLoad.username },
+        { password: payLoad.password },
+      ],
+    });
+    if (isEmpty) {
 
-
-    // return result;
+    }
+    return result;
   }
   // 添加用户
   async addUser(payLoad) {
@@ -35,7 +35,6 @@ class UserService extends Service {
       code: '',
     };
     payLoad.password = await ctx.genHash(payLoad.password);
-
     const isEmpty = await ctx.model.AdminUser.findOne({
       $or: [
         { username: payLoad.username },
