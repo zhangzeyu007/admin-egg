@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 20:14:25
+ * @LastEditTime: 2021-02-16 22:05:31
  */
 'use strict';
 const BaseController = require('./base');
@@ -24,7 +24,8 @@ const delUserRule = {
 };
 const updateUserRule = {
   userid: { required: true, type: 'string' },
-  password: { required: true, type: 'string' },
+  oldpassword: { required: true, type: 'string' },
+  newpassword: { required: true, type: 'string' },
   username: { required: true, type: 'string' },
   role: { required: true, type: 'string' },
 };
@@ -127,10 +128,11 @@ class UserController extends BaseController {
     const payload = ctx.request.body || {};
     // 查询结果
     const response = await service.user.updateUser(payload);
+    console.log(response);
     if (response.ok === 1) {
       this.message('修改成功');
-    } else {
-      this.fail(response);
+    } else if (response.ok === -1) {
+      this.error('旧密码输入不正确');
     }
   }
   // 查询接口

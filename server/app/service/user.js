@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 20:10:11
+ * @LastEditTime: 2021-02-16 22:14:18
  */
 'use strict';
 
@@ -93,8 +93,17 @@ class UserService extends Service {
   // 更新用户接口
   async updateUser(payLoad) {
     const { ctx } = this;
-    const hash = md5(payLoad.password + HashSalt);
-    return await ctx.model.AdminUser.findById(payLoad.userid).update({ role: payLoad.role, password: hash });
+    let result = { ok: '' };
+    const oldhash = md5(payLoad.oldpassword + HashSalt);
+    const newhash = md5(payLoad.newpassword + HashSalt);
+    const res = await ctx.model.AdminUser.findById(payLoad.userid);
+    if (res.password === oldhash) {
+      console.log('哈哈 ');
+      result = await ctx.model.AdminUser.findById(payLoad.userid).update({ role: payLoad.role, password: newhash });
+    } else {
+      result = { ok: -1 };
+    }
+    return result;
   }
 
   // 查询接口

@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 10:16:53
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 20:52:12
+ * @LastEditTime: 2021-02-16 22:00:48
 -->
 <template>
   <div class="userList">
@@ -141,9 +141,17 @@
             disabled
           ></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
+        <el-form-item label="旧密码" prop="oldpassword">
           <el-input
-            v-model="editForm.password"
+            v-model="editForm.oldpassword"
+            type="password"
+            prefix-icon="el-icon-unlock"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="新密码" prop="newpassword">
+          <el-input
+            v-model="editForm.newpassword"
             type="password"
             prefix-icon="el-icon-unlock"
             clearable
@@ -185,7 +193,8 @@ export default {
       },
       editForm: {
         username: "",
-        password: "",
+        oldpassword: "",
+        newpassword: "",
         role: "",
       },
       addUserRules: {
@@ -231,7 +240,14 @@ export default {
             trigger: "change",
           },
         ],
-        password: [
+        oldpassword: [
+          {
+            required: true,
+            message: "请输入密码",
+            trigger: "change",
+          },
+        ],
+        newpassword: [
           {
             required: true,
             message: "请输入密码",
@@ -304,7 +320,13 @@ export default {
       this.$refs.editFormRules.validate((valid) => {
         if (valid) {
           this.$api.user
-            .updateUser({ userid: this.userid, ...this.editForm })
+            .updateUser({
+              userid: this.userid,
+              username: this.editForm.username,
+              oldpassword: md5(this.editForm.oldpassword),
+              newpassword: md5(this.editForm.newpassword),
+              role: this.editForm.role,
+            })
             .then((res) => {
               console.log(res.code);
               if (res.code == 200) {
