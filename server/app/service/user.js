@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 22:14:18
+ * @LastEditTime: 2021-02-16 22:49:58
  */
 'use strict';
 
@@ -12,6 +12,7 @@ const md5 = require('md5');
 const HashSalt = ':zhangzeyu@good!@123';
 
 class UserService extends Service {
+  // 登录
   async Login(payLoad) {
     const { ctx } = this;
     const result = {
@@ -21,7 +22,6 @@ class UserService extends Service {
     const isEmpty = await ctx.model.AdminUser.findOne({
       username: payLoad.username,
     });
-    console.log(isEmpty);
     if (isEmpty) {
       console.log(isEmpty.password);
       console.log(hash);
@@ -43,12 +43,11 @@ class UserService extends Service {
       code: '',
     };
     payLoad.password = md5(payLoad.password + HashSalt);
+    console.log(payLoad.username);
     const isEmpty = await ctx.model.AdminUser.findOne({
-      $or: [
-        { username: payLoad.username },
-        { password: payLoad.password },
-      ],
+      username: payLoad.username,
     });
+    console.log(isEmpty);
     if (isEmpty) {
       if (isEmpty.username === payLoad.username) {
         result.code = 0;
@@ -72,7 +71,6 @@ class UserService extends Service {
   }
   // 获取用户列表
   async getUserList(payLoad) {
-    console.log(payLoad);
     const { ctx } = this;
     const page = payLoad.pageNum; // 当前页数
     const num = payLoad.pageSize ? Number(payLoad.pageSize) : 10;

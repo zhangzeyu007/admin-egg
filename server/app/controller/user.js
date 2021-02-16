@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 22:05:31
+ * @LastEditTime: 2021-02-16 22:41:46
  */
 'use strict';
 const BaseController = require('./base');
@@ -135,22 +135,7 @@ class UserController extends BaseController {
       this.error('旧密码输入不正确');
     }
   }
-  // 查询接口
-  async searchUser() {
-    const { ctx, app, service } = this;
-    // 校验传递的参数
-    const errors = app.validator.validate(updateUserRule, ctx.request.body);
 
-    if (errors) {
-      return this.error('参数校验失败', -1, errors);
-    }
-    // 组装参数
-    const payload = ctx.request.body || {};
-    // 查询结果
-    const response = await service.user.searchUser(payload);
-    this.success(response);
-
-  }
 }
 
 

@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-12 14:25:33
+ * @LastEditTime: 2021-02-16 22:37:23
  */
 
 import Vue from "vue";
@@ -33,6 +33,7 @@ export const constRoutes = [
   {
     path: "/",
     name: "Home",
+    redirect: '/login',
     meta: {
       title: "Home" // 导航菜单项标题
     },
