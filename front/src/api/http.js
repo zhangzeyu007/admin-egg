@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-01-09 22:09:44
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 15:37:29
+ * @LastEditTime: 2021-02-16 15:51:10
  */
 
 import axios from 'axios'
@@ -15,7 +15,7 @@ import qs from 'qs'
 
 switch (process.env.NODE_ENV) {
     case "development":
-        axios.defaults.baseURL = "http://localhost:7001"
+        axios.defaults.baseURL = "http://localhost:7001" // 这个前后台配置需要注意坑
         break;
     case "test":
         axios.defaults.baseURL = ""

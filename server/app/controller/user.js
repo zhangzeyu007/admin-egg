@@ -3,10 +3,11 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 15:42:17
+ * @LastEditTime: 2021-02-16 20:14:25
  */
 'use strict';
 const BaseController = require('./base');
+
 
 // 参数校验规则
 const addUserRule = {
@@ -39,14 +40,25 @@ class UserController extends BaseController {
     const { ctx, app, service } = this;
     // 校验传递的参数
     const errors = app.validator.validate(loginRule, ctx.request.body);
+
     if (errors) {
       return this.error('参数校验失败', -1, errors);
     }
     // 组装参数
     const payload = ctx.request.body || {};
     console.log(this.ctx.session.captcha);
+    if (payload.captcha.toUpperCase() !== ctx.session.captcha.toUpperCase()) {
+      this.error('验证码错误');
+      return;
+    }
     const res = await service.user.Login(payload);
-    this.success(res);
+    if (res.code === 1) {
+      this.success('登录成功');
+    } else if (res.code === 0) {
+      this.error('账号不存在');
+    } else {
+      this.error('密码不正确');
+    }
   }
   // 添加用户
   async addAdminUser() {

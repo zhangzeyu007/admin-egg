@@ -3,11 +3,13 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-13 11:07:16
+ * @LastEditTime: 2021-02-16 20:10:11
  */
 'use strict';
 
 const Service = require('egg').Service;
+const md5 = require('md5');
+const HashSalt = ':zhangzeyu@good!@123';
 
 class UserService extends Service {
   async Login(payLoad) {
@@ -15,26 +17,32 @@ class UserService extends Service {
     const result = {
       code: '',
     };
-    payLoad.password = await ctx.genHash(payLoad.password);
-
-    // const isEmpty = await ctx.model.AdminUser.findOne({
-    //   $or: [
-    //     { username: payLoad.username },
-    //     { password: payLoad.password },
-    //   ],
-    // });
-    // if (isEmpty) {
-
-    // }
+    const hash = md5(payLoad.password + HashSalt);
+    const isEmpty = await ctx.model.AdminUser.findOne({
+      username: payLoad.username,
+    });
+    console.log(isEmpty);
+    if (isEmpty) {
+      console.log(isEmpty.password);
+      console.log(hash);
+      if (isEmpty.password === hash) {
+        result.code = 1;
+      } else {
+        result.code = -1;
+      }
+    } else {
+      result.code = 0;
+    }
     return result;
   }
+
   // 添加用户
   async addUser(payLoad) {
     const { ctx } = this;
     const result = {
       code: '',
     };
-    payLoad.password = await ctx.genHash(payLoad.password);
+    payLoad.password = md5(payLoad.password + HashSalt);
     const isEmpty = await ctx.model.AdminUser.findOne({
       $or: [
         { username: payLoad.username },
@@ -85,7 +93,8 @@ class UserService extends Service {
   // 更新用户接口
   async updateUser(payLoad) {
     const { ctx } = this;
-    return await ctx.model.AdminUser.findById(payLoad.userid).update({ role: payLoad.role, password: payLoad.password });
+    const hash = md5(payLoad.password + HashSalt);
+    return await ctx.model.AdminUser.findById(payLoad.userid).update({ role: payLoad.role, password: hash });
   }
 
   // 查询接口

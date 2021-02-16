@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 10:16:53
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-12 12:13:05
+ * @LastEditTime: 2021-02-16 20:52:12
 -->
 <template>
   <div class="userList">
@@ -172,6 +172,7 @@
 <script>
 import { Message } from "element-ui";
 import moment from "moment";
+import md5 from "md5";
 // import md5 from "md5";
 export default {
   data() {
@@ -341,7 +342,11 @@ export default {
       this.$refs.addFormRules.validate((valid) => {
         if (valid) {
           this.$api.user
-            .addUser(this.addForm)
+            .addUser({
+              username: this.addForm.username,
+              password: md5(this.addForm.password),
+              role: this.addForm.role,
+            })
             .then((res) => {
               if (res.code == 200) {
                 Message({

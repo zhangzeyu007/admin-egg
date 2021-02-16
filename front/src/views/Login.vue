@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-13 10:41:01
+ * @LastEditTime: 2021-02-16 20:53:46
 -->
 <template>
   <div id="login">
@@ -88,6 +88,8 @@
 </template>
 
 <script>
+import { Message } from "element-ui";
+import md5 from "md5";
 export default {
   data() {
     return {
@@ -134,12 +136,27 @@ export default {
   },
   methods: {
     goLogin() {
+      let that = this;
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.$api.user
-            .Login(this.form)
+            .Login({
+              username: this.form.username,
+              password: md5(this.form.password),
+              captcha: this.form.captcha,
+            })
             .then((res) => {
               console.log(res);
+              if (res.code === 200) {
+                console.log("登录");
+                that.$router.push({ name: "Home" });
+              }
+              if (res.code === -1) {
+                Message({
+                  message: res.message,
+                  type: "warning",
+                });
+              }
             })
             .catch((err) => {
               console.log(err);
