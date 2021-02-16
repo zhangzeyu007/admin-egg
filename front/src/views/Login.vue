@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-13 10:28:20
+ * @LastEditTime: 2021-02-13 10:41:01
 -->
 <template>
   <div id="login">
@@ -12,15 +12,20 @@
         <img src="../assets/logo.jpg" alt="" />
       </div>
       <div class="login-form">
-        <el-form ref="loginForm" :model="form" label-width="60px">
-          <el-form-item label="用户名">
+        <el-form
+          ref="loginForm"
+          :model="form"
+          label-width="80px"
+          :rules="loginRules"
+        >
+          <el-form-item label="用户名" prop="username">
             <el-input
-              v-model="form.userName"
+              v-model="form.username"
               prefix-icon="el-icon-user-solid"
               clearable
             ></el-input>
           </el-form-item>
-          <el-form-item label="密码">
+          <el-form-item label="密码" prop="password">
             <el-input
               v-model="form.password"
               prefix-icon="el-icon-unlock"
@@ -63,7 +68,7 @@
                 type="info"
                 icon="el-icon-refresh"
                 size="medium"
-                @click="restForm"
+                @click="resetForm"
                 >重置</el-button
               >
             </el-col>
@@ -87,7 +92,7 @@ export default {
   data() {
     return {
       form: {
-        userName: "",
+        username: "",
         password: "",
         captcha: "",
       },

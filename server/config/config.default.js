@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:21:47
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-08 14:14:44
+ * @LastEditTime: 2021-02-16 15:40:29
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -41,8 +41,8 @@ module.exports = appInfo => {
 
   // eggjs 跨域配置
   config.cors = {
-    origin: '*', // 表示允许的源
-    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH', // 表示允许的http请求方式
+    origin: 'http://localhost:8080', // 表示允许的源
+    allowMethods: 'GET,HEAD,PUT,POST', // 表示允许的http请求方式
     credentials: true, // 开启认证
   };
 
@@ -50,6 +50,7 @@ module.exports = appInfo => {
     convert: true, // 对参数可以使用convertType规则进行类型转换
     validateRoot: false, // 限制被验证值必须是一个对象。
   };
+
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',

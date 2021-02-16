@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-01-09 22:09:44
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-08 13:34:45
+ * @LastEditTime: 2021-02-16 15:37:29
  */
 
 import axios from 'axios'
@@ -30,7 +30,7 @@ switch (process.env.NODE_ENV) {
  * 
 */
 axios.defaults.timeout = 10000;
-axios.defaults.withCredentials = false;
+axios.defaults.withCredentials = true;
 
 /**
  * 设置数据请求传递 的格式x-www-form-urlencoded

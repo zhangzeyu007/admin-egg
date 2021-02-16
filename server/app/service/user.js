@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-13 09:58:21
+ * @LastEditTime: 2021-02-13 11:07:16
  */
 'use strict';
 
@@ -17,16 +17,15 @@ class UserService extends Service {
     };
     payLoad.password = await ctx.genHash(payLoad.password);
 
-    const isEmpty = await ctx.model.AdminUser.findOne({
-      $or: [
-        { username: payLoad.username },
-        { password: payLoad.password },
-      ],
-    });
-    console.log(this.ctx.session.captcha);
-    if (isEmpty) {
+    // const isEmpty = await ctx.model.AdminUser.findOne({
+    //   $or: [
+    //     { username: payLoad.username },
+    //     { password: payLoad.password },
+    //   ],
+    // });
+    // if (isEmpty) {
 
-    }
+    // }
     return result;
   }
   // 添加用户

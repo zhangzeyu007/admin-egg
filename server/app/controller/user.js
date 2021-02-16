@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-13 09:58:57
+ * @LastEditTime: 2021-02-16 15:42:17
  */
 'use strict';
 const BaseController = require('./base');
@@ -16,37 +16,37 @@ const addUserRule = {
 };
 
 const getUserListRule = {
-  pageNum: {
-    required: true, type: 'string',
-  },
+  pageNum: { required: true, type: 'string' },
 };
 const delUserRule = {
-  userid: {
-    required: true, type: 'string',
-  },
+  userid: { required: true, type: 'string' },
 };
 const updateUserRule = {
-  userid: {
-    required: true, type: 'string',
-  },
+  userid: { required: true, type: 'string' },
   password: { required: true, type: 'string' },
   username: { required: true, type: 'string' },
   role: { required: true, type: 'string' },
 };
+const loginRule = {
+  password: { required: true, type: 'string' },
+  username: { required: true, type: 'string' },
+  captcha: { required: true, type: 'string' },
+};
 
 class UserController extends BaseController {
+  // 登录接口
   async Login() {
     const { ctx, app, service } = this;
     // 校验传递的参数
-    const errors = app.validator.validate(addUserRule, ctx.request.body);
+    const errors = app.validator.validate(loginRule, ctx.request.body);
     if (errors) {
       return this.error('参数校验失败', -1, errors);
     }
     // 组装参数
     const payload = ctx.request.body || {};
+    console.log(this.ctx.session.captcha);
     const res = await service.user.Login(payload);
-    console.log(res);
-
+    this.success(res);
   }
   // 添加用户
   async addAdminUser() {
