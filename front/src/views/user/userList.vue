@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 10:16:53
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 22:00:48
+ * @LastEditTime: 2021-02-16 22:23:01
 -->
 <template>
   <div class="userList">
@@ -116,7 +116,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="addUserDialog = false"> 取 消 </el-button>
+        <el-button @click="resetForm('add')"> 取 消 </el-button>
         <el-button type="primary" @click="addUserComfirm">确 定 </el-button>
       </span>
     </el-dialog>
@@ -170,7 +170,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="editUserDialog = false"> 取 消 </el-button>
+        <el-button @click="resetForm('edit')"> 取 消 </el-button>
         <el-button type="primary" @click="editUserComfirm">确 定 </el-button>
       </span>
     </el-dialog>
@@ -403,7 +403,8 @@ export default {
       if (name === "edit") {
         this.editUserDialog = false;
         this.editForm.username = "";
-        this.editForm.password = "";
+        this.editForm.newpassword = "";
+        this.editForm.oldpassword = "";
         this.editForm.role = "";
         this.$refs["editFormRules"].resetFields();
       }
