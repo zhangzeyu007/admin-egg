@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 17:23:18
+ * @LastEditTime: 2021-02-17 20:22:10
 -->
 <template>
   <div id="login">
@@ -158,6 +158,7 @@ export default {
                   message: res.message,
                   type: "warning",
                 });
+                this.resetCaptcha();
               }
             })
             .catch((err) => {

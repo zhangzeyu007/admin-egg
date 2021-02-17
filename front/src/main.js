@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-10 21:28:56
+ * @LastEditTime: 2021-02-17 17:58:21
  */
 import Vue from "vue";
 import App from "./App.vue";
@@ -14,6 +14,7 @@ import '../src/static/style/reset.css'
 import './static/icons/iconfont.css'
 import './static/icons/index.js'
 import api from './api/api.js'
+import './permission'
 Vue.use(Button).use(Col).use(Input).use(Form).use(FormItem).use(Select).use(Option).use(Container).use(Aside).use(Header).use(Main).use(Footer).use(Submenu).use(Menu).use(MenuItem).use(RadioButton).use(RadioGroup).use(Breadcrumb).use(BreadcrumbItem).use(Checkbox).use(Card).use(Table).use(TableColumn).use(Row).use(Dialog).use(Pagination).use(Popover)
 
 Vue.prototype.$api = api

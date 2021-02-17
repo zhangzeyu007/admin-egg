@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 17:38:59
+ * @LastEditTime: 2021-02-17 17:46:13
  */
 'use strict';
 const BaseController = require('./base');
@@ -30,6 +30,7 @@ const updateUserRule = {
   username: { required: true, type: 'string' },
   role: { required: true, type: 'string' },
 };
+
 const loginRule = {
   password: { required: true, type: 'string' },
   username: { required: true, type: 'string' },
