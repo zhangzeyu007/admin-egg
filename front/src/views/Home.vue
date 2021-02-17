@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 16:59:34
+ * @LastEditTime: 2021-02-17 22:22:33
 -->
 <template>
   <el-container>
@@ -15,7 +15,7 @@
           <div class="header-title">泽雨后台管理系统</div>
         </div>
         <div class="header-right">
-          <el-button size="small">退出</el-button>
+          <el-button size="small" @click="goOut">退出</el-button>
         </div>
       </div>
     </el-header>
@@ -156,6 +156,10 @@ export default {
     }
   },
   methods: {
+    goOut() {
+      localStorage.removeItem("token");
+      this.$router.push("/login");
+    },
     toggleClick() {
       this.isCollapse = this.isCollapse ? false : true;
     },

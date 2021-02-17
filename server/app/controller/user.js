@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 17:46:13
+ * @LastEditTime: 2021-02-17 21:50:02
  */
 'use strict';
 const BaseController = require('./base');
@@ -49,7 +49,6 @@ class UserController extends BaseController {
     }
     // 组装参数
     const payload = ctx.request.body || {};
-    console.log(this.ctx.session.captcha);
     if (payload.captcha.toUpperCase() !== ctx.session.captcha.toUpperCase()) {
       this.error('验证码错误');
       return;
@@ -59,7 +58,7 @@ class UserController extends BaseController {
     if (res.code === 1) {
       const token = jwt.sign({
         username,
-      }, app.config.jwt.secret, { expiresIn: '1m' });
+      }, app.config.jwt.secret, { expiresIn: '1h' });
       this.success({ token });
     } else if (res.code === 0) {
       this.error('账号不存在');
@@ -96,7 +95,6 @@ class UserController extends BaseController {
     if (errors) {
       return this.error('参数校验失败', -1, errors);
     }
-
     // 组装参数
     const payload = ctx.request.body || {};
     // 查询结果
@@ -132,7 +130,6 @@ class UserController extends BaseController {
 
     // 组装参数
     const payload = ctx.request.body || {};
-    // 查询结果
     const response = await service.user.updateUser(payload);
     console.log(response);
     if (response.ok === 1) {

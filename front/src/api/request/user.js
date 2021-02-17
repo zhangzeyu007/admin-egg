@@ -31,8 +31,8 @@ function updateUser(params) {
     return axios.post('/user/updateuser', params)
 }
 
-function searchUser(params) {
-    return axios.post('/user/searchuser', params)
+function searchUser() {
+    return axios.get('/user/searchuser')
 }
 
 export default {

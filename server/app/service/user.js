@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 12:46:12
+ * @LastEditTime: 2021-02-17 21:48:02
  */
 'use strict';
 
@@ -23,8 +23,6 @@ class UserService extends Service {
       username: payLoad.username,
     });
     if (isEmpty) {
-      console.log(isEmpty.password);
-      console.log(hash);
       if (isEmpty.password === hash) {
         result.code = 1;
       } else {

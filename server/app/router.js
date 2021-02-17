@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:21:47
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 16:25:31
+ * @LastEditTime: 2021-02-17 21:52:18
  */
 'use strict';
 
@@ -21,5 +21,5 @@ module.exports = app => {
   router.post('/user/getuserlist', jwt, controller.user.getUserList);
   router.post('/user/deluser', jwt, controller.user.delUser);
   router.post('/user/updateuser', jwt, controller.user.updateUser);
-  router.post('/user/searchuser', jwt, controller.user.searchUser);
+  router.get('/user/searchuser', jwt, controller.user.searchUser);
 };

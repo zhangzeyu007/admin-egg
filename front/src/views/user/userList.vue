@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 10:16:53
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 22:23:01
+ * @LastEditTime: 2021-02-17 22:15:53
 -->
 <template>
   <div class="userList">
@@ -298,10 +298,29 @@ export default {
       return this.tableData;
     },
   },
+  watch: {
+    search(old) {
+      console.log(old);
+      if (!old) {
+        this.pages.pageNum = 1;
+      }
+      this.$api.user
+        .searchUser()
+        .then((res) => {
+          console.log(res);
+          if (res.code === 200 && res.data.length > 0) {
+            this.tableData = res.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
   methods: {
     handleSizeChange(val) {
       this.pages.pageSize = val;
-      this.pageNum = 1;
+      this.pages.pageNum = 1;
       this.getUserListData();
     },
     handleCurrentChange(val) {
