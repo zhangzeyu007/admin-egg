@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-17 15:54:46
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 15:55:03
+ * @LastEditTime: 2021-02-17 17:29:50
  */
 
 'use strict';
@@ -22,8 +22,7 @@ module.exports = ({ app }) => {
     const token = ctx.request.header.authorization.replace('Bearer ', '');
     try {
       const ret = await jwt.verify(token, app.config.jwt.secret);
-      ctx.state.email = ret.email;
-      ctx.state.userid = ret._id;
+      ctx.state.username = ret.username;
       await next();
     } catch (err) {
       console.log(err);

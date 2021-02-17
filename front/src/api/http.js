@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-01-09 22:09:44
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 15:51:10
+ * @LastEditTime: 2021-02-17 16:54:50
  */
 
 import axios from 'axios'
@@ -43,8 +43,8 @@ axios.defaults.transformRequest = data => qs.stringify(data)
 /**
  * 设置请求截器
  * 客户端发送请求 -> [请求拦截器] -> 服务器 
- * TOKEN校验(JWT), 接收服务器返回的token,存储到vuex中
- * 每一次向服务器发请求, 我们应该把tken带上
+ * TOKEN校验(JWT), 接收服务器返回的token,存储到 vuex中
+ * 每一次向服务器发请求, 我们应该把token带上
 */
 axios.interceptors.request.use(config => {
     // 携带token

@@ -3,10 +3,11 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 15:31:13
+ * @LastEditTime: 2021-02-17 17:38:59
  */
 'use strict';
 const BaseController = require('./base');
+const jwt = require('jsonwebtoken');
 
 
 // 参数校验规则
@@ -53,8 +54,12 @@ class UserController extends BaseController {
       return;
     }
     const res = await service.user.Login(payload);
+    const username = payload.username;
     if (res.code === 1) {
-      this.success('登录成功');
+      const token = jwt.sign({
+        username,
+      }, app.config.jwt.secret, { expiresIn: '1m' });
+      this.success({ token });
     } else if (res.code === 0) {
       this.error('账号不存在');
     } else {

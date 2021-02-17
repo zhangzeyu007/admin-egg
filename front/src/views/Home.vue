@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-12 12:46:13
+ * @LastEditTime: 2021-02-17 16:59:34
 -->
 <template>
   <el-container>
@@ -12,7 +12,7 @@
       <div class="header">
         <div class="header-left">
           <img class="logo-icon" src="../assets/logo.jpg" alt="" />
-          <div class="header-title">泽雨电商后台管理系统</div>
+          <div class="header-title">泽雨后台管理系统</div>
         </div>
         <div class="header-right">
           <el-button size="small">退出</el-button>

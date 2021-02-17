@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:21:47
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 15:40:29
+ * @LastEditTime: 2021-02-17 17:37:51
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -51,9 +51,13 @@ module.exports = appInfo => {
     validateRoot: false, // 限制被验证值必须是一个对象。
   };
 
+  config.jwt = {
+    secret: 'kkbzhangzeyu',
+  };
+
   // add your user config here
   const userConfig = {
-    // myAppName: 'egg',
+    myAppName: 'admin-egg',
   };
 
   return {

@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 20:53:46
+ * @LastEditTime: 2021-02-17 17:23:18
 -->
 <template>
   <div id="login">
@@ -148,8 +148,10 @@ export default {
             .then((res) => {
               console.log(res);
               if (res.code === 200) {
-                console.log("登录");
-                that.$router.push({ name: "Home" });
+                if (res.data && res.data.token) {
+                  localStorage.setItem("token", res.data.token);
+                  that.$router.push({ name: "Home" });
+                }
               }
               if (res.code === -1) {
                 Message({
