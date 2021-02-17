@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 22:49:58
+ * @LastEditTime: 2021-02-17 12:46:12
  */
 'use strict';
 
@@ -96,7 +96,6 @@ class UserService extends Service {
     const newhash = md5(payLoad.newpassword + HashSalt);
     const res = await ctx.model.AdminUser.findById(payLoad.userid);
     if (res.password === oldhash) {
-      console.log('哈哈 ');
       result = await ctx.model.AdminUser.findById(payLoad.userid).update({ role: payLoad.role, password: newhash });
     } else {
       result = { ok: -1 };
@@ -105,9 +104,9 @@ class UserService extends Service {
   }
 
   // 查询接口
-  async searchUser(payLoad) {
+  async searchUser() {
     const { ctx } = this;
-    return await ctx.model.AdminUser.find({ username: payLoad.username });
+    return await ctx.model.AdminUser.find();
   }
 
 }

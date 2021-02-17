@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:21:47
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 12:09:54
+ * @LastEditTime: 2021-02-17 16:25:31
  */
 'use strict';
 
@@ -13,10 +13,13 @@
 
 module.exports = app => {
   const { router, controller } = app;
-  router.get('/user/captcha', controller.util.captcha);
-  router.post('/user/adduser', controller.user.addAdminUser);
-  router.post('/user/getuserlist', controller.user.getUserList);
-  router.post('/user/deluser', controller.user.delUser);
-  router.post('/user/updateuser', controller.user.updateUser);
+  const jwt = app.middleware.jwt({ app });
+
   router.post('/user/login', controller.user.Login);
+  router.get('/user/captcha', controller.util.captcha);
+  router.post('/user/adduser', jwt, controller.user.addAdminUser);
+  router.post('/user/getuserlist', jwt, controller.user.getUserList);
+  router.post('/user/deluser', jwt, controller.user.delUser);
+  router.post('/user/updateuser', jwt, controller.user.updateUser);
+  router.post('/user/searchuser', jwt, controller.user.searchUser);
 };

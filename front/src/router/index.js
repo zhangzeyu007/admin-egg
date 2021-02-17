@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 22:37:23
+ * @LastEditTime: 2021-02-17 16:34:42
  */
 
 import Vue from "vue";
@@ -31,9 +31,8 @@ export const constRoutes = [
     component: () => import("@/views/Register")
   },
   {
-    path: "/",
+    path: "/home",
     name: "Home",
-    redirect: '/login',
     meta: {
       title: "Home" // 导航菜单项标题
     },
@@ -63,7 +62,12 @@ console.log(constRoutes);
 export default new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes: constRoutes
+  routes: [{
+    path: '/',
+    redirect: '/login'
+  },
+  ...constRoutes
+  ]
 });
 
 // 路由重复报错处理方法

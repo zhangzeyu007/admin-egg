@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-16 22:41:46
+ * @LastEditTime: 2021-02-17 15:31:13
  */
 'use strict';
 const BaseController = require('./base');
@@ -134,6 +134,12 @@ class UserController extends BaseController {
     } else if (response.ok === -1) {
       this.error('旧密码输入不正确');
     }
+  }
+  // 查询接口
+  async searchUser() {
+    const { service } = this;
+    const response = await service.user.searchUser();
+    this.success(response);
   }
 
 }
