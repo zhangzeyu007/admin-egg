@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 10:16:53
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 22:15:53
+ * @LastEditTime: 2021-02-18 10:40:59
 -->
 <template>
   <div class="userList">
@@ -309,7 +309,7 @@ export default {
         .then((res) => {
           console.log(res);
           if (res.code === 200 && res.data.length > 0) {
-            this.tableData = res.data;
+            this.tableData = this.formateListData(res.data);
           }
         })
         .catch((error) => {
@@ -439,26 +439,27 @@ export default {
               this.pages.totalPage = res.data.totalPage;
             }
             if (res.data.page) {
-              let data = res.data.page;
-              data.map((item) => {
-                if (item.role == 0) {
-                  item.roleName = "管理员";
-                }
-                if (item.role == 1) {
-                  item.roleName = "员工";
-                }
-                if (item.role == 2) {
-                  item.roleName = "客服";
-                }
-              });
-              console.log(data);
-              this.tableData = data;
+              this.tableData = this.formateListData(res.data.page);
             }
           }
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+    formateListData(data) {
+      data.map((item) => {
+        if (item.role == 0) {
+          item.roleName = "管理员";
+        }
+        if (item.role == 1) {
+          item.roleName = "员工";
+        }
+        if (item.role == 2) {
+          item.roleName = "客服";
+        }
+      });
+      return data;
     },
   },
 };

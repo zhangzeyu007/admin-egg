@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-01-24 15:52:03
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-13 10:04:42
+ * @LastEditTime: 2021-02-18 11:54:55
  */
 
 import axios from '../http'
@@ -23,6 +23,7 @@ function addUser(params) {
 function getUserList(params) {
     return axios.post('/user/getuserlist', params)
 }
+
 function delUser(params) {
     return axios.post('/user/deluser', params)
 }
@@ -34,8 +35,12 @@ function updateUser(params) {
 function searchUser() {
     return axios.get('/user/searchuser')
 }
+function getUserInfo(params) {
+    axios.post('/user/userinfo', params)
+}
 
 export default {
+    getUserInfo,
     searchUser,
     updateUser,
     addUser,

@@ -3,8 +3,9 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 20:22:10
+ * @LastEditTime: 2021-02-18 12:05:00
 -->
+
 <template>
   <div id="login">
     <div class="login-main">
@@ -151,6 +152,7 @@ export default {
                 if (res.data && res.data.token) {
                   localStorage.setItem("token", res.data.token);
                   that.$router.push({ name: "Home" });
+                  this.getUserInfo(this.form);
                 }
               }
               if (res.code === -1) {
@@ -179,6 +181,12 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    // 获取用户信息
+    getUserInfo(params) {
+      this.$api.user.getUserInfo(params).then((res) => {
+        console.log(res);
+      });
     },
   },
 };

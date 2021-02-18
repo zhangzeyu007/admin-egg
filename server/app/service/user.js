@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 21:48:02
+ * @LastEditTime: 2021-02-18 11:48:49
  */
 'use strict';
 
@@ -103,6 +103,12 @@ class UserService extends Service {
 
   // 查询接口
   async searchUser() {
+    const { ctx } = this;
+    return await ctx.model.AdminUser.find();
+  }
+
+  // 查询用户信息接口
+  async userInfo() {
     const { ctx } = this;
     return await ctx.model.AdminUser.find();
   }

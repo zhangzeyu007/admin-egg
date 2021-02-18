@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 21:50:02
+ * @LastEditTime: 2021-02-18 11:44:41
  */
 'use strict';
 const BaseController = require('./base');
@@ -36,6 +36,9 @@ const loginRule = {
   username: { required: true, type: 'string' },
   captcha: { required: true, type: 'string' },
 };
+const userinfoRule = {
+
+};
 
 class UserController extends BaseController {
   // 登录接口
@@ -43,7 +46,6 @@ class UserController extends BaseController {
     const { ctx, app, service } = this;
     // 校验传递的参数
     const errors = app.validator.validate(loginRule, ctx.request.body);
-
     if (errors) {
       return this.error('参数校验失败', -1, errors);
     }
@@ -65,6 +67,20 @@ class UserController extends BaseController {
     } else {
       this.error('密码不正确');
     }
+  }
+  // 查询用户信息
+  async userInfo() {
+    const { ctx, app, service } = this;
+    // 校验传递的参数
+    const errors = app.validator.validate(userinfoRule, ctx.request.body);
+    if (errors) {
+      return this.error('参数校验失败', -1, errors);
+    }
+    // 组装参数
+    const payload = ctx.request.body || {};
+    const res = await service.user.userInfo(payload);
+    console.log(res);
+
   }
   // 添加用户
   async addAdminUser() {
@@ -138,7 +154,7 @@ class UserController extends BaseController {
       this.error('旧密码输入不正确');
     }
   }
-  // 查询接口
+  // 查询用户接口
   async searchUser() {
     const { service } = this;
     const response = await service.user.searchUser();
