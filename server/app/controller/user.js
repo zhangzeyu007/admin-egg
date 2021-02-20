@@ -3,11 +3,12 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-20 11:59:59
+ * @LastEditTime: 2021-02-20 15:04:49
  */
 'use strict';
 const BaseController = require('./base');
 const jwt = require('jsonwebtoken');
+
 // 参数校验规则
 const addUserRule = {
   password: { required: true, type: 'string' },

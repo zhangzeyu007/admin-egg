@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-19 17:40:10
+ * @LastEditTime: 2021-02-20 15:08:43
  */
 'use strict';
 
@@ -45,7 +45,7 @@ class UserService extends Service {
     const isEmpty = await ctx.model.AdminUser.findOne({
       username: payLoad.username,
     });
-    console.log(isEmpty);
+
     if (isEmpty) {
       if (isEmpty.username === payLoad.username) {
         result.code = 0;

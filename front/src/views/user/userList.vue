@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 10:16:53
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-19 10:49:26
+ * @LastEditTime: 2021-02-20 15:21:56
 -->
 <template>
   <div class="userList">
@@ -442,6 +442,7 @@ export default {
           console.log(err);
         });
     },
+    // 格式化数据处理
     formateListData(data) {
       data.map((item) => {
         if (item.role == 1) {
