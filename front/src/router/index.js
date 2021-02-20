@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 16:34:42
+ * @LastEditTime: 2021-02-19 18:27:18
  */
 
 import Vue from "vue";
@@ -12,7 +12,11 @@ import menuRouteList from './menu/menuRoutes.js'
 import goodsRouteList from './goods/goodsRoutes.js'
 import userRouteList from './user/userRoutes.js'
 
+
 Vue.use(VueRouter);
+
+
+
 // 2.声明一个路由表
 // 通用页面: 不需要守卫, 可以直接访问
 export const constRoutes = [
@@ -38,25 +42,23 @@ export const constRoutes = [
     },
     component: () => import("@/views/Home"),
     children: [
-      ...goodsRouteList.routes,
-      ...menuRouteList.routes,
-      ...userRouteList.routes
+      {
+        path: '/404',
+        name: '404',
+        component: () => import("@/views/404.vue"),
+      }
     ]
   }
 ];
+
+
 // 权限页面: 受保护的页面, 要求用户登录并拥有访问权限的角色才能访问
 export const asyncRoutes = [
-  {
-    // path: "/about",
-    // name: "About",
-    // meta: {
-    //   title: "about",
-    //   icon: "qq",
-    //   roles: ["admin", "editor"]
-    // },
-    // component: () => import("@/views/About")
-  }
+  ...goodsRouteList.routes,
+  ...menuRouteList.routes,
+  ...userRouteList.routes
 ];
+
 console.log(constRoutes);
 
 export default new VueRouter({

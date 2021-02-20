@@ -3,13 +3,11 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-18 11:44:41
+ * @LastEditTime: 2021-02-19 17:41:14
  */
 'use strict';
 const BaseController = require('./base');
 const jwt = require('jsonwebtoken');
-
-
 // 参数校验规则
 const addUserRule = {
   password: { required: true, type: 'string' },
@@ -37,7 +35,7 @@ const loginRule = {
   captcha: { required: true, type: 'string' },
 };
 const userinfoRule = {
-
+  token: { required: true, type: 'string' },
 };
 
 class UserController extends BaseController {
@@ -78,8 +76,13 @@ class UserController extends BaseController {
     }
     // 组装参数
     const payload = ctx.request.body || {};
-    const res = await service.user.userInfo(payload);
-    console.log(res);
+    const decoded = jwt.verify(payload.token, app.config.jwt.secret);
+    const res = await service.user.userInfo(decoded.username);
+
+    res.map(item => {
+      return this.success([ item.role ]);
+    });
+
 
   }
   // 添加用户

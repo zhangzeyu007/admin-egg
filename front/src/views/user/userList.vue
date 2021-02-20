@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 10:16:53
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-18 10:40:59
+ * @LastEditTime: 2021-02-19 10:49:26
 -->
 <template>
   <div class="userList">
@@ -181,6 +181,7 @@
 import { Message } from "element-ui";
 import moment from "moment";
 import md5 from "md5";
+import roles from "../../config/roleconfig.js";
 // import md5 from "md5";
 export default {
   data() {
@@ -262,11 +263,7 @@ export default {
           },
         ],
       },
-      roleOptions: [
-        { name: "管理员", value: "0" },
-        { name: "员工", value: "1" },
-        { name: "客服", value: "2" },
-      ],
+      roleOptions: roles,
       addUserDialog: false,
       editUserDialog: false,
       pages: {
@@ -307,7 +304,6 @@ export default {
       this.$api.user
         .searchUser()
         .then((res) => {
-          console.log(res);
           if (res.code === 200 && res.data.length > 0) {
             this.tableData = this.formateListData(res.data);
           }
@@ -372,7 +368,6 @@ export default {
     // 删除按钮
     handleDelete(item) {
       this.$api.user.delUser({ userid: item._id }).then((res) => {
-        console.log(res);
         if (res.code == 200) {
           this.getUserListData();
         }
@@ -449,13 +444,13 @@ export default {
     },
     formateListData(data) {
       data.map((item) => {
-        if (item.role == 0) {
+        if (item.role == 1) {
           item.roleName = "管理员";
         }
-        if (item.role == 1) {
+        if (item.role == 2) {
           item.roleName = "员工";
         }
-        if (item.role == 2) {
+        if (item.role == 3) {
           item.roleName = "客服";
         }
       });

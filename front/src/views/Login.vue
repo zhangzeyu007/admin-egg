@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-18 12:05:00
+ * @LastEditTime: 2021-02-19 17:44:45
 -->
 
 <template>
@@ -147,12 +147,10 @@ export default {
               captcha: this.form.captcha,
             })
             .then((res) => {
-              console.log(res);
               if (res.code === 200) {
                 if (res.data && res.data.token) {
                   localStorage.setItem("token", res.data.token);
                   that.$router.push({ name: "Home" });
-                  this.getUserInfo(this.form);
                 }
               }
               if (res.code === -1) {
@@ -181,12 +179,6 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-    },
-    // 获取用户信息
-    getUserInfo(params) {
-      this.$api.user.getUserInfo(params).then((res) => {
-        console.log(res);
-      });
     },
   },
 };
