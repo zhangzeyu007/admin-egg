@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-20 09:29:43
+ * @LastEditTime: 2021-02-20 12:18:06
 -->
 <template>
   <el-container>
@@ -15,7 +15,17 @@
           <div class="header-title">泽雨后台管理系统</div>
         </div>
         <div class="header-right">
-          <el-button size="small" @click="goOut">退出</el-button>
+          <el-dropdown type="primary" @command="goOut">
+            <div class="avatar-header">
+              <el-avatar icon="el-icon-user-solid" :src="circleUrl"></el-avatar>
+              <span class="avatar-text"> {{ $store.getters.username }}</span>
+            </div>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="a">退出</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+
+          <!-- <el-button size="small">退出</el-button> -->
         </div>
       </div>
     </el-header>
@@ -79,6 +89,8 @@ export default {
   name: "Home",
   data() {
     return {
+      circleUrl:
+        "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3229045480,3780302107&fm=26&gp=0.jpg",
       activePath: "",
       isCollapse: false,
       breadcrumbs: [],
@@ -258,5 +270,14 @@ export default {
   background-color: #373d41;
   text-align: center;
   line-height: 30px;
+}
+.avatar-header {
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+.avatar-text {
+  margin-left: 10px;
+  font-size: 12px;
 }
 </style>

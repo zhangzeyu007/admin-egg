@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-19 17:41:14
+ * @LastEditTime: 2021-02-20 11:59:59
  */
 'use strict';
 const BaseController = require('./base');
@@ -80,7 +80,7 @@ class UserController extends BaseController {
     const res = await service.user.userInfo(decoded.username);
 
     res.map(item => {
-      return this.success([ item.role ]);
+      return this.success({ roles: [ item.role ], username: decoded.username });
     });
 
 

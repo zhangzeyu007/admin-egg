@@ -3,13 +3,14 @@
  * @Author: 海象
  * @Date: 2021-02-19 10:59:43
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-20 09:33:01
+ * @LastEditTime: 2021-02-20 12:06:07
  */
 
 import api from '../api/api'
 const state = {
     token: localStorage.getItem('token'),
-    roles: [] // 角色信息
+    roles: [],// 角色信息
+    username: "" // 用户名
 }
 
 const mutations = {
@@ -19,12 +20,18 @@ const mutations = {
     setToken: (state, token) => {
         state.token = token;
     },
+    setUserName: (state, username) => {
+        state.username = username;
+    }
 }
 
 const actions = {
     getInfo({ commit }, hasToken) {
-        return api.user.getUserInfo(hasToken).then(({ data: roles }) => {
+        return api.user.getUserInfo(hasToken).then(({ data }) => {
+            let roles = data.roles
+            let username = data.username
             commit("setRoles", roles);
+            commit('setUserName', username)
             return { roles }
         })
     },
