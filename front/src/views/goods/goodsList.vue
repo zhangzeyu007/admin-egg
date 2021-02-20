@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 09:46:03
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-06 22:21:41
+ * @LastEditTime: 2021-02-20 12:43:27
 -->
 
 <template>
@@ -16,7 +16,7 @@
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary">添加用户</el-button>
+          <el-button type="primary">添加商品</el-button>
         </el-col>
       </el-row>
       <!-- table内容区 -->

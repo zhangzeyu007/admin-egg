@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-20 10:04:19
+ * @LastEditTime: 2021-02-20 12:40:36
 -->
 
 <template>
@@ -295,6 +295,18 @@ export default {
     z-index: -100;
   }
 }
+@media (max-height: 200px) {
+  .login-main {
+    display: none;
+  }
+  #video {
+    width: 100%;
+    height: 100%;
+    transform: scale(8);
+    z-index: -100;
+  }
+}
+
 .login-info {
   padding: 0 35px;
   box-sizing: border-box;
