@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-19 17:44:45
+ * @LastEditTime: 2021-02-20 10:04:19
 -->
 
 <template>
@@ -151,6 +151,7 @@ export default {
                 if (res.data && res.data.token) {
                   localStorage.setItem("token", res.data.token);
                   that.$router.push({ name: "Home" });
+                  window.location.reload();
                 }
               }
               if (res.code === -1) {

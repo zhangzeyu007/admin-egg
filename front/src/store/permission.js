@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-18 20:52:01
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-19 22:10:47
+ * @LastEditTime: 2021-02-20 09:39:27
  */
 import { asyncRoutes, constRoutes } from '@/router'
 
@@ -18,6 +18,7 @@ const mutations = {
         state.addRoutes = routes;
         constRoutes.forEach(item => {
             if (item.name === 'Home') {
+                item.children = []
                 item.children = item.children.concat(routes)
             }
         })

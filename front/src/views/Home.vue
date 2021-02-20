@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 22:22:33
+ * @LastEditTime: 2021-02-20 09:29:43
 -->
 <template>
   <el-container>
@@ -157,7 +157,7 @@ export default {
   },
   methods: {
     goOut() {
-      localStorage.removeItem("token");
+      this.$store.dispatch("user/resetToken");
       this.$router.push("/login");
     },
     toggleClick() {

@@ -3,9 +3,12 @@
  * @Author: 海象
  * @Date: 2020-12-15 16:50:19
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-20 09:08:25
+ * @LastEditTime: 2021-02-20 10:03:54
  */
-
+/**
+ * @用户权限管理
+ * 
+*/
 import router from "./router";
 import store from './store'
 
@@ -42,6 +45,7 @@ router.beforeEach(async (to, from, next) => {
 
           // 根据当前用户角色过滤出可访问路由
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+          console.log(accessRoutes);
 
           // 添加路由
           router.addRoutes(accessRoutes)

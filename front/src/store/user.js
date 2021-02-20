@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-19 10:59:43
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-19 17:40:49
+ * @LastEditTime: 2021-02-20 09:33:01
  */
 
 import api from '../api/api'
@@ -29,6 +29,7 @@ const actions = {
         })
     },
     resetToken({ commit }) {
+        console.log('被调用');
         // 清空令牌和角色状态
         return new Promise(resolve => {
             commit("setToken", "");
