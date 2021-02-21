@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 09:46:03
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-21 11:48:18
+ * @LastEditTime: 2021-02-21 12:28:23
 -->
 
 <template>
@@ -63,6 +63,9 @@
           <div class="fileinput-button">
             <el-button type="primary" size="medium">点击上传</el-button>
             <input type="file" name="file" @change="handleFileChange" />
+            <div>
+              <img src="" alt="" />
+            </div>
           </div>
         </el-form-item>
       </el-form>
@@ -75,6 +78,8 @@
 </template>
 
 <script>
+const CHUNK_SIZE = 10 * 1024 * 1024;
+
 export default {
   data() {
     return {
@@ -144,11 +149,28 @@ export default {
     handleFileChange(e) {
       console.log(e.target.files);
       const [file] = e.target.files;
+      console.log(file);
       if (!file) return;
       this.addGoodsForm.file = file;
     },
     // 上传文件
-    uploadFile() {},
+    uploadFile() {
+      if (!this.addGoodsForm.file) {
+        return;
+      }
+      const chunks = this.createFileChunk(this.addGoodsForm.file);
+    },
+    // 创建切片
+    createFileChunk(file, size = CHUNK_SIZE) {
+      const chunks = [];
+      let cur = 0;
+      // 切片分区
+      while (cur < file.size) {
+        chunks.push({ index: cur, file: file.slice(cur, cur + size) });
+        cur += size;
+      }
+      return chunks;
+    },
   },
 };
 </script>

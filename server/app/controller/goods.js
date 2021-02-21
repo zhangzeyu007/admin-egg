@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-21 11:27:14
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-21 11:47:26
+ * @LastEditTime: 2021-02-21 12:35:33
  */
 'use strict';
 const BaseController = require('./base');
@@ -21,6 +21,9 @@ class GoodsController extends BaseController {
     // 组装参数
     const payload = ctx.request.body || {};
     console.log(payload);
+  }
+  async checkfile() {
+    const { ctx, app, service } = this;
   }
 
 }
