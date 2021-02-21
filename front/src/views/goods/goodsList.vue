@@ -3,11 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 09:46:03
  * @LastEditors: 海象
-<<<<<<< HEAD
- * @LastEditTime: 2021-02-21 16:31:08
-=======
- * @LastEditTime: 2021-02-21 12:28:23
->>>>>>> 4b601327f32747e31ea03378a4576538f4e10a98
+ * @LastEditTime: 2021-02-21 16:41:28
 -->
 
 <template>
@@ -82,13 +78,9 @@
 </template>
 
 <script>
-<<<<<<< HEAD
 import { Message } from "element-ui";
 import Util from "../../util/util.js";
 const CHUNK_SIZE = 1 * 1024 * 1024;
-=======
-const CHUNK_SIZE = 10 * 1024 * 1024;
->>>>>>> 4b601327f32747e31ea03378a4576538f4e10a98
 
 export default {
   data() {
@@ -177,7 +169,6 @@ export default {
       return chunks;
     },
     // 上传文件
-<<<<<<< HEAD
     async uploadFile() {
       if (!this.addGoodsForm.file) {
         Message({
@@ -195,24 +186,6 @@ export default {
       }
       const chunks = this.createFileChunk(this.addGoodsForm.file);
       console.log(chunks);
-=======
-    uploadFile() {
-      if (!this.addGoodsForm.file) {
-        return;
-      }
-      const chunks = this.createFileChunk(this.addGoodsForm.file);
-    },
-    // 创建切片
-    createFileChunk(file, size = CHUNK_SIZE) {
-      const chunks = [];
-      let cur = 0;
-      // 切片分区
-      while (cur < file.size) {
-        chunks.push({ index: cur, file: file.slice(cur, cur + size) });
-        cur += size;
-      }
-      return chunks;
->>>>>>> 4b601327f32747e31ea03378a4576538f4e10a98
     },
   },
 };
