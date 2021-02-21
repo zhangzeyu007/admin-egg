@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 09:46:03
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-20 18:08:52
+ * @LastEditTime: 2021-02-20 21:49:50
 -->
 
 <template>
@@ -64,8 +64,8 @@
             ref="upload"
             action=""
             :on-remove="handleRemove"
+            :on-change="handleChange"
             :auto-upload="false"
-            :file-list="fileList"
             list-type="picture"
             :limit="1"
           >
@@ -102,6 +102,10 @@ export default {
     resetForm() {},
     handleRemove() {
       console.log("删除");
+    },
+    handleChange(file, fileList) {
+      console.log(file);
+      console.log(fileList);
     },
   },
 };
