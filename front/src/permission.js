@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2020-12-15 16:50:19
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-20 11:58:10
+ * @LastEditTime: 2021-02-21 11:49:23
  */
 /**
  * @用户权限管理
@@ -57,7 +57,7 @@ router.beforeEach(async (to, from, next) => {
           // 出错需重置令牌并重新登录（令牌过期、网络错误等原因）
           await store.dispatch('user/resetToken')
           next(`/login?redirect=${to.path}`)
-          alert(error || '未知错误')
+          // alert(error || '未知错误')
         }
       }
     }

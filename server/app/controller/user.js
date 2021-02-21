@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-20 15:04:49
+ * @LastEditTime: 2021-02-21 11:45:01
  */
 'use strict';
 const BaseController = require('./base');
@@ -19,9 +19,11 @@ const addUserRule = {
 const getUserListRule = {
   pageNum: { required: true, type: 'string' },
 };
+
 const delUserRule = {
   userid: { required: true, type: 'string' },
 };
+
 const updateUserRule = {
   userid: { required: true, type: 'string' },
   oldpassword: { required: true, type: 'string' },
@@ -35,6 +37,7 @@ const loginRule = {
   username: { required: true, type: 'string' },
   captcha: { required: true, type: 'string' },
 };
+
 const userinfoRule = {
   token: { required: true, type: 'string' },
 };
@@ -83,8 +86,6 @@ class UserController extends BaseController {
     res.map(item => {
       return this.success({ roles: [ item.role ], username: decoded.username });
     });
-
-
   }
   // 添加用户
   async addAdminUser() {
@@ -151,7 +152,6 @@ class UserController extends BaseController {
     // 组装参数
     const payload = ctx.request.body || {};
     const response = await service.user.updateUser(payload);
-    console.log(response);
     if (response.ok === 1) {
       this.message('修改成功');
     } else if (response.ok === -1) {

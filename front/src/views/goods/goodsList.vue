@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 09:46:03
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-20 21:49:50
+ * @LastEditTime: 2021-02-21 11:48:18
 -->
 
 <template>
@@ -26,7 +26,7 @@
         <el-table-column></el-table-column>
       </el-table>
     </el-card>
-    <!-- 添加用户弹窗 -->
+    <!-- 添加商品弹窗 -->
     <el-dialog
       title="添加商品"
       :visible.sync="addGoodsDialog"
@@ -44,14 +44,14 @@
         </el-form-item>
         <el-form-item label="价格" prop="price">
           <el-input
-            v-model="addGoodsForm.price"
+            v-model.number="addGoodsForm.price"
             type="text"
             clearable
           ></el-input>
         </el-form-item>
         <el-form-item label="折扣价格" prop="discountPrice">
           <el-input
-            v-model="addGoodsForm.discountPrice"
+            v-model.number="addGoodsForm.discountPrice"
             type="text"
             clearable
           ></el-input>
@@ -60,21 +60,14 @@
           <el-input type="textarea" v-model="addGoodsForm.desc"></el-input>
         </el-form-item>
         <el-form-item label="图片上传">
-          <el-upload
-            ref="upload"
-            action=""
-            :on-remove="handleRemove"
-            :on-change="handleChange"
-            :auto-upload="false"
-            list-type="picture"
-            :limit="1"
-          >
-            <el-button size="small" type="primary">点击上传</el-button>
-          </el-upload>
+          <div class="fileinput-button">
+            <el-button type="primary" size="medium">点击上传</el-button>
+            <input type="file" name="file" @change="handleFileChange" />
+          </div>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="resetForm('add')"> 取消 </el-button>
+        <el-button @click="resetForm('add')">取消</el-button>
         <el-button type="primary" @click="addGoodsComfirm">确定</el-button>
       </span>
     </el-dialog>
@@ -90,26 +83,85 @@ export default {
         price: "",
         discountPrice: "",
         desc: "",
+        file: [],
       },
-      addGoodsDialog: false,
-      addGoodsRules: {},
+      addGoodsDialog: true,
+      addGoodsRules: {
+        name: [
+          {
+            required: true,
+            message: "请输入商品名称",
+            trigger: "change",
+          },
+        ],
+        price: [
+          {
+            required: true,
+            message: "请输入商品价格",
+            trigger: "change",
+          },
+          {
+            type: "number",
+            message: "必须是数字",
+            trigger: "change",
+          },
+        ],
+        discountPrice: [
+          {
+            required: true,
+            message: "请输入商品折扣价格",
+            trigger: "change",
+          },
+          {
+            type: "number",
+            message: "必须是数字",
+            trigger: "change",
+          },
+        ],
+        desc: [
+          {
+            required: true,
+            message: "请输入商品描述",
+            trigger: "change",
+          },
+          {
+            min: 1,
+            max: 120,
+            message: "长度在 1 到 120个字符",
+            trigger: "change",
+          },
+        ],
+      },
     };
   },
   mounted() {},
   methods: {
     // 提交商品
     addGoodsComfirm() {},
+    // 重置Form表单
     resetForm() {},
-    handleRemove() {
-      console.log("删除");
+    // 文件发生改变
+    handleFileChange(e) {
+      console.log(e.target.files);
+      const [file] = e.target.files;
+      if (!file) return;
+      this.addGoodsForm.file = file;
     },
-    handleChange(file, fileList) {
-      console.log(file);
-      console.log(fileList);
-    },
+    // 上传文件
+    uploadFile() {},
   },
 };
 </script>
 
 <style  scoped>
+.fileinput-button {
+  position: relative;
+  display: inline-block;
+}
+.fileinput-button input {
+  position: absolute;
+  right: 30px;
+  top: 5px;
+  opacity: 0;
+}
 </style>

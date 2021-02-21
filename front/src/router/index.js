@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-19 18:27:18
+ * @LastEditTime: 2021-02-21 11:51:37
  */
 
 import Vue from "vue";
@@ -59,7 +59,6 @@ export const asyncRoutes = [
   ...userRouteList.routes
 ];
 
-console.log(constRoutes);
 
 export default new VueRouter({
   mode: "history",
@@ -71,6 +70,7 @@ export default new VueRouter({
   ...constRoutes
   ]
 });
+
 
 // 路由重复报错处理方法
 const originalPush = VueRouter.prototype.push
