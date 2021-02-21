@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 09:46:03
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-21 16:41:28
+ * @LastEditTime: 2021-02-21 18:02:37
 -->
 
 <template>
@@ -80,6 +80,7 @@
 <script>
 import { Message } from "element-ui";
 import Util from "../../util/util.js";
+import SparkMD5 from "spark-md5";
 const CHUNK_SIZE = 1 * 1024 * 1024;
 
 export default {

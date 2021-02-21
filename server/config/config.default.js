@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:21:47
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 17:37:51
+ * @LastEditTime: 2021-02-21 16:53:02
  */
 /* eslint valid-jsdoc: "off" */
 
@@ -12,6 +12,9 @@
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
+
+const path = require('path');
+
 module.exports = appInfo => {
   /**
    * built-in config
@@ -54,6 +57,13 @@ module.exports = appInfo => {
   config.jwt = {
     secret: 'kkbzhangzeyu',
   };
+  // 上传文件配置
+  config.multipart = {
+    mode: 'file',
+    whitelist: () => true,
+  };
+
+  config.UPLOAD_DIR = path.resolve(__dirname, '..', 'app/public');
 
   // add your user config here
   const userConfig = {

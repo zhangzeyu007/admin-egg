@@ -3,12 +3,12 @@
  * @Author: 海象
  * @Date: 2021-02-21 11:27:14
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-21 12:35:33
+ * @LastEditTime: 2021-02-21 17:08:02
  */
 'use strict';
 const BaseController = require('./base');
-
 const uploadRule = {};
+const fse = require('fs-extra');
 
 class GoodsController extends BaseController {
   async upload() {
@@ -18,9 +18,8 @@ class GoodsController extends BaseController {
     if (errors) {
       return this.error('参数校验失败', -1, errors);
     }
-    // 组装参数
-    const payload = ctx.request.body || {};
-    console.log(payload);
+    const file = ctx.request.files[0];
+    await fse.move(file.filepath, this.config.UPLOAD_DIR);
   }
   async checkfile() {
     const { ctx, app, service } = this;
