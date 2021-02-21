@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 09:46:03
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-21 12:28:23
+ * @LastEditTime: 2021-02-21 16:31:08
 -->
 
 <template>
@@ -78,11 +78,14 @@
 </template>
 
 <script>
-const CHUNK_SIZE = 10 * 1024 * 1024;
+import { Message } from "element-ui";
+import Util from "../../util/util.js";
+const CHUNK_SIZE = 1 * 1024 * 1024;
 
 export default {
   data() {
     return {
+      addGoodsDialog: true,
       addGoodsForm: {
         name: "",
         price: "",
@@ -90,7 +93,6 @@ export default {
         desc: "",
         file: [],
       },
-      addGoodsDialog: true,
       addGoodsRules: {
         name: [
           {
@@ -142,7 +144,9 @@ export default {
   mounted() {},
   methods: {
     // 提交商品
-    addGoodsComfirm() {},
+    addGoodsComfirm() {
+      this.uploadFile();
+    },
     // 重置Form表单
     resetForm() {},
     // 文件发生改变
@@ -152,13 +156,6 @@ export default {
       console.log(file);
       if (!file) return;
       this.addGoodsForm.file = file;
-    },
-    // 上传文件
-    uploadFile() {
-      if (!this.addGoodsForm.file) {
-        return;
-      }
-      const chunks = this.createFileChunk(this.addGoodsForm.file);
     },
     // 创建切片
     createFileChunk(file, size = CHUNK_SIZE) {
@@ -170,6 +167,25 @@ export default {
         cur += size;
       }
       return chunks;
+    },
+    // 上传文件
+    async uploadFile() {
+      if (!this.addGoodsForm.file) {
+        Message({
+          message: "没有选择文件",
+          type: "warning",
+        });
+        return;
+      }
+      if (!(await Util.isImage(this.addGoodsForm.file))) {
+        Message({
+          message: "文件格式不对",
+          type: "warning",
+        });
+        return;
+      }
+      const chunks = this.createFileChunk(this.addGoodsForm.file);
+      console.log(chunks);
     },
   },
 };
