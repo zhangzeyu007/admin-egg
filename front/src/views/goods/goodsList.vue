@@ -72,7 +72,7 @@
 <script>
 import { Message } from "element-ui";
 import Util from "../../util/util.js";
-// import SparkMD5 from "spark-md5";
+import sparkMD5 from "spark-md5";
 const CHUNK_SIZE = 1 * 1024 * 1024;
 
 export default {
@@ -163,6 +163,10 @@ export default {
       }
       return chunks;
     },
+    /**
+     * 使用web worker 计算hash
+     * todo 存在 bug
+     */
     async calculateHashWorker() {
       return new Promise((resolve) => {
         this.worker = new Worker("/hash.js");
@@ -174,6 +178,46 @@ export default {
             resolve(hash);
           }
         };
+      });
+    },
+    /**
+     * 利用空闲时间 进行计算 hash
+     *
+     */
+    async calculateHashIdle() {
+      const chunks = this.chunks;
+      return new Promise((resolve) => {
+        const saprk = new sparkMD5.ArrayBuffer();
+        let count = 0;
+
+        const appendToSpark = async (file) => {
+          return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(file);
+            reader.onload = (e) => {
+              saprk.append(e.target.result);
+              resolve();
+            };
+          });
+        };
+
+        const workLoop = async (deadline) => {
+          // timeRemaining 获取当前帧的剩余时间
+          while (count < chunks.length && deadline.timeRemaining() > 1) {
+            // 空闲时间, 且有任务
+            await appendToSpark(chunks[count].file);
+            count++;
+            if (count < chunks.length) {
+              this.hash = Number(((100 * count) / chunks.length).toFixed(2));
+            } else {
+              this.hashProgress = 100;
+              resolve(saprk.end());
+            }
+          }
+          window.requestIdleCallback(workLoop);
+        };
+        // 浏览器一旦空闲, 就会调用 workLoop
+        window.requestIdleCallback(workLoop);
       });
     },
     // 上传文件
@@ -195,7 +239,7 @@ export default {
       const chunks = this.createFileChunk(this.addGoodsForm.file);
       console.log(chunks);
       this.chunks = chunks;
-      const hash = await this.calculateHashWorker();
+      const hash = await this.calculateHashIdle();
       console.log(hash);
     },
   },
