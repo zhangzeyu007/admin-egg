@@ -1,11 +1,3 @@
-<!--
- * @Description: 组件
- * @Author: 海象
- * @Date: 2021-02-06 09:46:03
- * @LastEditors: 海象
- * @LastEditTime: 2021-02-21 18:02:37
--->
-
 <template>
   <div class="goodsList">
     <el-card>
@@ -80,12 +72,14 @@
 <script>
 import { Message } from "element-ui";
 import Util from "../../util/util.js";
-import SparkMD5 from "spark-md5";
+// import SparkMD5 from "spark-md5";
 const CHUNK_SIZE = 1 * 1024 * 1024;
 
 export default {
   data() {
     return {
+      chunks: [],
+      hashProgress: 0,
       addGoodsDialog: true,
       addGoodsForm: {
         name: "",
@@ -169,6 +163,19 @@ export default {
       }
       return chunks;
     },
+    async calculateHashWorker() {
+      return new Promise((resolve) => {
+        this.worker = new Worker("/hash.js");
+        this.worker.postMessage({ chunks: this.chunks });
+        this.worker.onmessage = (e) => {
+          const { progress, hash } = e.data;
+          this.hashProgress = Number(progress.toFixed(2));
+          if (hash) {
+            resolve(hash);
+          }
+        };
+      });
+    },
     // 上传文件
     async uploadFile() {
       if (!this.addGoodsForm.file) {
@@ -187,6 +194,9 @@ export default {
       }
       const chunks = this.createFileChunk(this.addGoodsForm.file);
       console.log(chunks);
+      this.chunks = chunks;
+      const hash = await this.calculateHashWorker();
+      console.log(hash);
     },
   },
 };
