@@ -3,15 +3,14 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-23 08:46:52
+ * @LastEditTime: 2021-02-23 15:50:57
  */
 'use strict';
 
 const svgCaptcha = require('svg-captcha');
 const fse = require('fs-extra');
 const BaseController = require('./base');
-const uploadRule = {};
-
+const path = require('path');
 
 class UtilController extends BaseController {
   // 验证码接口
@@ -30,16 +29,20 @@ class UtilController extends BaseController {
   }
   // 上传接口
   async upload() {
-    const { ctx, app, service } = this;
-    // 校验传递的参数
-    console.log(ctx);
-    const errors = app.validator.validate(uploadRule, ctx.request.body);
-    if (errors) {
-      return this.error('参数校验失败', -1, errors);
-    }
+    const { ctx } = this;
+
     const file = ctx.request.files[0];
-    await fse.move(file.filepath, this.config.UPLOAD_DIR);
-    this.success('成功');
+    console.log(file);
+    const { hash, name } = ctx.request.body;
+    const chunkPath = path.resolve(this.config.UPLOAD_DIR, hash);
+
+    if (!fse.existsSync(chunkPath)) {
+      await fse.mkdir(chunkPath);
+    }
+
+    await fse.move(file.filepath, `${chunkPath}/${name}`);
+
+    this.message('切片上传成功');
   }
   // 检测文件是否存在接口
   async checkFile() {

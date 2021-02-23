@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-21 15:51:33
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-22 11:40:45
+ * @LastEditTime: 2021-02-23 15:25:04
  */
 /**
  * 处理图片类型判断
@@ -19,7 +19,6 @@ async function blobToString(blob) {
                 .join("");
             resolve(ret);
         };
-        console.log(blob);
         reader.readAsBinaryString(blob);
     });
 }
@@ -36,7 +35,6 @@ async function isImage(file) {
 
 async function isPng(file) {
     const ret = await blobToString(file.slice(0, 8));
-    console.log(ret);
     const ispng = ret == "89504E47DA1AA";
     return ispng;
 }

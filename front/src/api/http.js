@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-01-09 22:09:44
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-23 13:32:22
+ * @LastEditTime: 2021-02-23 13:45:12
  */
 
 import axios from 'axios'
@@ -48,8 +48,6 @@ axios.defaults.transformRequest = [function (data, config) {
     }
 }]
 
-
-
 /**
  * 设置请求截器
  * 客户端发送请求 -> [请求拦截器] -> 服务器 
@@ -60,10 +58,12 @@ axios.interceptors.request.use(config => {
     // 携带token
     let token = localStorage.getItem('token');
     token && (config.headers.Authorization = 'Bearer ' + token);
-
-    if (config.url.includes('/util/upload')) {
+    // 对请求头处理
+    // formData类型 如果url 包含以下路径 使用formData 上传
+    if (config.url.includes('/util/upload' || '/util/checkfile')) {
         config.headers['Content-Type'] = 'multipart/form-data;charet=utf-8'
     }
+
     return config
 }, error => {
     return Promise.reject(error)

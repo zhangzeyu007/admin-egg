@@ -73,6 +73,7 @@
                   success: chunk.progress == 100,
                   error: chunk.progress < 0,
                 }"
+                :style="{ height: chunk.progress + '%' }"
               >
                 <i
                   class="el-icon-loading"
@@ -314,16 +315,18 @@ export default {
             form,
             index: chunk.index,
             error: 0,
+            progress: 0,
           };
         })
         .map(({ form, index }) => {
           // console.log(form);
-          this.$api.util.upload(form).then({
+          this.$api.util.upload(form, {
             onUploadProgress: (progress) => {
               // 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
               this.chunks[index].progress = Number(
                 ((progress.loaded / progress.total) * 100).toFixed(2)
               );
+              console.log(this.chunks[index].progress);
             },
           });
         });
@@ -358,7 +361,7 @@ export default {
           index,
           chunk: chunk.file,
           // 设置进度条，已经上传的，设为100
-          // progress: uploadedList.indexOf(name) > -1 ? 100 : 0,
+          progress: 0,
         };
       });
 
@@ -380,23 +383,25 @@ export default {
   opacity: 0;
 }
 
-.cube-container .cube {
-  width: 14px;
-  height: 14px;
-  line-height: 12px;
-  border: 1px solid #606266;
-  background: #e4e7ed;
-  float: left;
-  > .success {
-    background: #67c23a;
-  }
+.cube-container {
+  .cube {
+    width: 14px;
+    height: 14px;
+    line-height: 12px;
+    border: 1px solid #606266;
+    background: #e4e7ed;
+    float: left;
+    > .success {
+      background: #67c23a;
+    }
 
-  > .uploading {
-    background: #409eff;
-  }
+    > .uploading {
+      background: #409eff;
+    }
 
-  > .error {
-    background: #f56c6c;
+    > .error {
+      background: #f56c6c;
+    }
   }
 }
 </style>
