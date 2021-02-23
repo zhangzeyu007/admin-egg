@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 10:16:53
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-20 15:21:56
+ * @LastEditTime: 2021-02-23 21:47:35
 -->
 <template>
   <div class="userList">
@@ -297,7 +297,6 @@ export default {
   },
   watch: {
     search(old) {
-      console.log(old);
       if (!old) {
         this.pages.pageNum = 1;
       }
@@ -343,7 +342,6 @@ export default {
               role: this.editForm.role,
             })
             .then((res) => {
-              console.log(res.code);
               if (res.code == 200) {
                 Message({
                   message: "修改成功",
@@ -428,7 +426,6 @@ export default {
       this.$api.user
         .getUserList(this.pages)
         .then((res) => {
-          console.log(res);
           if (res.code == 200) {
             if (res.data.totalPage) {
               this.pages.totalPage = res.data.totalPage;
