@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-01-09 22:09:44
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 16:54:50
+ * @LastEditTime: 2021-02-22 21:59:36
  */
 
 import axios from 'axios'
@@ -33,11 +33,12 @@ axios.defaults.timeout = 10000;
 axios.defaults.withCredentials = true;
 
 /**
- * 设置数据请求传递 的格式x-www-form-urlencoded
+ * 设置数据请求传递的格式x-www-form-urlencoded
  * (看服务器要求什么格式)
 */
 
 axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 axios.defaults.transformRequest = data => qs.stringify(data)
 
 /**

@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-21 15:51:33
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-21 16:26:41
+ * @LastEditTime: 2021-02-22 11:40:45
  */
 /**
  * 处理图片类型判断
@@ -19,6 +19,7 @@ async function blobToString(blob) {
                 .join("");
             resolve(ret);
         };
+        console.log(blob);
         reader.readAsBinaryString(blob);
     });
 }

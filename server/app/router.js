@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:21:47
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-21 12:37:08
+ * @LastEditTime: 2021-02-22 21:29:38
  */
 'use strict';
 
@@ -25,5 +25,5 @@ module.exports = app => {
   router.post('/user/userinfo', jwt, controller.user.userInfo);
   // 商品
   router.post('/goods/upload', jwt, controller.goods.upload);
-  router.post('/goods/upload', jwt, controller.goods.checkfile);
+  router.post('/goods/checkfile', jwt, controller.goods.checkfile);
 };
