@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-01-09 22:09:44
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-22 21:59:36
+ * @LastEditTime: 2021-02-23 13:32:22
  */
 
 import axios from 'axios'
@@ -38,8 +38,17 @@ axios.defaults.withCredentials = true;
 */
 
 axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
-axios.defaults.transformRequest = data => qs.stringify(data)
+
+// 请求发送前对数据处理fromData
+axios.defaults.transformRequest = [function (data, config) {
+    if (config['Content-Type'] == 'multipart/form-data;charet=utf-8') {
+        return data
+    } else {
+        return qs.stringify(data)
+    }
+}]
+
+
 
 /**
  * 设置请求截器
@@ -51,6 +60,10 @@ axios.interceptors.request.use(config => {
     // 携带token
     let token = localStorage.getItem('token');
     token && (config.headers.Authorization = 'Bearer ' + token);
+
+    if (config.url.includes('/util/upload')) {
+        config.headers['Content-Type'] = 'multipart/form-data;charet=utf-8'
+    }
     return config
 }, error => {
     return Promise.reject(error)

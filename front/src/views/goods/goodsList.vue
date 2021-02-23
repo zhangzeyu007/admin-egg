@@ -310,7 +310,6 @@ export default {
           form.append("chunk", chunk.chunk);
           form.append("hash", chunk.hash);
           form.append("name", chunk.name);
-
           return {
             form,
             index: chunk.index,
@@ -318,7 +317,8 @@ export default {
           };
         })
         .map(({ form, index }) => {
-          this.$api.goods.upload(form).then({
+          // console.log(form);
+          this.$api.util.upload(form).then({
             onUploadProgress: (progress) => {
               // 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
               this.chunks[index].progress = Number(
