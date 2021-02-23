@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-23 08:32:38
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-23 16:14:12
+ * @LastEditTime: 2021-02-23 22:04:35
  */
 import axios from '../http'
 
@@ -15,8 +15,13 @@ function upload(params, config) {
 function checkFile(params) {
     return axios.post('/util/checkfile', params)
 }
+//  合并文件
+function mergeFile(params) {
+    return axios.post('/util/mergefile', params)
+}
 
 export default {
     upload,
-    checkFile
+    checkFile,
+    mergeFile
 }

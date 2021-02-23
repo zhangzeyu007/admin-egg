@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-23 15:50:57
+ * @LastEditTime: 2021-02-23 22:34:07
  */
 'use strict';
 
@@ -48,6 +48,7 @@ class UtilController extends BaseController {
   async checkFile() {
     const { ctx, app, service } = this;
   }
+  async mergeFile() { }
 
 }
 

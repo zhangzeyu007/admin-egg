@@ -93,6 +93,41 @@
   </div>
 </template>
 
+<style  lang="less" scoped>
+.fileinput-button {
+  position: relative;
+  display: inline-block;
+}
+.fileinput-button input {
+  position: absolute;
+  right: 30px;
+  top: 5px;
+  opacity: 0;
+}
+
+.cube-container {
+  .cube {
+    width: 14px;
+    height: 14px;
+    line-height: 12px;
+    border: 1px solid #606266;
+    background: #e4e7ed;
+    float: left;
+    > .success {
+      background: #67c23a;
+    }
+
+    > .uploading {
+      background: #409eff;
+    }
+
+    > .error {
+      background: #f56c6c;
+    }
+  }
+}
+</style>
+
 <script>
 import { Message } from "element-ui";
 import Util from "../../util/util.js";
@@ -332,6 +367,10 @@ export default {
         });
 
       await Promise.all(requests);
+      await this.mergeRequest();
+    },
+    async mergeRequest() {
+      this.$api.util.mergeFile();
     },
     // 上传文件
     async uploadFile() {
@@ -371,37 +410,3 @@ export default {
 };
 </script>
 
-<style  lang="less" scoped>
-.fileinput-button {
-  position: relative;
-  display: inline-block;
-}
-.fileinput-button input {
-  position: absolute;
-  right: 30px;
-  top: 5px;
-  opacity: 0;
-}
-
-.cube-container {
-  .cube {
-    width: 14px;
-    height: 14px;
-    line-height: 12px;
-    border: 1px solid #606266;
-    background: #e4e7ed;
-    float: left;
-    > .success {
-      background: #67c23a;
-    }
-
-    > .uploading {
-      background: #409eff;
-    }
-
-    > .error {
-      background: #f56c6c;
-    }
-  }
-}
-</style>
