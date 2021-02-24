@@ -133,7 +133,7 @@
 import { Message } from "element-ui";
 import Util from "../../util/util.js";
 import sparkMD5 from "spark-md5";
-const CHUNK_SIZE = 0.1 * 1024 * 1024;
+const CHUNK_SIZE = 1 * 1024 * 1024;
 
 export default {
   data() {

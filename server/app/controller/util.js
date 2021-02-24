@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-24 10:36:43
+ * @LastEditTime: 2021-02-24 14:22:56
  */
 'use strict';
 
@@ -30,7 +30,6 @@ class UtilController extends BaseController {
   // 上传接口
   async upload() {
     const { ctx } = this;
-
     const file = ctx.request.files[0];
     const { hash, name } = ctx.request.body;
     const chunkPath = path.resolve(this.config.UPLOAD_DIR, hash);
@@ -45,12 +44,33 @@ class UtilController extends BaseController {
   }
   // 检测文件是否存在接口
   async checkFile() {
-    const { ctx, app, service } = this;
+    const { ctx } = this;
+    const { ext, hash } = ctx.request.body;
+    const filePath = path.resolve(this.config.UPLOAD_DIR, `${hash}.${ext}`);
+
+    let uploaded = false;
+    let uploadedList = [];
+    if (fse.existsSync(filePath)) {
+      // 文件存在
+      uploaded = true;
+    } else {
+      uploadedList = await this.getUploadedList(path.resolve(this.config.UPLOAD_DIR, hash));
+    }
+    this.success({
+      uploaded,
+      uploadedList,
+    });
   }
+  // 对上传文件夹进行过滤
+  async getUploadedList(dirPath) {
+    return fse.existsSync(dirPath)
+      ? (await fse.readdir(dirPath)).filter(name => name[0] !== '.') : [];
+  }
+
   // 合并文件
   async mergeFile() {
     const { ctx } = this;
-    const { ext, hash, size } = ctx.request.body;
+    const { ext, size, hash } = ctx.request.body;
     const filePath = path.resolve(this.config.UPLOAD_DIR, `${hash}.${ext}`);
     await ctx.service.tools.mergeFile(filePath, hash, size);
     this.success({
