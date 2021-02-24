@@ -110,9 +110,10 @@
     width: 14px;
     height: 14px;
     line-height: 12px;
-    border: 1px solid #606266;
+    border: 1px solid #000;
     background: #e4e7ed;
     float: left;
+    opacity: 0.6;
     > .success {
       background: #67c23a;
     }
@@ -139,6 +140,7 @@ export default {
     return {
       chunks: [],
       hashProgress: 0,
+      hash: "",
       addGoodsDialog: true,
       addGoodsForm: {
         name: "",
@@ -259,15 +261,16 @@ export default {
      *
      */
     async calculateHashIdle() {
+      console.log(this.chunks);
       const chunks = this.chunks;
       return new Promise((resolve) => {
         const spark = new sparkMD5.ArrayBuffer();
         let count = 0;
 
-        const appendToSpark = async (file) => {
+        const appendToSpark = async (chunk) => {
           return new Promise((resolve) => {
             const reader = new FileReader();
-            reader.readAsArrayBuffer(file);
+            reader.readAsArrayBuffer(chunk);
             reader.onload = (e) => {
               spark.append(e.target.result);
               resolve();
@@ -279,7 +282,7 @@ export default {
           // timeRemaining 获取当前帧的剩余时间
           while (count < chunks.length && deadline.timeRemaining() > 1) {
             // 空闲时间, 且有任务
-            await appendToSpark(chunks[count].file);
+            await appendToSpark(chunks[count].chunk);
             count++;
             if (count < chunks.length) {
               this.hash = Number(((100 * count) / chunks.length).toFixed(2));
@@ -370,7 +373,11 @@ export default {
       await this.mergeRequest();
     },
     async mergeRequest() {
-      this.$api.util.mergeFile();
+      this.$api.util.mergeFile({
+        ext: this.addGoodsForm.file.name.split(".").pop(),
+        size: CHUNK_SIZE,
+        hash: this.hash,
+      });
     },
     // 上传文件
     async uploadFile() {
@@ -389,8 +396,22 @@ export default {
         return;
       }
       const chunks = this.createFileChunk(this.addGoodsForm.file);
-      // const hash1 = await this.calculateHashIdle();
+      // const hash = await this.calculateHashIdle();
       const hash = await this.calculateHashSample();
+      this.hash = hash;
+
+      // 问一下后端, 文件是否上传过, 如果没有  是否存在切片
+      const {
+        data: { uploaded, uploadedList },
+      } = await this.$api.util.checkFile({
+        hash: this.hash,
+        ext: this.addGoodsForm.file.name.split(".").pop(),
+      });
+
+      if (uploaded) {
+        return Message.success("秒传成功");
+      }
+
       this.chunks = chunks.map((chunk, index) => {
         // 切片的名字 hash+index
         const name = hash + "-" + index;
@@ -404,7 +425,7 @@ export default {
         };
       });
 
-      await this.uploadChunks();
+      await this.uploadChunks(uploadedList);
     },
   },
 };

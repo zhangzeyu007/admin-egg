@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-23 22:34:07
+ * @LastEditTime: 2021-02-24 10:36:43
  */
 'use strict';
 
@@ -32,7 +32,6 @@ class UtilController extends BaseController {
     const { ctx } = this;
 
     const file = ctx.request.files[0];
-    console.log(file);
     const { hash, name } = ctx.request.body;
     const chunkPath = path.resolve(this.config.UPLOAD_DIR, hash);
 
@@ -48,8 +47,16 @@ class UtilController extends BaseController {
   async checkFile() {
     const { ctx, app, service } = this;
   }
-  async mergeFile() { }
-
+  // 合并文件
+  async mergeFile() {
+    const { ctx } = this;
+    const { ext, hash, size } = ctx.request.body;
+    const filePath = path.resolve(this.config.UPLOAD_DIR, `${hash}.${ext}`);
+    await ctx.service.tools.mergeFile(filePath, hash, size);
+    this.success({
+      url: `/public/${hash}.${ext}`,
+    });
+  }
 }
 
 
