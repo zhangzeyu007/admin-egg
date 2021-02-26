@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-21 15:51:33
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-23 15:25:04
+ * @LastEditTime: 2021-02-25 22:16:40
  */
 /**
  * 处理图片类型判断
@@ -53,7 +53,6 @@ async function isGif(file) {
     // 16进制的抓安环
     const ret = await blobToString(file.slice(0, 6));
     const isGif = ret == "47 49 46 38 39 61" || ret == "47 49 46 38 37 61";
-    console.log(ret);
     return isGif;
 }
 

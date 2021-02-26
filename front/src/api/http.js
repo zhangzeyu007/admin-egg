@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-01-09 22:09:44
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-23 13:45:12
+ * @LastEditTime: 2021-02-26 21:55:32
  */
 
 import axios from 'axios'
@@ -29,7 +29,7 @@ switch (process.env.NODE_ENV) {
  * 设置超时时间和跨域是否允许携带凭证
  * 
 */
-axios.defaults.timeout = 10000;
+// axios.defaults.timeout = 10000;
 axios.defaults.withCredentials = true;
 
 /**
@@ -66,6 +66,7 @@ axios.interceptors.request.use(config => {
 
     return config
 }, error => {
+    console.log(error);
     return Promise.reject(error)
 })
 
@@ -101,10 +102,9 @@ axios.interceptors.response.use(response => {
         //=> 服务器连接结果都没有返回
         if (!window.navigator.online) {
             // 断网处理: 可以跳转到断网页面
-
             return;
         }
-
+        console.log(error);
         return Promise.reject(error)
     }
 })

@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-24 14:22:56
+ * @LastEditTime: 2021-02-26 22:42:33
  */
 'use strict';
 
@@ -27,29 +27,14 @@ class UtilController extends BaseController {
     this.ctx.response.type = 'image/svg+xml';
     this.ctx.body = captcha.data;
   }
-  // 上传接口
-  async upload() {
-    const { ctx } = this;
-    const file = ctx.request.files[0];
-    const { hash, name } = ctx.request.body;
-    const chunkPath = path.resolve(this.config.UPLOAD_DIR, hash);
-
-    if (!fse.existsSync(chunkPath)) {
-      await fse.mkdir(chunkPath);
-    }
-
-    await fse.move(file.filepath, `${chunkPath}/${name}`);
-
-    this.message('切片上传成功');
-  }
   // 检测文件是否存在接口
   async checkFile() {
     const { ctx } = this;
     const { ext, hash } = ctx.request.body;
     const filePath = path.resolve(this.config.UPLOAD_DIR, `${hash}.${ext}`);
-
     let uploaded = false;
     let uploadedList = [];
+
     if (fse.existsSync(filePath)) {
       // 文件存在
       uploaded = true;
@@ -67,11 +52,26 @@ class UtilController extends BaseController {
       ? (await fse.readdir(dirPath)).filter(name => name[0] !== '.') : [];
   }
 
+  // 上传接口
+  async upload() {
+    const { ctx } = this;
+    const file = ctx.request.files[0];
+    const { hash, name } = ctx.request.body;
+    const chunkPath = path.resolve(this.config.UPLOAD_DIR, hash);
+    console.log('----上传切片');
+    if (!fse.existsSync(chunkPath)) {
+      await fse.mkdir(chunkPath);
+    }
+    await fse.move(file.filepath, `${chunkPath}/${name}`);
+    this.message('切片上传成功');
+  }
+
   // 合并文件
   async mergeFile() {
     const { ctx } = this;
     const { ext, size, hash } = ctx.request.body;
     const filePath = path.resolve(this.config.UPLOAD_DIR, `${hash}.${ext}`);
+    console.log('----合并调用');
     await ctx.service.tools.mergeFile(filePath, hash, size);
     this.success({
       url: `/public/${hash}.${ext}`,

@@ -261,16 +261,17 @@ export default {
      *
      */
     async calculateHashIdle() {
-      console.log(this.chunks);
       const chunks = this.chunks;
+      console.log(chunks);
+
       return new Promise((resolve) => {
         const spark = new sparkMD5.ArrayBuffer();
         let count = 0;
 
-        const appendToSpark = async (chunk) => {
+        const appendToSpark = async (file) => {
           return new Promise((resolve) => {
             const reader = new FileReader();
-            reader.readAsArrayBuffer(chunk);
+            reader.readAsArrayBuffer(file);
             reader.onload = (e) => {
               spark.append(e.target.result);
               resolve();
@@ -282,7 +283,7 @@ export default {
           // timeRemaining 获取当前帧的剩余时间
           while (count < chunks.length && deadline.timeRemaining() > 1) {
             // 空闲时间, 且有任务
-            await appendToSpark(chunks[count].chunk);
+            await appendToSpark(chunks[count].file);
             count++;
             if (count < chunks.length) {
               this.hash = Number(((100 * count) / chunks.length).toFixed(2));
@@ -341,7 +342,7 @@ export default {
     },
     // 上传切片处理方法
     async uploadChunks(uploadedList = []) {
-      const requests = this.chunks
+      const requests = await this.chunks
         .filter((chunk) => uploadedList.indexOf(chunk.name) == -1)
         .map((chunk) => {
           // 转成 promise
@@ -353,24 +354,83 @@ export default {
             form,
             index: chunk.index,
             error: 0,
-            progress: 0,
           };
-        })
-        .map(({ form, index }) => {
-          // console.log(form);
-          this.$api.util.upload(form, {
-            onUploadProgress: (progress) => {
-              // 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
-              this.chunks[index].progress = Number(
-                ((progress.loaded / progress.total) * 100).toFixed(2)
-              );
-              console.log(this.chunks[index].progress);
-            },
-          });
         });
+      // .map(({ form, index }) => {
+      //   console.log("调用2");
+      //   this.$api.util.upload(form, {
+      //     onUploadProgress: (progress) => {
+      //       console.log("哈哈哈哈");
+      //       // 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
+      //       this.chunks[index].progress = Number(
+      //         ((progress.loaded / progress.total) * 100).toFixed(2)
+      //       );
+      //       console.log(this.chunks[index].progress);
+      //     },
+      //   });
+      // });
+      // TODO 并发量控制
+      //尝试申请tcp链接过多,也会造成卡顿
+      // await Promise.all(requests);
+      await this.sendRequest(requests);
+      setTimeout(async () => {
+        await this.mergeRequest();
+      }, 5000);
+    },
+    sendRequest(chunks, limit = 3) {
+      let that = this;
+      // limit 并发数
+      return new Promise((resolve, reject) => {
+        const len = chunks.length;
+        let counter = 0;
+        let isStop = false;
+        const start = async () => {
+          if (isStop) {
+            return;
+          }
+          const task = chunks.shift();
+          if (task) {
+            const { form, index } = task;
+            try {
+              that.$api.util.upload(form, {
+                onUploadProgress: (progress) => {
+                  // console.log(progress);
+                  // 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
+                  that.chunks[index].progress = Number(
+                    ((progress.loaded / progress.total) * 100).toFixed(2)
+                  );
+                },
+              });
+              if (counter == len - 1) {
+                // 最后一个任务
+                resolve();
+              } else {
+                counter++;
+                // 启动下一个任务
+                start();
+              }
+            } catch (e) {
+              console.log("接口报错");
+              this.chunks[index].progress = -1;
+              if (task.error < 3) {
+                task.error++;
+                chunks.unshift(task);
+                start();
+              } else {
+                // 错误
+                isStop = true;
+                reject();
+              }
+            }
+          }
+        };
 
-      await Promise.all(requests);
-      await this.mergeRequest();
+        while (limit > 0) {
+          // 启动limit个任务
+          start();
+          limit -= 1;
+        }
+      });
     },
     async mergeRequest() {
       this.$api.util.mergeFile({
@@ -396,6 +456,7 @@ export default {
         return;
       }
       const chunks = this.createFileChunk(this.addGoodsForm.file);
+      this.chunks = chunks;
       // const hash = await this.calculateHashIdle();
       const hash = await this.calculateHashSample();
       this.hash = hash;
@@ -420,8 +481,8 @@ export default {
           name,
           index,
           chunk: chunk.file,
-          // 设置进度条，已经上传的，设为100
-          progress: 0,
+          // 设置进度条，已经上传的设为100
+          progress: uploadedList.indexOf(name) > -1 ? 100 : 0,
         };
       });
 
