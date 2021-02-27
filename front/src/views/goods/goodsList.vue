@@ -426,6 +426,57 @@ export default {
       // await Promise.all(requests);
       await this.sendRequest(requests);
     },
+
+    // 上传文件
+    async uploadFile() {
+      if (!this.addGoodsForm.file) {
+        Message({
+          message: "没有选择文件",
+          type: "warning",
+        });
+        return;
+      }
+      if (!(await Util.isImage(this.addGoodsForm.file))) {
+        Message({
+          message: "文件格式不对",
+          type: "warning",
+        });
+        return;
+      }
+      const chunks = this.createFileChunk(this.addGoodsForm.file);
+      this.chunks = chunks;
+      // const hash = await this.calculateHashIdle();
+      const hash = await this.calculateHashSample();
+      this.hash = hash;
+
+      // 问一下后端, 文件是否上传过, 如果没有  是否存在切片
+      const {
+        data: { uploaded, uploadedList },
+      } = await this.$api.util.checkFile({
+        hash: this.hash,
+        ext: this.addGoodsForm.file.name.split(".").pop(),
+      });
+
+      if (uploaded) {
+        return Message.success("秒传成功");
+      }
+
+      this.chunks = chunks.map((chunk, index) => {
+        // 切片的名字 hash+index
+        const name = hash + "-" + index;
+        return {
+          hash,
+          name,
+          index,
+          chunk: chunk.file,
+          // 设置进度条，已经上传的设为100
+          progress: uploadedList.indexOf(name) > -1 ? 100 : 0,
+        };
+      });
+
+      await this.uploadChunks(uploadedList);
+    },
+    // 发送请求
     sendRequest(chunks, limit = 3) {
       let that = this;
       // limit 并发数
@@ -483,7 +534,6 @@ export default {
             }
           }
         };
-
         while (limit > 0) {
           // 启动limit个任务
           start();
@@ -491,61 +541,13 @@ export default {
         }
       });
     },
+    // 合并文件
     async mergeRequest() {
       this.$api.util.mergeFile({
         ext: this.addGoodsForm.file.name.split(".").pop(),
         size: CHUNK_SIZE,
         hash: this.hash,
       });
-    },
-    // 上传文件
-    async uploadFile() {
-      if (!this.addGoodsForm.file) {
-        Message({
-          message: "没有选择文件",
-          type: "warning",
-        });
-        return;
-      }
-      if (!(await Util.isImage(this.addGoodsForm.file))) {
-        Message({
-          message: "文件格式不对",
-          type: "warning",
-        });
-        return;
-      }
-      const chunks = this.createFileChunk(this.addGoodsForm.file);
-      this.chunks = chunks;
-      // const hash = await this.calculateHashIdle();
-      const hash = await this.calculateHashSample();
-      this.hash = hash;
-
-      // 问一下后端, 文件是否上传过, 如果没有  是否存在切片
-      const {
-        data: { uploaded, uploadedList },
-      } = await this.$api.util.checkFile({
-        hash: this.hash,
-        ext: this.addGoodsForm.file.name.split(".").pop(),
-      });
-
-      if (uploaded) {
-        return Message.success("秒传成功");
-      }
-
-      this.chunks = chunks.map((chunk, index) => {
-        // 切片的名字 hash+index
-        const name = hash + "-" + index;
-        return {
-          hash,
-          name,
-          index,
-          chunk: chunk.file,
-          // 设置进度条，已经上传的设为100
-          progress: uploadedList.indexOf(name) > -1 ? 100 : 0,
-        };
-      });
-
-      await this.uploadChunks(uploadedList);
     },
   },
 };
