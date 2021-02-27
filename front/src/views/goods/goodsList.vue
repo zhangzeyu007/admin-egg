@@ -434,7 +434,6 @@ export default {
         let counter = 0;
         let last = 0;
         let isStop = false;
-
         const start = async () => {
           if (isStop) {
             return;

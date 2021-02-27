@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-01-09 22:09:44
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-27 10:29:28
+ * @LastEditTime: 2021-02-27 22:30:45
  */
 
 import axios from 'axios'
@@ -86,7 +86,6 @@ axios.interceptors.response.use(response => {
 }, error => {
     let { response } = error
     if (response) {
-        console.log('报错了啊');
         //  服务器最起码返回结果
         switch (response.status) {
             case 401: // 权限
