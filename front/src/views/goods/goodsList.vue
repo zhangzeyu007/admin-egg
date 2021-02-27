@@ -373,9 +373,6 @@ export default {
       //尝试申请tcp链接过多,也会造成卡顿
       // await Promise.all(requests);
       await this.sendRequest(requests);
-      setTimeout(async () => {
-        await this.mergeRequest();
-      }, 5000);
     },
     sendRequest(chunks, limit = 3) {
       let that = this;
@@ -383,7 +380,9 @@ export default {
       return new Promise((resolve, reject) => {
         const len = chunks.length;
         let counter = 0;
+        let last = 0;
         let isStop = false;
+
         const start = async () => {
           if (isStop) {
             return;
@@ -392,15 +391,26 @@ export default {
           if (task) {
             const { form, index } = task;
             try {
-              that.$api.util.upload(form, {
-                onUploadProgress: (progress) => {
-                  // console.log(progress);
-                  // 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
-                  that.chunks[index].progress = Number(
-                    ((progress.loaded / progress.total) * 100).toFixed(2)
-                  );
-                },
-              });
+              that.$api.util
+                .upload(form, {
+                  onUploadProgress: (progress) => {
+                    // console.log(progress);
+                    // 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
+                    that.chunks[index].progress = Number(
+                      ((progress.loaded / progress.total) * 100).toFixed(2)
+                    );
+                  },
+                })
+                .then((res) => {
+                  last += 1;
+                  if (last == len) {
+                    if (res.code == 200) {
+                      setTimeout(() => {
+                        that.mergeRequest();
+                      }, 5000);
+                    }
+                  }
+                });
               if (counter == len - 1) {
                 // 最后一个任务
                 resolve();
@@ -457,8 +467,8 @@ export default {
       }
       const chunks = this.createFileChunk(this.addGoodsForm.file);
       this.chunks = chunks;
-      // const hash = await this.calculateHashIdle();
-      const hash = await this.calculateHashSample();
+      const hash = await this.calculateHashIdle();
+      // const hash = await this.calculateHashSample();
       this.hash = hash;
 
       // 问一下后端, 文件是否上传过, 如果没有  是否存在切片

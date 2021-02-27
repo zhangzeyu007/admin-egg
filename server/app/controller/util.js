@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-26 22:42:33
+ * @LastEditTime: 2021-02-27 09:54:50
  */
 'use strict';
 
@@ -63,7 +63,8 @@ class UtilController extends BaseController {
       await fse.mkdir(chunkPath);
     }
     await fse.move(file.filepath, `${chunkPath}/${name}`);
-    this.message('切片上传成功');
+    await this.getUploadedList(path.resolve(this.config.UPLOAD_DIR, hash));
+    await this.message('切片上传成功');
   }
 
   // 合并文件

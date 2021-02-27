@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-24 09:23:40
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-26 22:41:54
+ * @LastEditTime: 2021-02-26 22:46:08
  */
 'use strict';
 const Service = require('egg').Service;
@@ -17,7 +17,6 @@ class ToolService extends Service {
     const chunkdDir = path.join(this.config.UPLOAD_DIR, filehash);// 切片文件夹
     let chunks = [];
     const that = this;
-    console.log(chunkdDir);
     fs.readdir(chunkdDir, 'utf8', async function(err, files) {
       console.log('------读取文件');
       console.log(err);
