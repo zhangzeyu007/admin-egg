@@ -59,30 +59,40 @@
               <img src="" alt="" />
             </div>
           </div>
-          <!-- <el-progress
-            :text-inside="true"
-            :stroke-width="18"
-            :percentage="hashProgress"
-            status="success"
-          ></el-progress> -->
-          <div class="cube-container" :style="{ width: cubWidth + 'px' }">
-            <div class="cube" v-for="chunk in chunks" :key="chunk.name">
-              <div
-                :class="{
-                  uploading: chunk.progress > 0 && chunk.progress < 100,
-                  success: chunk.progress == 100,
-                  error: chunk.progress < 0,
-                }"
-                :style="{ height: chunk.progress + '%' }"
-              >
-                <i
-                  class="el-icon-loading"
-                  style="color: #409eff"
-                  v-if="chunk.progress < 100 && chunk.progress > 0"
-                ></i>
+          <div class="upload-image" v-if="showUpLoad">
+            <div class="image">
+              <img :src="imgUrl" alt="" />
+            </div>
+            <div class="upload-right">
+              <div class="file-name">{{ fileName }}</div>
+              <div class="cube-container" :style="{ width: cubWidth + 'px' }">
+                <div class="cube" v-for="chunk in chunks" :key="chunk.name">
+                  <div
+                    :class="{
+                      uploading: chunk.progress > 0 && chunk.progress < 100,
+                      success: chunk.progress == 100,
+                      error: chunk.progress < 0,
+                    }"
+                    :style="{ height: chunk.progress + '%' }"
+                  >
+                    <i
+                      class="el-icon-loading"
+                      style="color: #409eff"
+                      v-if="chunk.progress < 100 && chunk.progress > 0"
+                    ></i>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          <el-progress
+            v-if="showUpLoad"
+            style="margin-top: 5px"
+            :text-inside="true"
+            :stroke-width="18"
+            :percentage="uploadProgress"
+            status="success"
+          ></el-progress>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -105,25 +115,55 @@
   opacity: 0;
 }
 
-.cube-container {
-  .cube {
-    width: 14px;
-    height: 14px;
-    line-height: 12px;
-    border: 1px solid #000;
-    background: #e4e7ed;
-    float: left;
-    opacity: 0.6;
-    > .success {
-      background: #67c23a;
+.upload-image {
+  display: flex;
+  align-items: center;
+  border: 2px solid #e4e7ed;
+  border-radius: 5px;
+  .image {
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+    box-sizing: border-box;
+    > img {
+      width: 100%;
+      height: 100%;
     }
-
-    > .uploading {
-      background: #409eff;
+  }
+  .upload-right {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    .file-name {
+      flex-shrink: 0;
+      font-size: 14px;
+      color: #409eff;
     }
+    .cube-container {
+      padding-left: 15px;
+      height: 80px;
+      width: 200px;
+      overflow: auto;
+      .cube {
+        width: 14px;
+        height: 14px;
+        line-height: 12px;
+        border: 1px solid #000;
+        background: #e4e7ed;
+        float: left;
+        opacity: 0.4;
+        > .success {
+          background: #67c23a;
+        }
 
-    > .error {
-      background: #f56c6c;
+        > .uploading {
+          background: #409eff;
+        }
+
+        > .error {
+          background: #f56c6c;
+        }
+      }
     }
   }
 }
@@ -133,13 +173,14 @@
 import { Message } from "element-ui";
 import Util from "../../util/util.js";
 import sparkMD5 from "spark-md5";
-const CHUNK_SIZE = 1 * 1024 * 1024;
+const CHUNK_SIZE = 2 * 1024 * 1024;
 
 export default {
   data() {
     return {
       chunks: [],
       hashProgress: 0,
+      totalProgress: 0,
       hash: "",
       addGoodsDialog: true,
       addGoodsForm: {
@@ -195,6 +236,9 @@ export default {
           },
         ],
       },
+      imgUrl: "",
+      fileName: "",
+      showUpLoad: false,
     };
   },
   computed: {
@@ -202,15 +246,19 @@ export default {
       return Math.ceil(Math.sqrt(this.chunks.length)) * 16;
     },
     uploadProgress() {
-      if (!this.addGoodsForm.file || this.chunks.length) {
+      if (!this.addGoodsForm.file || this.chunks.length <= 0) {
         return 0;
       }
       const loaded = this.chunks
-        .map((item) => item.chunk.size * item.progress)
+        .map(
+          (item) =>
+            (item.chunk ? item.chunk.size : 0) *
+            (item.progress ? item.progress : 0)
+        )
         .reduce((acc, cur) => acc + cur, 0);
 
       return parseInt(
-        ((loaded * 100) / this.addGoodsForm.file.size).toFixed(2)
+        ((loaded * 100) / this.addGoodsForm.file.size).toFixed(2) / 100
       );
     },
   },
@@ -220,13 +268,19 @@ export default {
       this.uploadFile();
     },
     // 重置Form表单
-    resetForm() {},
+    resetForm() {
+      this.chunks = [];
+      this.showUpLoad = false;
+    },
     // 文件发生改变
     handleFileChange(e) {
       const [file] = e.target.files;
-      console.log(file);
       if (!file) return;
+      this.resetForm();
+      this.fileName = file.name;
+      this.imgUrl = window.URL.createObjectURL(file);
       this.addGoodsForm.file = file;
+      this.showUpLoad = true;
     },
     // 创建切片
     createFileChunk(file, size = CHUNK_SIZE) {
@@ -262,8 +316,6 @@ export default {
      */
     async calculateHashIdle() {
       const chunks = this.chunks;
-      console.log(chunks);
-
       return new Promise((resolve) => {
         const spark = new sparkMD5.ArrayBuffer();
         let count = 0;
@@ -395,7 +447,7 @@ export default {
                 onUploadProgress: (progress) => {
                   // console.log(progress);
                   // 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
-                  that.chunks[index].progress = Number(
+                  this.chunks[index].progress = Number(
                     ((progress.loaded / progress.total) * 100).toFixed(2)
                   );
                 },
@@ -465,8 +517,8 @@ export default {
       }
       const chunks = this.createFileChunk(this.addGoodsForm.file);
       this.chunks = chunks;
-      const hash = await this.calculateHashIdle();
-      // const hash = await this.calculateHashSample();
+      // const hash = await this.calculateHashIdle();
+      const hash = await this.calculateHashSample();
       this.hash = hash;
 
       // 问一下后端, 文件是否上传过, 如果没有  是否存在切片
