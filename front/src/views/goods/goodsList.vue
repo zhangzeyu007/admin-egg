@@ -390,47 +390,45 @@ export default {
           const task = chunks.shift();
           if (task) {
             const { form, index } = task;
-            try {
-              that.$api.util
-                .upload(form, {
-                  onUploadProgress: (progress) => {
-                    // console.log(progress);
-                    // 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
-                    that.chunks[index].progress = Number(
-                      ((progress.loaded / progress.total) * 100).toFixed(2)
-                    );
-                  },
-                })
-                .then((res) => {
-                  last += 1;
-                  if (last == len) {
-                    if (res.code == 200) {
-                      setTimeout(() => {
-                        that.mergeRequest();
-                      }, 5000);
-                    }
+            await that.$api.util
+              .upload(form, {
+                onUploadProgress: (progress) => {
+                  // console.log(progress);
+                  // 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
+                  that.chunks[index].progress = Number(
+                    ((progress.loaded / progress.total) * 100).toFixed(2)
+                  );
+                },
+              })
+              .then((res) => {
+                last += 1;
+                if (last == len) {
+                  if (res.code == 200) {
+                    setTimeout(() => {
+                      that.mergeRequest();
+                    }, 5000);
                   }
-                });
-              if (counter == len - 1) {
-                // 最后一个任务
-                resolve();
-              } else {
-                counter++;
-                // 启动下一个任务
-                start();
-              }
-            } catch (e) {
-              console.log("接口报错");
-              this.chunks[index].progress = -1;
-              if (task.error < 3) {
-                task.error++;
-                chunks.unshift(task);
-                start();
-              } else {
-                // 错误
-                isStop = true;
-                reject();
-              }
+                }
+              })
+              .catch(() => {
+                this.chunks[index].progress = -1;
+                if (task.error < 3) {
+                  task.error++;
+                  chunks.unshift(task);
+                  start();
+                } else {
+                  // 错误
+                  isStop = true;
+                  reject();
+                }
+              });
+            if (counter == len - 1) {
+              // 最后一个任务
+              resolve();
+            } else {
+              counter++;
+              // 启动下一个任务
+              start();
             }
           }
         };

@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-01-09 22:09:44
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-26 21:55:32
+ * @LastEditTime: 2021-02-27 10:29:28
  */
 
 import axios from 'axios'
@@ -66,7 +66,6 @@ axios.interceptors.request.use(config => {
 
     return config
 }, error => {
-    console.log(error);
     return Promise.reject(error)
 })
 
@@ -86,8 +85,8 @@ axios.interceptors.response.use(response => {
     return response.data;
 }, error => {
     let { response } = error
-
     if (response) {
+        console.log('报错了啊');
         //  服务器最起码返回结果
         switch (response.status) {
             case 401: // 权限
@@ -96,15 +95,16 @@ axios.interceptors.response.use(response => {
                 break;
             case 404:// 资源文件不存在
                 break;
+            case 500:  //系统错误
+                break;
         }
-
+        return Promise.reject(error)
     } else {
         //=> 服务器连接结果都没有返回
         if (!window.navigator.online) {
             // 断网处理: 可以跳转到断网页面
             return;
         }
-        console.log(error);
         return Promise.reject(error)
     }
 })

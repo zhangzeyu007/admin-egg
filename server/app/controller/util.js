@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-27 09:54:50
+ * @LastEditTime: 2021-02-27 11:04:18
  */
 'use strict';
 
@@ -54,6 +54,10 @@ class UtilController extends BaseController {
 
   // 上传接口
   async upload() {
+    // 报错
+    // if (Math.random() > 0.3) {
+    //   return this.ctx.status = 500;
+    // }
     const { ctx } = this;
     const file = ctx.request.files[0];
     const { hash, name } = ctx.request.body;
