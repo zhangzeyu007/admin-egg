@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-24 09:23:40
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-26 22:46:08
+ * @LastEditTime: 2021-02-28 14:22:19
  */
 'use strict';
 const Service = require('egg').Service;
@@ -29,9 +29,7 @@ class ToolService extends Service {
       chunks = chunks.map(cp => path.resolve(chunkdDir, cp));
       await that.mergeChunks(chunks, filePath, size);
     });
-
   }
-
   async mergeChunks(files, dest, size) {
     const pipStream = (filePath, writeStream) => new Promise(resolve => {
       const readStream = fse.createReadStream(filePath);

@@ -188,7 +188,11 @@ export default {
         price: "",
         discountPrice: "",
         desc: "",
-        file: "",
+        file: {
+          name: "",
+          ext: "",
+          hash: "",
+        },
       },
       addGoodsRules: {
         name: [
@@ -270,11 +274,9 @@ export default {
       this.fileName = file.name;
       this.imgUrl = window.URL.createObjectURL(file);
       this.file = file;
-      this.addGoodsForm.file = {
-        name: file.name,
-        size: file.size,
-      };
-      this.showUpLoad = true;
+      this.addGoodsForm.file.name = file.name;
+      (this.addGoodsForm.file.ext = file.name.split(".").pop()),
+        (this.showUpLoad = true);
     },
     // 重置Form表单
     resetForm() {
@@ -288,6 +290,8 @@ export default {
     },
     // 添加商品
     async sendAddGoods() {
+      console.log(this.hash);
+      console.log(this.addGoodsForm);
       this.$refs.addFormRules.validate((valid) => {
         if (valid) {
           if (!this.isUpload) {
@@ -471,6 +475,7 @@ export default {
       // const hash = await this.calculateHashIdle();
       const hash = await this.calculateHashSample();
       this.hash = hash;
+      this.addGoodsForm.file.hash = hash;
 
       // 问一下后端, 文件是否上传过, 如果没有  是否存在切片
       const {

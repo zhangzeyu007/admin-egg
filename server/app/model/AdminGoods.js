@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-28 11:47:28
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-28 12:21:49
+ * @LastEditTime: 2021-02-28 15:08:23
  */
 
 'use strict';
@@ -15,7 +15,9 @@ module.exports = app => {
     price: { type: Number, required: true },
     discountPrice: { type: Number, required: true },
     desc: { type: String, required: true },
-  }, { timestamps: true });
+    url: { type: String, required: true },
+  },
+  { timestamps: true });
 
   return mongoose.model('AdminGoods', UserSchema);
 };
