@@ -426,6 +426,7 @@ export default {
                   message: res.message,
                   type: "success",
                 });
+                this.getGoodsListData();
                 this.resetForm("cancel");
               } else if (res.code == -2) {
                 Message({
