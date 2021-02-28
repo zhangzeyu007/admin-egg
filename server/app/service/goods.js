@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-28 11:39:38
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-28 15:24:46
+ * @LastEditTime: 2021-02-28 15:43:36
  */
 'use strict';
 const Service = require('egg').Service;
@@ -23,7 +23,7 @@ class GoodsService extends Service {
     const fullPath = 'http://localhost:7001/public/';
     console.log(filePath);
     if (!fse.existsSync(filePath)) {
-      result.code = -1;
+      result.code = -2;
     } else {
       const isEmpty = await ctx.model.AdminGoods.findOne({
         name: payLoad.name,

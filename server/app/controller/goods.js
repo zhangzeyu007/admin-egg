@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-21 11:27:14
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-28 15:35:50
+ * @LastEditTime: 2021-02-28 15:58:48
  */
 'use strict';
 const BaseController = require('./base');
@@ -31,12 +31,13 @@ class GoodsController extends BaseController {
       this.message('商品添加成功');
     } else if (response.code === 0) {
       this.error('商品已存在');
+    } else if (response.code === -2) {
+      this.warning('图片生成中...');
     } else {
       this.error('服务端错误');
     }
   }
 
 }
-
 
 module.exports = GoodsController;

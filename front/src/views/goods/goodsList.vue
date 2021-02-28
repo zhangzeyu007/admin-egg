@@ -94,7 +94,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="resetForm('add')">取消</el-button>
+        <el-button @click="resetForm('cancel')">取消</el-button>
         <el-button type="primary" @click="addGoodsComfirm">确定</el-button>
       </span>
     </el-dialog>
@@ -279,10 +279,13 @@ export default {
         (this.showUpLoad = true);
     },
     // 重置Form表单
-    resetForm() {
+    resetForm(name) {
       this.chunks = [];
       this.showUpLoad = false;
       this.isUpload = false;
+      if (name == "cancel") {
+        this.addGoodsDialog = false;
+      }
     },
     // 提交商品
     addGoodsComfirm() {
@@ -304,7 +307,23 @@ export default {
           this.$api.goods
             .addGoods(this.addGoodsForm)
             .then((res) => {
-              console.log(res);
+              if (res.code == 200) {
+                Message({
+                  message: res.message,
+                  type: "success",
+                });
+                this.resetForm("cancel");
+              } else if (res.code == -2) {
+                Message({
+                  type: "warning",
+                  message: res.message,
+                });
+              } else {
+                Message({
+                  type: "error",
+                  message: res.message,
+                });
+              }
             })
             .catch((err) => {
               console.log(err);
