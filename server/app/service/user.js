@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-20 15:08:43
+ * @LastEditTime: 2021-02-28 12:08:39
  */
 'use strict';
 
@@ -41,7 +41,6 @@ class UserService extends Service {
       code: '',
     };
     payLoad.password = md5(payLoad.password + HashSalt);
-    console.log(payLoad.username);
     const isEmpty = await ctx.model.AdminUser.findOne({
       username: payLoad.username,
     });

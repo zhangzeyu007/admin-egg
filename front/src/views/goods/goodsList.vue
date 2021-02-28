@@ -188,7 +188,7 @@ export default {
         price: "",
         discountPrice: "",
         desc: "",
-        file: "ddd",
+        file: "",
       },
       addGoodsRules: {
         name: [
@@ -286,6 +286,7 @@ export default {
     addGoodsComfirm() {
       this.sendAddGoods();
     },
+    // 添加商品
     async sendAddGoods() {
       this.$refs.addFormRules.validate((valid) => {
         if (valid) {
