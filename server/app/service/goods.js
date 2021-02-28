@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-28 11:39:38
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-28 15:43:36
+ * @LastEditTime: 2021-02-28 21:26:55
  */
 'use strict';
 const Service = require('egg').Service;
@@ -11,8 +11,8 @@ const fse = require('fs-extra');
 const path = require('path');
 
 class GoodsService extends Service {
+  // 添加商品
   async addGoods(payLoad) {
-    console.log(payLoad);
     const { ctx } = this;
     const result = {
       code: '',
@@ -21,7 +21,6 @@ class GoodsService extends Service {
     const ext = payLoad.file.ext;
     const filePath = path.resolve(this.config.UPLOAD_DIR, `${hash}.${ext}`);
     const fullPath = 'http://localhost:7001/public/';
-    console.log(filePath);
     if (!fse.existsSync(filePath)) {
       result.code = -2;
     } else {
@@ -49,6 +48,10 @@ class GoodsService extends Service {
       }
     }
     return result;
+  }
+  async getGoodsList(payLoad) {
+    const { ctx } = this;
+
   }
 }
 module.exports = GoodsService;

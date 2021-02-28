@@ -194,6 +194,10 @@ export default {
           hash: "",
         },
       },
+      imgUrl: "",
+      fileName: "",
+      showUpLoad: false,
+      isUpload: false,
       addGoodsRules: {
         name: [
           {
@@ -240,10 +244,6 @@ export default {
           },
         ],
       },
-      imgUrl: "",
-      fileName: "",
-      showUpLoad: false,
-      isUpload: false,
     };
   },
   computed: {
@@ -285,6 +285,10 @@ export default {
       this.isUpload = false;
       if (name == "cancel") {
         this.addGoodsDialog = false;
+        this.addGoodsForm.name = "";
+        this.addGoodsForm.price = "";
+        this.addGoodsForm.discountPrice = "";
+        this.addGoodsForm.file = {};
       }
     },
     // 提交商品
@@ -293,8 +297,6 @@ export default {
     },
     // 添加商品
     async sendAddGoods() {
-      console.log(this.hash);
-      console.log(this.addGoodsForm);
       this.$refs.addFormRules.validate((valid) => {
         if (valid) {
           if (!this.isUpload) {
