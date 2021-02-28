@@ -3,16 +3,21 @@
  * @Author: 海象
  * @Date: 2021-02-21 11:27:14
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-27 22:12:35
+ * @LastEditTime: 2021-02-28 11:28:43
  */
 'use strict';
 const BaseController = require('./base');
 
-const addGoodsRule = {};
-
+const addGoodsRule = {
+  name: { required: true, type: 'string' },
+  price: { required: true, type: 'string' },
+  discountPrice: { required: true, type: 'string' },
+  desc: { required: true, type: 'string' },
+  file: { required: true, type: 'object' },
+};
 class GoodsController extends BaseController {
   async addGoods() {
-    const { ctx, app, service } = this;
+    const { ctx, app } = this;
     // 校验传递的参数
     const errors = app.validator.validate(addGoodsRule, ctx.request.body);
     if (errors) {
@@ -20,6 +25,8 @@ class GoodsController extends BaseController {
     }
     // 组装参数
     const payload = ctx.request.body || {};
+    console.log(payload);
+    this.message('请求成功');
   }
 
 }

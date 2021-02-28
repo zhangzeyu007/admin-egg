@@ -8,9 +8,9 @@
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" @click="addGoodsDialog = true"
-            >添加商品</el-button
-          >
+          <el-button type="primary" @click="addGoodsDialog = true">
+            添加商品
+          </el-button>
         </el-col>
       </el-row>
       <!-- table内容区 -->
@@ -53,11 +53,9 @@
         </el-form-item>
         <el-form-item label="图片上传">
           <div class="fileinput-button">
-            <el-button type="primary" size="medium">点击上传</el-button>
+            <el-button type="primary" size="medium">选择文件</el-button>
+            <el-button type="success" @click="uploadFile">上传</el-button>
             <input type="file" name="file" @change="handleFileChange" />
-            <div>
-              <img src="" alt="" />
-            </div>
           </div>
           <div class="upload-image" v-if="showUpLoad">
             <div class="image">
@@ -110,7 +108,7 @@
 }
 .fileinput-button input {
   position: absolute;
-  right: 30px;
+  right: 100px;
   top: 5px;
   opacity: 0;
 }
@@ -118,6 +116,7 @@
 .upload-image {
   display: flex;
   align-items: center;
+  margin-top: 5px;
   border: 2px solid #e4e7ed;
   border-radius: 5px;
   .image {
@@ -145,8 +144,8 @@
       width: 200px;
       overflow: auto;
       .cube {
-        width: 14px;
-        height: 14px;
+        width: 16px;
+        height: 16px;
         line-height: 12px;
         border: 1px solid #000;
         background: #e4e7ed;
@@ -178,17 +177,18 @@ const CHUNK_SIZE = 2 * 1024 * 1024;
 export default {
   data() {
     return {
+      file: "",
+      hash: "",
       chunks: [],
       hashProgress: 0,
       totalProgress: 0,
-      hash: "",
       addGoodsDialog: true,
       addGoodsForm: {
         name: "",
         price: "",
         discountPrice: "",
         desc: "",
-        file: "",
+        file: "ddd",
       },
       addGoodsRules: {
         name: [
@@ -239,14 +239,15 @@ export default {
       imgUrl: "",
       fileName: "",
       showUpLoad: false,
+      isUpload: false,
     };
   },
   computed: {
     cubWidth() {
-      return Math.ceil(Math.sqrt(this.chunks.length)) * 16;
+      return Math.ceil(Math.sqrt(this.chunks.length)) * 18;
     },
     uploadProgress() {
-      if (!this.addGoodsForm.file || this.chunks.length <= 0) {
+      if (!this.file || this.chunks.length <= 0) {
         return 0;
       }
       const loaded = this.chunks
@@ -257,21 +258,10 @@ export default {
         )
         .reduce((acc, cur) => acc + cur, 0);
 
-      return parseInt(
-        ((loaded * 100) / this.addGoodsForm.file.size).toFixed(2) / 100
-      );
+      return parseInt(((loaded * 100) / this.file.size).toFixed(2) / 100);
     },
   },
   methods: {
-    // 提交商品
-    addGoodsComfirm() {
-      this.uploadFile();
-    },
-    // 重置Form表单
-    resetForm() {
-      this.chunks = [];
-      this.showUpLoad = false;
-    },
     // 文件发生改变
     handleFileChange(e) {
       const [file] = e.target.files;
@@ -279,8 +269,43 @@ export default {
       this.resetForm();
       this.fileName = file.name;
       this.imgUrl = window.URL.createObjectURL(file);
-      this.addGoodsForm.file = file;
+      this.file = file;
+      this.addGoodsForm.file = {
+        name: file.name,
+        size: file.size,
+      };
       this.showUpLoad = true;
+    },
+    // 重置Form表单
+    resetForm() {
+      this.chunks = [];
+      this.showUpLoad = false;
+      this.isUpload = false;
+    },
+    // 提交商品
+    addGoodsComfirm() {
+      this.sendAddGoods();
+    },
+    async sendAddGoods() {
+      this.$refs.addFormRules.validate((valid) => {
+        if (valid) {
+          if (!this.isUpload) {
+            Message({
+              message: "请先上传文件",
+              type: "warning",
+            });
+            return;
+          }
+          this.$api.goods
+            .addGoods(this.addGoodsForm)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      });
     },
     // 创建切片
     createFileChunk(file, size = CHUNK_SIZE) {
@@ -319,7 +344,6 @@ export default {
       return new Promise((resolve) => {
         const spark = new sparkMD5.ArrayBuffer();
         let count = 0;
-
         const appendToSpark = async (file) => {
           return new Promise((resolve) => {
             const reader = new FileReader();
@@ -330,7 +354,6 @@ export default {
             };
           });
         };
-
         const workLoop = async (deadline) => {
           // timeRemaining 获取当前帧的剩余时间
           while (count < chunks.length && deadline.timeRemaining() > 1) {
@@ -361,7 +384,7 @@ export default {
       return new Promise((resolve) => {
         const spark = new sparkMD5.ArrayBuffer();
         const reader = new FileReader();
-        const file = this.addGoodsForm.file;
+        const file = this.file;
         const size = file.size;
         const offset = 1 * 1024 * 1024;
         // 第一个 1M ,最后一个区块的数据 全要
@@ -426,24 +449,23 @@ export default {
       // await Promise.all(requests);
       await this.sendRequest(requests);
     },
-
     // 上传文件
     async uploadFile() {
-      if (!this.addGoodsForm.file) {
+      if (!this.file) {
         Message({
           message: "没有选择文件",
           type: "warning",
         });
         return;
       }
-      if (!(await Util.isImage(this.addGoodsForm.file))) {
+      if (!(await Util.isImage(this.file))) {
         Message({
           message: "文件格式不对",
           type: "warning",
         });
         return;
       }
-      const chunks = this.createFileChunk(this.addGoodsForm.file);
+      const chunks = this.createFileChunk(this.file);
       this.chunks = chunks;
       // const hash = await this.calculateHashIdle();
       const hash = await this.calculateHashSample();
@@ -454,10 +476,11 @@ export default {
         data: { uploaded, uploadedList },
       } = await this.$api.util.checkFile({
         hash: this.hash,
-        ext: this.addGoodsForm.file.name.split(".").pop(),
+        ext: this.file.name.split(".").pop(),
       });
 
       if (uploaded) {
+        this.isUpload = true;
         return Message.success("秒传成功");
       }
 
@@ -506,6 +529,7 @@ export default {
                 last += 1;
                 if (last == len) {
                   if (res.code == 200) {
+                    that.isUpload = true;
                     setTimeout(() => {
                       that.mergeRequest();
                     }, 5000);
@@ -544,7 +568,7 @@ export default {
     // 合并文件
     async mergeRequest() {
       this.$api.util.mergeFile({
-        ext: this.addGoodsForm.file.name.split(".").pop(),
+        ext: this.file.name.split(".").pop(),
         size: CHUNK_SIZE,
         hash: this.hash,
       });
