@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-21 11:27:14
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-28 21:29:45
+ * @LastEditTime: 2021-02-28 22:34:43
  */
 'use strict';
 const BaseController = require('./base');
@@ -15,7 +15,9 @@ const addGoodsRule = {
   desc: { required: true, type: 'string' },
   file: { required: true, type: 'object' },
 };
-const getGoodsListRule = {};
+const getGoodsListRule = {
+  pageNum: { required: true, type: 'string' },
+};
 
 class GoodsController extends BaseController {
   async addGoods() {
@@ -38,6 +40,7 @@ class GoodsController extends BaseController {
       this.error('服务端错误');
     }
   }
+  // 获取商品列表数据接口
   async getGoodsList() {
     const { ctx, app, service } = this;
     // 校验传递的参数
@@ -48,7 +51,9 @@ class GoodsController extends BaseController {
     // 组装参数
     const payload = ctx.request.body || {};
 
-    this.message('成功');
+    // 查询结果
+    const response = await service.goods.getGoodsList(payload);
+    this.success(response);
   }
 
 }

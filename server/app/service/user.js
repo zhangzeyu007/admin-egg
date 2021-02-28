@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-28 12:08:39
+ * @LastEditTime: 2021-02-28 22:37:11
  */
 'use strict';
 
@@ -70,14 +70,12 @@ class UserService extends Service {
   async getUserList(payLoad) {
     const { ctx } = this;
     const page = payLoad.pageNum; // 当前页数
-    const num = payLoad.pageSize ? Number(payLoad.pageSize) : 10;
+    const num = payLoad.pageSize ? Number(payLoad.pageSize) : 10; // 每页最大显示条数
     const start = (page - 1) * num; // 开始位置
     const totalPage = (await ctx.model.AdminUser.find()).length;
     const res = await ctx.model.AdminUser.find().skip(start).limit(num)
       .exec();
-
     return { totalPage, page: res };
-
   }
   // 删除用户
   async delUser(payLoad) {

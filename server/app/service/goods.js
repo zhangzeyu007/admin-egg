@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-28 11:39:38
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-28 21:26:55
+ * @LastEditTime: 2021-02-28 22:38:28
  */
 'use strict';
 const Service = require('egg').Service;
@@ -51,7 +51,13 @@ class GoodsService extends Service {
   }
   async getGoodsList(payLoad) {
     const { ctx } = this;
-
+    const page = payLoad.pageNum; // 当前页数
+    const num = payLoad.pageSize ? Number(payLoad.pageSize) : 10; // 每页最大显示条数
+    const start = (page - 1) * num; // 开始位置
+    const totalPage = (await ctx.model.AdminGoods.find()).length;
+    const res = await ctx.model.AdminGoods.find().skip(start).limit(num)
+      .exec();
+    return { totalPage, page: res };
   }
 }
 module.exports = GoodsService;

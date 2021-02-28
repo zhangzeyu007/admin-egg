@@ -14,9 +14,71 @@
         </el-col>
       </el-row>
       <!-- table内容区 -->
-      <el-table>
-        <el-table-column></el-table-column>
+      <el-table :data="tableData" style="margin-top: 20px" border size="medium">
+        <el-table-column
+          label="商品名称"
+          prop="name"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          label="价格"
+          prop="price"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          label="折扣价格"
+          prop="discountPrice"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          label="商品描述"
+          prop="desc"
+          align="center"
+        ></el-table-column>
+        <el-table-column label="商品图片" prop="url" align="center">
+          <template scope="scope">
+            <img
+              :src="scope.row.url"
+              alt=""
+              style="width: 80px; height: 80px"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column label="创建时间" align="center">
+          <template slot-scope="tableData">
+            {{ tableData.row.createdAt | formate }}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="primary"
+              icon="el-icon-edit"
+              @click="handleEdit(scope.row)"
+            ></el-button>
+            <el-button
+              icon="el-icon-delete"
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.row)"
+            ></el-button>
+          </template>
+        </el-table-column>
       </el-table>
+      <div class="pagination">
+        <el-pagination
+          style="width: 100%"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pages.pageNum"
+          :page-sizes="[5, 10, 20, 50]"
+          :page-size="pages.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pages.totalPage"
+        >
+        </el-pagination>
+      </div>
     </el-card>
     <!-- 添加商品弹窗 -->
     <el-dialog
@@ -166,23 +228,37 @@
     }
   }
 }
+.pagination {
+  width: 100%;
+  margin-top: 15px;
+}
+.el-pagination {
+  text-align: right;
+}
 </style>
 
 <script>
 import { Message } from "element-ui";
 import Util from "../../util/util.js";
 import sparkMD5 from "spark-md5";
+import moment from "moment";
 const CHUNK_SIZE = 2 * 1024 * 1024;
 
 export default {
   data() {
     return {
+      tableData: [],
+      pages: {
+        totalPage: 10,
+        pageSize: 10,
+        pageNum: 1,
+      },
       file: "",
       hash: "",
       chunks: [],
       hashProgress: 0,
       totalProgress: 0,
-      addGoodsDialog: true,
+      addGoodsDialog: false,
       addGoodsForm: {
         name: "",
         price: "",
@@ -246,6 +322,11 @@ export default {
       },
     };
   },
+  filters: {
+    formate(v) {
+      return moment(v).format("YYYY-MM-DD HH:mm");
+    },
+  },
   computed: {
     cubWidth() {
       return Math.ceil(Math.sqrt(this.chunks.length)) * 18;
@@ -265,7 +346,38 @@ export default {
       return parseInt(((loaded * 100) / this.file.size).toFixed(2) / 100);
     },
   },
+  created() {
+    this.getGoodsListData();
+  },
   methods: {
+    handleSizeChange(val) {
+      this.pages.pageSize = val;
+      this.pages.pageNum = 1;
+      this.getGoodsListData();
+    },
+    handleCurrentChange(val) {
+      this.pages.pageNum = val;
+      this.getGoodsListData();
+    },
+    // 获取table数据
+    getGoodsListData() {
+      this.$api.goods
+        .getGoodsList(this.pages)
+        .then((res) => {
+          console.log(res);
+          if (res.code == 200) {
+            if (res.data.totalPage) {
+              this.pages.totalPage = res.data.totalPage;
+            }
+            if (res.data.page) {
+              this.tableData = res.data.page;
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     // 文件发生改变
     handleFileChange(e) {
       const [file] = e.target.files;
