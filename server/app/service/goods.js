@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-28 11:39:38
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-01 12:43:46
+ * @LastEditTime: 2021-03-01 17:15:15
  */
 'use strict';
 const Service = require('egg').Service;
@@ -81,6 +81,10 @@ class GoodsService extends Service {
       });
     }
     return await ctx.model.AdminGoods.findByIdAndDelete(payLoad.goodsid);
+  }
+  // 更新商品
+  async updateGoods(payload) {
+    const { ctx } = this;
   }
 }
 module.exports = GoodsService;

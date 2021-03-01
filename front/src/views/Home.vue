@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-20 12:18:06
+ * @LastEditTime: 2021-03-01 15:32:50
 -->
 <template>
   <el-container>
@@ -90,7 +90,7 @@ export default {
   data() {
     return {
       circleUrl:
-        "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3229045480,3780302107&fm=26&gp=0.jpg",
+        "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3720724356,96448992&fm=26&gp=0.jpg",
       activePath: "",
       isCollapse: false,
       breadcrumbs: [],

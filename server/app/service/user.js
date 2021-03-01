@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-28 22:37:11
+ * @LastEditTime: 2021-03-01 17:17:39
  */
 'use strict';
 
@@ -109,7 +109,6 @@ class UserService extends Service {
     const { ctx } = this;
     return await ctx.model.AdminUser.find({ username: payLoad });
   }
-
 }
 
 module.exports = UserService;

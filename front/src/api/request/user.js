@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-01-24 15:52:03
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-19 11:27:48
+ * @LastEditTime: 2021-03-01 17:19:24
  */
 
 import axios from '../http'
@@ -35,6 +35,7 @@ function updateUser(params) {
 function searchUser() {
     return axios.get('/user/searchuser')
 }
+
 function getUserInfo(params) {
     return axios.post('/user/userinfo', params)
 }

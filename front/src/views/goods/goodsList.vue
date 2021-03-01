@@ -45,7 +45,7 @@
             <img
               :src="scope.row.url"
               alt=""
-              style="width: 80px; height: 80px"
+              style="width: 120px; height: 80px"
             />
           </template>
         </el-table-column>
@@ -164,8 +164,95 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="resetForm('cancel')">取消</el-button>
-        <el-button type="primary" @click="addGoodsComfirm">确定</el-button>
+        <el-button @click="resetForm('add')">取消</el-button>
+        <el-button type="primary" @click="sendAddGoods">确定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 修改商品弹窗 -->
+    <el-dialog
+      title="修改商品"
+      :visible.sync="editGoodsDialog"
+      width="35%"
+      close-on-click-modal
+    >
+      <el-form
+        ref="editFormRules"
+        :model="editGoodsForm"
+        label-width="100px"
+        :rules="editGoodsRules"
+      >
+        <el-form-item label="商品编号" prop="goodsId">
+          <el-input
+            v-model.number="editGoodsForm.goodsId"
+            disabled
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="商品名称" prop="name">
+          <el-input v-model="editGoodsForm.name" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="价格" prop="price">
+          <el-input
+            v-model.number="editGoodsForm.price"
+            type="text"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="折扣价格" prop="discountPrice">
+          <el-input
+            v-model.number="editGoodsForm.discountPrice"
+            type="text"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="商品描述" prop="desc">
+          <el-input type="textarea" v-model="editGoodsForm.desc"></el-input>
+        </el-form-item>
+        <el-form-item label="图片上传">
+          <div class="fileinput-button">
+            <el-button type="primary" size="medium">选择文件</el-button>
+            <el-button type="success" @click="uploadFile">上传</el-button>
+            <input type="file" name="file" @change="handleFileChange" />
+          </div>
+          <div class="upload-image" v-if="showUpLoad">
+            <div class="image">
+              <img :src="imgUrl" alt="" />
+            </div>
+            <div class="upload-right">
+              <div class="file-name">{{ fileName }}</div>
+              <div class="cube-container" :style="{ width: cubWidth + 'px' }">
+                <div class="cube" v-for="chunk in chunks" :key="chunk.name">
+                  <div
+                    :class="{
+                      uploading: chunk.progress > 0 && chunk.progress < 100,
+                      success: chunk.progress == 100,
+                      error: chunk.progress < 0,
+                    }"
+                    :style="{ height: chunk.progress + '%' }"
+                  >
+                    <i
+                      class="el-icon-loading"
+                      style="color: #409eff"
+                      v-if="chunk.progress < 100 && chunk.progress > 0"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <el-progress
+            v-if="showUpLoad"
+            style="margin-top: 5px"
+            :text-inside="true"
+            :stroke-width="18"
+            :percentage="uploadProgress"
+            status="success"
+          ></el-progress>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resetForm('edit')">取消</el-button>
+        <el-button type="primary" @click="sendEditGoods">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -267,7 +354,20 @@ export default {
       hashProgress: 0,
       totalProgress: 0,
       addGoodsDialog: false,
+      editGoodsDialog: false,
       addGoodsForm: {
+        goodsId: "",
+        name: "",
+        price: "",
+        discountPrice: "",
+        desc: "",
+        file: {
+          name: "",
+          ext: "",
+          hash: "",
+        },
+      },
+      editGoodsForm: {
         goodsId: "",
         name: "",
         price: "",
@@ -301,6 +401,52 @@ export default {
             trigger: "change",
           },
         ],
+        name: [
+          {
+            required: true,
+            message: "请输入商品名称",
+            trigger: "change",
+          },
+        ],
+        price: [
+          {
+            required: true,
+            message: "请输入商品价格",
+            trigger: "change",
+          },
+          {
+            type: "number",
+            message: "必须是数字",
+            trigger: "change",
+          },
+        ],
+        discountPrice: [
+          {
+            required: true,
+            message: "请输入商品折扣价格",
+            trigger: "change",
+          },
+          {
+            type: "number",
+            message: "必须是数字",
+            trigger: "change",
+          },
+        ],
+        desc: [
+          {
+            required: true,
+            message: "请输入商品描述",
+            trigger: "change",
+          },
+          {
+            min: 1,
+            max: 120,
+            message: "长度在 1 到 120个字符",
+            trigger: "change",
+          },
+        ],
+      },
+      editGoodsRules: {
         name: [
           {
             required: true,
@@ -385,9 +531,20 @@ export default {
       this.pages.pageNum = val;
       this.getGoodsListData();
     },
+    //修改按钮
+    handleEdit(item) {
+      this.editGoodsDialog = true;
+      console.log(item);
+      this.editGoodsForm.goodsId = item.goodsId;
+      this.editGoodsForm.name = item.name;
+      this.editGoodsForm.price = item.price;
+      this.editGoodsForm.discountPrice = item.discountPrice;
+      this.editGoodsForm.desc = item.desc;
+      this.imgUrl = item.url;
+      this.showUpLoad = true;
+    },
     // 删除商品方法
     handleDelete(item) {
-      console.log();
       let url = item.url.split("public/")[1];
       this.$api.goods
         .delGoods({ goodsid: item._id, fileName: url })
@@ -433,20 +590,52 @@ export default {
       this.chunks = [];
       this.showUpLoad = false;
       this.isUpload = false;
-      if (name == "cancel") {
+      if (name == "add") {
         this.addGoodsDialog = false;
         this.addGoodsForm.name = "";
         this.addGoodsForm.price = "";
         this.addGoodsForm.discountPrice = "";
         this.addGoodsForm.desc = "";
         this.addGoodsForm.file = {};
-        this.file = "";
         this.$refs["addFormRules"].resetFields();
       }
+      if (name == "edit") {
+        this.editGoodsDialog = false;
+        this.editGoodsForm.name = "";
+        this.editGoodsForm.price = "";
+        this.editGoodsForm.discountPrice = "";
+        this.editGoodsForm.desc = "";
+        this.editGoodsForm.file = {};
+        this.file = "";
+        this.$refs["editFormRules"].resetFields();
+      }
     },
-    // 提交商品
-    addGoodsComfirm() {
-      this.sendAddGoods();
+    async sendEditGoods() {
+      this.$refs.editFormRules.validate((valid) => {
+        if (valid) {
+          this.$api.goods
+            .goodsUpdate(this.editGoodsForm)
+            .then((res) => {
+              if (res.code == 200) {
+                Message({
+                  message: "修改成功",
+                  type: "success",
+                });
+                this.resetForm("edit");
+                this.getUserListData();
+              }
+              if (res.code == -1) {
+                Message({
+                  message: "修改失败",
+                  type: "warning",
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      });
     },
     // 添加商品
     async sendAddGoods() {
@@ -468,7 +657,7 @@ export default {
                   type: "success",
                 });
                 this.getGoodsListData();
-                this.resetForm("cancel");
+                this.resetForm("add");
               } else if (res.code == -2) {
                 Message({
                   type: "warning",

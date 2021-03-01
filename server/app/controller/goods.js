@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-21 11:27:14
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-01 12:30:21
+ * @LastEditTime: 2021-03-01 17:05:29
  */
 'use strict';
 const BaseController = require('./base');
@@ -22,8 +22,12 @@ const getGoodsListRule = {
 const delGoodsRule = {
   goodsid: { required: true, type: 'string' },
 };
+const updateGoodsRule = {
+
+};
 
 class GoodsController extends BaseController {
+  // 添加商品
   async addGoods() {
     const { ctx, app, service } = this;
     // 校验传递的参数
@@ -59,7 +63,7 @@ class GoodsController extends BaseController {
     const response = await service.goods.getGoodsList(payload);
     this.success(response);
   }
-
+  // 删除商品接口
   async delGoods() {
     const { ctx, app, service } = this;
     // 校验传递的参数
@@ -73,6 +77,21 @@ class GoodsController extends BaseController {
     // 查询结果
     const response = await service.goods.delGoods(payload);
     this.success(response);
+  }
+  // 更新商品
+  async updateGoods() {
+    const { ctx, app, service } = this;
+    // 校验传递的参数
+    const errors = app.validator.validate(updateGoodsRule, ctx.request.body);
+
+    if (errors) {
+      return this.error('参数校验失败', -1, errors);
+    }
+
+    // 组装参数
+    const payload = ctx.request.body || {};
+    const response = await service.goods.updateGoods(payload);
+
   }
 
 }
