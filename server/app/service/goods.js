@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-28 11:39:38
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-01 11:33:10
+ * @LastEditTime: 2021-03-01 12:43:46
  */
 'use strict';
 const Service = require('egg').Service;
@@ -25,10 +25,12 @@ class GoodsService extends Service {
     //   result.code = -2;
     // }
     const isEmpty = await ctx.model.AdminGoods.findOne({
-      name: payLoad.name,
+      goodsId: payLoad.goodsId,
     });
     if (isEmpty) {
-      if (isEmpty.name === payLoad.name) {
+      console.log(isEmpty.goodsId);
+      console.log(payLoad.goodsId);
+      if (isEmpty.goodsId === payLoad.goodsId) {
         result.code = 0;
       } else {
         const isSave = await ctx.model.AdminGoods.create({ ...payLoad, url: fullPath + `${hash}.${ext}` });

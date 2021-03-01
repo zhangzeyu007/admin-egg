@@ -3,12 +3,13 @@
  * @Author: 海象
  * @Date: 2021-02-21 11:27:14
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-01 08:46:40
+ * @LastEditTime: 2021-03-01 12:30:21
  */
 'use strict';
 const BaseController = require('./base');
 
 const addGoodsRule = {
+  goodsId: { required: true, type: 'string' },
   name: { required: true, type: 'string' },
   price: { required: true, type: 'string' },
   discountPrice: { required: true, type: 'string' },
@@ -39,7 +40,7 @@ class GoodsController extends BaseController {
       this.error('商品已存在');
     } else if (response.code === -2) {
       this.warning('图片生成中...');
-    } else {
+    } else if (response.code === -1) {
       this.error('服务端错误');
     }
   }

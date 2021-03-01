@@ -16,6 +16,11 @@
       <!-- table内容区 -->
       <el-table :data="tableData" style="margin-top: 20px" border size="medium">
         <el-table-column
+          label="商品编号"
+          prop="goodsId"
+          align="center"
+        ></el-table-column>
+        <el-table-column
           label="商品名称"
           prop="name"
           align="center"
@@ -93,7 +98,10 @@
         label-width="100px"
         :rules="addGoodsRules"
       >
-        <el-form-item label="名称" prop="name">
+        <el-form-item label="商品编号" prop="goodsId">
+          <el-input v-model.number="addGoodsForm.goodsId" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="商品名称" prop="name">
           <el-input v-model="addGoodsForm.name" clearable></el-input>
         </el-form-item>
         <el-form-item label="价格" prop="price">
@@ -260,6 +268,7 @@ export default {
       totalProgress: 0,
       addGoodsDialog: false,
       addGoodsForm: {
+        goodsId: "",
         name: "",
         price: "",
         discountPrice: "",
@@ -275,6 +284,23 @@ export default {
       showUpLoad: false,
       isUpload: false,
       addGoodsRules: {
+        goodsId: [
+          {
+            required: true,
+            message: "请输入商品编号",
+            trigger: "change",
+          },
+          {
+            type: "number",
+            message: "必须是数字",
+            trigger: "change",
+          },
+          {
+            pattern: /^[0-9]+?$/,
+            message: "必须是正整数",
+            trigger: "change",
+          },
+        ],
         name: [
           {
             required: true,
@@ -414,6 +440,8 @@ export default {
         this.addGoodsForm.discountPrice = "";
         this.addGoodsForm.desc = "";
         this.addGoodsForm.file = {};
+        this.file = "";
+        this.$refs["addFormRules"].resetFields();
       }
     },
     // 提交商品
