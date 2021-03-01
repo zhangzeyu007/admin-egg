@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-21 11:45:01
+ * @LastEditTime: 2021-03-01 08:41:02
  */
 'use strict';
 const BaseController = require('./base');
@@ -132,7 +132,6 @@ class UserController extends BaseController {
       return this.error('参数校验失败', -1, errors);
     }
 
-    // 组装参数
     const payload = ctx.request.body || {};
     // 查询结果
     const response = await service.user.delUser(payload);

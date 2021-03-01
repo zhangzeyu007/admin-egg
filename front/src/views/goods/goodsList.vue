@@ -359,6 +359,18 @@ export default {
       this.pages.pageNum = val;
       this.getGoodsListData();
     },
+    // 删除商品方法
+    handleDelete(item) {
+      console.log();
+      let url = item.url.split("public/")[1];
+      this.$api.goods
+        .delGoods({ goodsid: item._id, fileName: url })
+        .then((res) => {
+          if (res.code == 200) {
+            this.getGoodsListData();
+          }
+        });
+    },
     // 获取table数据
     getGoodsListData() {
       this.$api.goods
@@ -400,6 +412,7 @@ export default {
         this.addGoodsForm.name = "";
         this.addGoodsForm.price = "";
         this.addGoodsForm.discountPrice = "";
+        this.addGoodsForm.desc = "";
         this.addGoodsForm.file = {};
       }
     },
@@ -476,7 +489,6 @@ export default {
     },
     /**
      * 利用空闲时间 进行计算 hash
-     *
      */
     async calculateHashIdle() {
       const chunks = this.chunks;
@@ -672,7 +684,7 @@ export default {
                     that.isUpload = true;
                     setTimeout(() => {
                       that.mergeRequest();
-                    }, 5000);
+                    }, 1000);
                   }
                 }
               })

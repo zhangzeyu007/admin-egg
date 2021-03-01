@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-21 11:27:14
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-28 22:34:43
+ * @LastEditTime: 2021-03-01 08:46:40
  */
 'use strict';
 const BaseController = require('./base');
@@ -17,6 +17,9 @@ const addGoodsRule = {
 };
 const getGoodsListRule = {
   pageNum: { required: true, type: 'string' },
+};
+const delGoodsRule = {
+  goodsid: { required: true, type: 'string' },
 };
 
 class GoodsController extends BaseController {
@@ -53,6 +56,21 @@ class GoodsController extends BaseController {
 
     // 查询结果
     const response = await service.goods.getGoodsList(payload);
+    this.success(response);
+  }
+
+  async delGoods() {
+    const { ctx, app, service } = this;
+    // 校验传递的参数
+    const errors = app.validator.validate(delGoodsRule, ctx.request.body);
+
+    if (errors) {
+      return this.error('参数校验失败', -1, errors);
+    }
+
+    const payload = ctx.request.body || {};
+    // 查询结果
+    const response = await service.goods.delGoods(payload);
     this.success(response);
   }
 
