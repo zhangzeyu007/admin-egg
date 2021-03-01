@@ -378,6 +378,7 @@ export default {
           ext: "",
           hash: "",
         },
+        url: "",
       },
       imgUrl: "",
       fileName: "",
@@ -533,13 +534,14 @@ export default {
     },
     //修改按钮
     handleEdit(item) {
-      this.editGoodsDialog = true;
       console.log(item);
+      this.editGoodsDialog = true;
       this.editGoodsForm.goodsId = item.goodsId;
       this.editGoodsForm.name = item.name;
       this.editGoodsForm.price = item.price;
       this.editGoodsForm.discountPrice = item.discountPrice;
       this.editGoodsForm.desc = item.desc;
+      this.editGoodsForm.url = item.url;
       this.imgUrl = item.url;
       this.showUpLoad = true;
     },
@@ -582,8 +584,10 @@ export default {
       this.imgUrl = window.URL.createObjectURL(file);
       this.file = file;
       this.addGoodsForm.file.name = file.name;
-      (this.addGoodsForm.file.ext = file.name.split(".").pop()),
-        (this.showUpLoad = true);
+      this.addGoodsForm.file.ext = file.name.split(".").pop();
+      this.editGoodsForm.file.name = file.name;
+      this.editGoodsForm.file.ext = file.name.split(".").pop();
+      this.showUpLoad = true;
     },
     // 重置Form表单
     resetForm(name) {
@@ -621,8 +625,8 @@ export default {
                   message: "修改成功",
                   type: "success",
                 });
+                this.getGoodsListData();
                 this.resetForm("edit");
-                this.getUserListData();
               }
               if (res.code == -1) {
                 Message({
@@ -839,6 +843,7 @@ export default {
       const hash = await this.calculateHashSample();
       this.hash = hash;
       this.addGoodsForm.file.hash = hash;
+      this.editGoodsForm.file.hash = hash;
 
       // 问一下后端, 文件是否上传过, 如果没有  是否存在切片
       const {

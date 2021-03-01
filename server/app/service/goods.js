@@ -3,12 +3,13 @@
  * @Author: 海象
  * @Date: 2021-02-28 11:39:38
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-01 17:15:15
+ * @LastEditTime: 2021-03-01 22:33:05
  */
 'use strict';
 const Service = require('egg').Service;
 const fse = require('fs-extra');
 const path = require('path');
+const fullPath = 'http://localhost:7001/public/';
 
 class GoodsService extends Service {
   // 添加商品
@@ -20,7 +21,6 @@ class GoodsService extends Service {
     const hash = payLoad.file.hash;
     const ext = payLoad.file.ext;
     // const filePath = path.resolve(this.config.UPLOAD_DIR, `${hash}.${ext}`);
-    const fullPath = 'http://localhost:7001/public/';
     // if (!fse.existsSync(filePath)) {
     //   result.code = -2;
     // }
@@ -83,8 +83,42 @@ class GoodsService extends Service {
     return await ctx.model.AdminGoods.findByIdAndDelete(payLoad.goodsid);
   }
   // 更新商品
-  async updateGoods(payload) {
+  async updateGoods(payLoad) {
     const { ctx } = this;
+    const result = {
+      code: '',
+    };
+    const responese = await ctx.model.AdminGoods.find({ goodsId: payLoad.goodsId }).updateOne({ name: payLoad.name, price: payLoad.price, discountPrice: payLoad.discountPrice, desc: payLoad.desc });
+    if (responese) {
+      const url = payLoad.url;
+      const fileName = url.split('public/')[1];
+      const filePath = path.resolve(this.config.UPLOAD_DIR, fileName);
+      const hash = fileName.split('.')[0];
+      const hashPath = path.resolve(this.config.UPLOAD_DIR, hash);
+      if (payLoad.file.name && payLoad.file.ext && payLoad.file.hash) {
+        const res = await ctx.model.AdminGoods.find({ goodsId: payLoad.goodsId }).updateOne({ url: fullPath + `${payLoad.file.hash}.${payLoad.file.ext}` });
+        if (res) {
+          result.code = 1;
+          if (fse.existsSync(filePath)) {
+            fse.unlink(filePath, err => {
+              if (err) throw err;
+              console.log('文件已被删除');
+            });
+          }
+          if (fse.existsSync(hashPath)) {
+            fse.rmdir(hashPath, err => {
+              if (err) throw err;
+              console.log('删除文件夹成功');
+            });
+          }
+        } else {
+          result.code = -1;
+        }
+      }
+    } else {
+      result.code = -1;
+    }
+    return result;
   }
 }
 module.exports = GoodsService;
