@@ -3,18 +3,21 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-input placeholder="请输入内容">
+          <el-input placeholder="请输入内容" v-model="search">
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" @click="addGoodsDialog = true">
-            添加商品
-          </el-button>
+          <el-button type="primary" @click="addGoods"> 添加商品 </el-button>
         </el-col>
       </el-row>
       <!-- table内容区 -->
-      <el-table :data="tableData" style="margin-top: 20px" border size="medium">
+      <el-table
+        :data="tableDatas"
+        style="margin-top: 20px"
+        border
+        size="medium"
+      >
         <el-table-column
           label="商品编号"
           prop="goodsId"
@@ -342,6 +345,7 @@ const CHUNK_SIZE = 2 * 1024 * 1024;
 export default {
   data() {
     return {
+      search: "",
       tableData: [],
       pages: {
         totalPage: 10,
@@ -495,12 +499,38 @@ export default {
       },
     };
   },
+  watch: {
+    search(old) {
+      if (!old) {
+        this.pages.pageNum = 1;
+      }
+      this.$api.goods
+        .goodsSearch()
+        .then((res) => {
+          if (res.code === 200 && res.data.length > 0) {
+            this.tableData = res.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
   filters: {
     formate(v) {
       return moment(v).format("YYYY-MM-DD HH:mm");
     },
   },
   computed: {
+    tableDatas() {
+      const search = String(this.search).toLowerCase();
+      if (search) {
+        return this.tableData.filter((data) => {
+          return String(data.name).toLowerCase().indexOf(search) > -1;
+        });
+      }
+      return this.tableData;
+    },
     cubWidth() {
       return Math.ceil(Math.sqrt(this.chunks.length)) * 18;
     },
@@ -532,9 +562,13 @@ export default {
       this.pages.pageNum = val;
       this.getGoodsListData();
     },
+    // 添加商品按钮
+    addGoods() {
+      this.addGoodsDialog = true;
+      this.resetForm();
+    },
     //修改按钮
     handleEdit(item) {
-      console.log(item);
       this.editGoodsDialog = true;
       this.editGoodsForm.goodsId = item.goodsId;
       this.editGoodsForm.name = item.name;
@@ -614,6 +648,7 @@ export default {
         this.$refs["editFormRules"].resetFields();
       }
     },
+    // 修改商品
     async sendEditGoods() {
       this.$refs.editFormRules.validate((valid) => {
         if (valid) {

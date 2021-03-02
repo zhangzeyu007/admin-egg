@@ -3,13 +3,13 @@
  * @Author: 海象
  * @Date: 2021-02-28 11:39:38
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-01 22:33:05
+ * @LastEditTime: 2021-03-02 11:34:06
  */
 'use strict';
 const Service = require('egg').Service;
-const fse = require('fs-extra');
-const path = require('path');
 const fullPath = 'http://localhost:7001/public/';
+// const fse = require('fs-extra');
+// const path = require('path');
 
 class GoodsService extends Service {
   // 添加商品
@@ -28,8 +28,6 @@ class GoodsService extends Service {
       goodsId: payLoad.goodsId,
     });
     if (isEmpty) {
-      console.log(isEmpty.goodsId);
-      console.log(payLoad.goodsId);
       if (isEmpty.goodsId === payLoad.goodsId) {
         result.code = 0;
       } else {
@@ -65,23 +63,24 @@ class GoodsService extends Service {
   // 删除商品接口
   async delGoods(payLoad) {
     const { ctx } = this;
-    const filePath = path.resolve(this.config.UPLOAD_DIR, payLoad.fileName);
-    const hash = payLoad.fileName.split('.')[0];
-    const hashPath = path.resolve(this.config.UPLOAD_DIR, hash);
-    if (fse.existsSync(filePath)) {
-      fse.unlink(filePath, err => {
-        if (err) throw err;
-        console.log('文件已被删除');
-      });
-    }
-    if (fse.existsSync(hashPath)) {
-      fse.rmdir(hashPath, err => {
-        if (err) throw err;
-        console.log('删除文件夹成功');
-      });
-    }
+    // const filePath = path.resolve(this.config.UPLOAD_DIR, payLoad.fileName);
+    // const hash = payLoad.fileName.split('.')[0];
+    // const hashPath = path.resolve(this.config.UPLOAD_DIR, hash);
+    // if (fse.existsSync(filePath)) {
+    //   fse.unlink(filePath, err => {
+    //     if (err) throw err;
+    //     console.log('文件已被删除');
+    //   });
+    // }
+    // if (fse.existsSync(hashPath)) {
+    //   fse.rmdir(hashPath, err => {
+    //     if (err) throw err;
+    //     console.log('删除文件夹成功');
+    //   });
+    // }
     return await ctx.model.AdminGoods.findByIdAndDelete(payLoad.goodsid);
   }
+
   // 更新商品
   async updateGoods(payLoad) {
     const { ctx } = this;
@@ -90,27 +89,27 @@ class GoodsService extends Service {
     };
     const responese = await ctx.model.AdminGoods.find({ goodsId: payLoad.goodsId }).updateOne({ name: payLoad.name, price: payLoad.price, discountPrice: payLoad.discountPrice, desc: payLoad.desc });
     if (responese) {
-      const url = payLoad.url;
-      const fileName = url.split('public/')[1];
-      const filePath = path.resolve(this.config.UPLOAD_DIR, fileName);
-      const hash = fileName.split('.')[0];
-      const hashPath = path.resolve(this.config.UPLOAD_DIR, hash);
+      // const url = payLoad.url;
+      // const fileName = url.split('public/')[1];
+      // const filePath = path.resolve(this.config.UPLOAD_DIR, fileName);
+      // const hash = fileName.split('.')[0];
+      // const hashPath = path.resolve(this.config.UPLOAD_DIR, hash);
       if (payLoad.file.name && payLoad.file.ext && payLoad.file.hash) {
         const res = await ctx.model.AdminGoods.find({ goodsId: payLoad.goodsId }).updateOne({ url: fullPath + `${payLoad.file.hash}.${payLoad.file.ext}` });
         if (res) {
           result.code = 1;
-          if (fse.existsSync(filePath)) {
-            fse.unlink(filePath, err => {
-              if (err) throw err;
-              console.log('文件已被删除');
-            });
-          }
-          if (fse.existsSync(hashPath)) {
-            fse.rmdir(hashPath, err => {
-              if (err) throw err;
-              console.log('删除文件夹成功');
-            });
-          }
+          // if (fse.existsSync(filePath)) {
+          //   fse.unlink(filePath, err => {
+          //     if (err) throw err;
+          //     console.log('文件已被删除');
+          //   });
+          // }
+          // if (fse.existsSync(hashPath)) {
+          //   fse.rmdir(hashPath, err => {
+          //     if (err) throw err;
+          //     console.log('删除文件夹成功');
+          //   });
+          // }
         } else {
           result.code = -1;
         }
@@ -119,6 +118,11 @@ class GoodsService extends Service {
       result.code = -1;
     }
     return result;
+  }
+  // 查询商品数据接口
+  async searchGoods() {
+    const { ctx } = this;
+    return await ctx.model.AdminGoods.find();
   }
 }
 module.exports = GoodsService;

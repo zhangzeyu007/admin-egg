@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-21 11:27:14
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-01 22:10:21
+ * @LastEditTime: 2021-03-02 11:32:32
  */
 'use strict';
 const BaseController = require('./base');
@@ -92,6 +92,12 @@ class GoodsController extends BaseController {
     } else {
       this.error('更新失败');
     }
+  }
+
+  async searchGoods() {
+    const { service } = this;
+    const response = await service.goods.searchGoods();
+    this.success(response);
   }
 }
 

@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-24 09:23:40
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-01 10:22:13
+ * @LastEditTime: 2021-03-02 10:18:59
  */
 'use strict';
 const Service = require('egg').Service;
@@ -36,6 +36,7 @@ class ToolService extends Service {
       readStream.on('end', () => {
         fse.unlinkSync(filePath);
         console.log('完成合并');
+        this.removeFile(dest);
         resolve();
       });
       readStream.pipe(writeStream);
@@ -49,6 +50,17 @@ class ToolService extends Service {
       }),
     ]
     );
+  }
+  async removeFile(dest) {
+    const fileName = dest.split('public\\')[1];
+    const hash = fileName.split('.')[0];
+    const hashPath = path.resolve(this.config.UPLOAD_DIR, hash);
+    if (fse.existsSync(hashPath)) {
+      fse.rmdir(hashPath, err => {
+        if (err) throw err;
+        console.log('删除文件夹成功');
+      });
+    }
   }
 }
 
