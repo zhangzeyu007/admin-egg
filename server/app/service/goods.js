@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-28 11:39:38
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-02 11:34:06
+ * @LastEditTime: 2021-03-02 21:06:20
  */
 'use strict';
 const Service = require('egg').Service;
@@ -85,19 +85,19 @@ class GoodsService extends Service {
   async updateGoods(payLoad) {
     const { ctx } = this;
     const result = {
-      code: '',
+      code: 1,
     };
-    const responese = await ctx.model.AdminGoods.find({ goodsId: payLoad.goodsId }).updateOne({ name: payLoad.name, price: payLoad.price, discountPrice: payLoad.discountPrice, desc: payLoad.desc });
-    if (responese) {
+    console.log(payLoad.name);
+    const response = await ctx.model.AdminGoods.find({ goodsId: payLoad.goodsId }).updateOne({ name: payLoad.name, price: payLoad.price, discountPrice: payLoad.discountPrice, desc: payLoad.desc });
+    if (response) {
       // const url = payLoad.url;
       // const fileName = url.split('public/')[1];
       // const filePath = path.resolve(this.config.UPLOAD_DIR, fileName);
       // const hash = fileName.split('.')[0];
       // const hashPath = path.resolve(this.config.UPLOAD_DIR, hash);
-      if (payLoad.file.name && payLoad.file.ext && payLoad.file.hash) {
+      if (payLoad.file && payLoad.file.name && payLoad.file.ext && payLoad.file.hash) {
         const res = await ctx.model.AdminGoods.find({ goodsId: payLoad.goodsId }).updateOne({ url: fullPath + `${payLoad.file.hash}.${payLoad.file.ext}` });
         if (res) {
-          result.code = 1;
           // if (fse.existsSync(filePath)) {
           //   fse.unlink(filePath, err => {
           //     if (err) throw err;
@@ -110,11 +110,13 @@ class GoodsService extends Service {
           //     console.log('删除文件夹成功');
           //   });
           // }
+
         } else {
           result.code = -1;
         }
       }
     } else {
+      console.log('你好');
       result.code = -1;
     }
     return result;
