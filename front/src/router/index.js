@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-21 11:51:37
+ * @LastEditTime: 2021-03-02 15:25:46
  */
 
 import Vue from "vue";
@@ -11,6 +11,7 @@ import VueRouter from "vue-router";
 import menuRouteList from './menu/menuRoutes.js'
 import goodsRouteList from './goods/goodsRoutes.js'
 import userRouteList from './user/userRoutes.js'
+import editorRouteList from './editor/editorRoutes.js'
 
 
 Vue.use(VueRouter);
@@ -56,7 +57,8 @@ export const constRoutes = [
 export const asyncRoutes = [
   ...goodsRouteList.routes,
   ...menuRouteList.routes,
-  ...userRouteList.routes
+  ...userRouteList.routes,
+  ...editorRouteList.routes
 ];
 
 

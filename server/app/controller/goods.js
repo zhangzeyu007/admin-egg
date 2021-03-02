@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-21 11:27:14
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-02 11:32:32
+ * @LastEditTime: 2021-03-02 11:45:56
  */
 'use strict';
 const BaseController = require('./base');
@@ -22,8 +22,14 @@ const getGoodsListRule = {
 const delGoodsRule = {
   goodsid: { required: true, type: 'string' },
 };
-const updateGoodsRule = {
 
+const updateGoodsRule = {
+  goodsId: { required: true, type: 'string' },
+  name: { required: true, type: 'string' },
+  price: { required: true, type: 'string' },
+  discountPrice: { required: true, type: 'string' },
+  desc: { required: true, type: 'string' },
+  file: { required: true, type: 'object' },
 };
 
 class GoodsController extends BaseController {

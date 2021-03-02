@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-01 15:32:50
+ * @LastEditTime: 2021-03-02 15:10:03
 -->
 <template>
   <el-container>
@@ -107,28 +107,36 @@ export default {
               path: "goodslist",
               icon: "yiqifafang",
             },
-            {
-              id: "103",
-              authName: "商品详情",
-              path: "goodsdetail",
-              icon: "gongyingshang",
-            },
           ],
         },
         {
           id: "201",
-          authName: "用户管理",
+          authName: "文章管理",
           path: "",
           icon: "gangweiguanli",
           children: [
             {
               id: "202",
+              authName: "文章列表",
+              path: "editorlist",
+              icon: "jixiaoguanli",
+            },
+          ],
+        },
+        {
+          id: "301",
+          authName: "用户管理",
+          path: "",
+          icon: "gangweiguanli",
+          children: [
+            {
+              id: "302",
               authName: "用户列表",
               path: "userlist",
               icon: "jixiaoguanli",
             },
             {
-              id: "203",
+              id: "303",
               authName: "权限",
               path: "userrole",
               icon: "quanxianguanli",
@@ -136,13 +144,13 @@ export default {
           ],
         },
         {
-          id: "301",
+          id: "401",
           authName: "菜单管理",
           path: "",
           icon: "fenleiguanli",
           children: [
             {
-              id: "302",
+              id: "402",
               authName: "菜单列表",
               path: "menulist",
               icon: "jixiaoguanli",
