@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-10 14:00:50
+ * @LastEditTime: 2021-03-02 16:05:40
 -->
 <template>
   <div id="register">
@@ -49,7 +49,7 @@
     </div>
     <video
       id="video"
-      src="../assets/video_back.mp4"
+      src="../assets/video_back3.mp4"
       autoplay="autoplay"
       muted
       loop

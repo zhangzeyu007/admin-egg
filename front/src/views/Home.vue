@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-02 15:10:03
+ * @LastEditTime: 2021-03-02 15:52:01
 -->
 <template>
   <el-container>
@@ -99,7 +99,7 @@ export default {
           id: "101",
           authName: "商品管理",
           path: "",
-          icon: "kehuguanli",
+          icon: "gongyingshang",
           children: [
             {
               id: "102",
@@ -113,13 +113,13 @@ export default {
           id: "201",
           authName: "文章管理",
           path: "",
-          icon: "gangweiguanli",
+          icon: "xinwenguanli",
           children: [
             {
               id: "202",
               authName: "文章列表",
               path: "editorlist",
-              icon: "jixiaoguanli",
+              icon: "guanggaoguanli",
             },
           ],
         },
