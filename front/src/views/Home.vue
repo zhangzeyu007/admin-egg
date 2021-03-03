@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-02 15:52:01
+ * @LastEditTime: 2021-03-03 15:42:03
 -->
 <template>
   <el-container>
@@ -133,7 +133,7 @@ export default {
               id: "302",
               authName: "用户列表",
               path: "userlist",
-              icon: "jixiaoguanli",
+              icon: "yuangongxinxi",
             },
             {
               id: "303",
@@ -229,7 +229,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .el-header,
 .el-footer {
   background-color: #373d41;

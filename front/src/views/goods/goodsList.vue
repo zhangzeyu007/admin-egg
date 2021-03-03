@@ -348,8 +348,8 @@ export default {
       search: "",
       tableData: [],
       pages: {
-        totalPage: 10,
-        pageSize: 10,
+        totalPage: 0,
+        pageSize: 5,
         pageNum: 1,
       },
       file: "",
