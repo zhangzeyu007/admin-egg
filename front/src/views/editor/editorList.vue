@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-02 15:18:24
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-03 22:39:46
+ * @LastEditTime: 2021-03-05 22:41:31
 -->
 <template>
   <div class="editorList">
@@ -175,9 +175,11 @@ export default {
       tableData: [],
       addEditorDialog: false,
       addEditorForm: {
-        articleId: "",
+        editorId: "",
         title: "",
         content: "",
+        compiledContent: "",
+        likenum: "",
       },
       pages: {
         totalPage: 10,
