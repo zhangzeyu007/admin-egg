@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-02 15:18:24
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-03 17:04:13
+ * @LastEditTime: 2021-03-03 22:39:46
 -->
 <template>
   <div class="editorList">
@@ -165,8 +165,9 @@ export default {
   data() {
     return {
       search: "",
-      content: `### 代码高亮写法
+      content: `### 代码高亮写法 
 \`\`\`javascript
+
   let a =1;
   console.log(a)
 \`\`\`
@@ -205,6 +206,7 @@ export default {
     handleCurrentChange() {},
     handleEdit() {},
     handleDelete() {},
+    // 添加文章按钮
     addEditor() {
       this.addEditorDialog = true;
       this.bindEvents();
@@ -213,7 +215,16 @@ export default {
     resetForm() {
       this.addEditorDialog = false;
     },
-    sendAddEditor() {},
+    sendAddEditor() {
+      this.$api.editor
+        .addEditor()
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     update(e) {
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {

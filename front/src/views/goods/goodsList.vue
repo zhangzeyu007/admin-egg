@@ -569,7 +569,9 @@ export default {
     },
     //修改按钮
     handleEdit(item) {
+      console.log(item);
       this.editGoodsDialog = true;
+      this.fileName = "";
       this.editGoodsForm.goodsId = item.goodsId;
       this.editGoodsForm.name = item.name;
       this.editGoodsForm.price = item.price;
