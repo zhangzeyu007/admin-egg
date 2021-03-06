@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-02 15:18:24
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-05 22:41:31
+ * @LastEditTime: 2021-03-06 21:58:20
 -->
 <template>
   <div class="editorList">
@@ -88,9 +88,9 @@
         label-width="100px"
         :rules="addEditorRules"
       >
-        <el-form-item label="编号" prop="articleId">
+        <el-form-item label="编号" prop="editorId">
           <el-input
-            v-model.number="addEditorForm.articleId"
+            v-model.number="addEditorForm.editorId"
             clearable
           ></el-input>
         </el-form-item>
@@ -111,7 +111,7 @@
               ></textarea>
             </el-col>
             <el-col :span="12">
-              <div class="markdown-body" v-html="compiledContent"></div>
+              <div class="markdown-body" v-html="addCompiledContent"></div>
             </el-col>
           </el-row>
         </div>
@@ -156,6 +156,7 @@
 </style>
 
 <script>
+import { Message } from "element-ui";
 import marked from "marked";
 import hljs from "highlight.js";
 // import javascript from "highlight.js/lib/languages/javascript";
@@ -164,29 +165,46 @@ import Vue from "vue";
 export default {
   data() {
     return {
-      search: "",
-      content: `### 代码高亮写法 
-\`\`\`javascript
-
-  let a =1;
-  console.log(a)
-\`\`\`
-      `,
-      tableData: [],
       addEditorDialog: false,
+      search: "",
+      tableData: [],
       addEditorForm: {
         editorId: "",
         title: "",
         content: "",
         compiledContent: "",
-        likenum: "",
       },
       pages: {
         totalPage: 10,
         pageSize: 10,
         pageNum: 1,
       },
-      addEditorRules: {},
+      addEditorRules: {
+        editorId: [
+          {
+            required: true,
+            message: "请输入编号",
+            trigger: "change",
+          },
+          {
+            type: "number",
+            message: "必须是数字",
+            trigger: "change",
+          },
+          {
+            pattern: /^[0-9]+?$/,
+            message: "必须是正整数",
+            trigger: "change",
+          },
+        ],
+        title: [
+          {
+            required: true,
+            message: "请输入标题",
+            trigger: "change",
+          },
+        ],
+      },
     };
   },
   computed: {
@@ -199,15 +217,24 @@ export default {
       }
       return this.tableData;
     },
-    compiledContent() {
-      return marked(this.content, {});
+    addCompiledContent() {
+      return marked(this.addEditorForm.content, {});
     },
   },
   methods: {
-    handleSizeChange() {},
-    handleCurrentChange() {},
+    handleSizeChange(val) {
+      this.pages.pageSize = val;
+      this.pages.pageNum = 1;
+      this.getEditorListData();
+    },
+    handleCurrentChange(val) {
+      this.pages.pageNum = val;
+      this.getEditorListData();
+    },
     handleEdit() {},
     handleDelete() {},
+    // 获取文章列表数据
+    getEditorListData() {},
     // 添加文章按钮
     addEditor() {
       this.addEditorDialog = true;
@@ -217,15 +244,29 @@ export default {
     resetForm() {
       this.addEditorDialog = false;
     },
+    // 发送添加文章接口
     sendAddEditor() {
-      this.$api.editor
-        .addEditor()
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.$refs.addEditorRules.validate((valid) => {
+        if (valid) {
+          if (
+            !this.addEditorForm.content ||
+            !this.addEditorForm.compiledContent
+          ) {
+            Message({
+              message: "文章内容不能为空",
+              type: "error",
+            });
+          }
+          this.$api.editor
+            .addEditor(this.addEditorForm)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      });
     },
     update(e) {
       clearTimeout(this.timer);
