@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-05 22:16:32
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-05 22:26:53
+ * @LastEditTime: 2021-03-06 22:53:16
  */
 'use strict';
 const Service = require('egg').Service;
@@ -30,6 +30,8 @@ class EditorService extends Service {
         }
       }
     } else {
+      console.log('--------------------');
+      console.log(payLoad);
       const isSave = await ctx.model.AdminEditor.create({ ...payLoad });
       if (isSave) {
         result.code = 1;

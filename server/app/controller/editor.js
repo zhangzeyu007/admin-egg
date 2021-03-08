@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-05 21:05:52
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-05 22:15:25
+ * @LastEditTime: 2021-03-06 22:46:10
  */
 'use strict';
 const BaseController = require('./base');
@@ -20,7 +20,17 @@ class EditorController extends BaseController {
     // 组装参数
     const payload = ctx.request.body || {};
     const response = await service.editor.addEditor(payload);
-
+    switch (response.code) {
+      case 0:
+        this.warning('文章编号重复');
+        break;
+      case 1:
+        this.success('文章添加成功');
+        break;
+      default:
+        this.error('系统错误');
+        break;
+    }
   }
 }
 

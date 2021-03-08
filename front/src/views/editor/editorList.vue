@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-02 15:18:24
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-06 21:58:20
+ * @LastEditTime: 2021-03-06 22:37:46
 -->
 <template>
   <div class="editorList">
@@ -106,7 +106,7 @@
                 v-if="addEditorDialog"
                 ref="editor"
                 class="md-editor"
-                :value="content"
+                v-model="addEditorForm.content"
                 @input="update"
               ></textarea>
             </el-col>
@@ -173,6 +173,7 @@ export default {
         title: "",
         content: "",
         compiledContent: "",
+        likenum: "",
       },
       pages: {
         totalPage: 10,
@@ -248,6 +249,7 @@ export default {
     sendAddEditor() {
       this.$refs.addEditorRules.validate((valid) => {
         if (valid) {
+          this.addEditorForm.compiledContent = this.addCompiledContent;
           if (
             !this.addEditorForm.content ||
             !this.addEditorForm.compiledContent
@@ -257,6 +259,7 @@ export default {
               type: "error",
             });
           }
+
           this.$api.editor
             .addEditor(this.addEditorForm)
             .then((res) => {
