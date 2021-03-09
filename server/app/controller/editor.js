@@ -3,13 +3,14 @@
  * @Author: 海象
  * @Date: 2021-03-05 21:05:52
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-09 16:35:40
+ * @LastEditTime: 2021-03-09 17:08:58
  */
 'use strict';
 const BaseController = require('./base');
 const addEditorRule = {};
 const getEditorListRule = {};
 const delEditorRule = {};
+const updateEditorRule = {};
 
 class EditorController extends BaseController {
   async addEditor() {
@@ -63,6 +64,24 @@ class EditorController extends BaseController {
     const response = await service.editor.delEditor(payload);
     this.success(response);
   }
+  // 更新商品
+  async updateEditor() {
+    const { ctx, app, service } = this;
+    // 校验传递的参数
+    const errors = app.validator.validate(updateEditorRule, ctx.request.body);
+    if (errors) {
+      return this.error('参数校验失败', -1, errors);
+    }
+    // 组装参数
+    const payload = ctx.request.body || {};
+    const response = await service.editor.updateEditor(payload);
+    if (response.code === 1) {
+      this.message('更新成功');
+    } else {
+      this.error('更新失败');
+    }
+  }
+
 }
 
 module.exports = EditorController;

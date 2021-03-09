@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-02 15:18:24
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-09 16:32:55
+ * @LastEditTime: 2021-03-09 17:06:34
 -->
 <template>
   <div class="editorList">
@@ -112,7 +112,7 @@
               ></textarea>
             </el-col>
             <el-col :span="12">
-              <div class="markdown-body" v-html="editCompiledContent"></div>
+              <div class="markdown-body" v-html="addCompiledContent"></div>
             </el-col>
           </el-row>
         </div>
@@ -130,7 +130,7 @@
       close-on-click-modal
     >
       <el-form
-        ref="addEditorRules"
+        ref="editEditorRules"
         :model="editEditorForm"
         label-width="100px"
         :rules="editEditorRules"
@@ -311,6 +311,7 @@ export default {
         this.addEditorForm.title = "";
         this.addEditorForm.content = "";
         this.addEditorForm.compiledContent = "";
+        this.$refs["addEditorRules"].resetFields();
       }
       if (name === "edit") {
         this.editEditorDialog = false;
@@ -318,6 +319,7 @@ export default {
         this.editEditorForm.title = "";
         this.editEditorForm.content = "";
         this.editEditorForm.compiledContent = "";
+        this.$refs["editEditorRules"].resetFields();
       }
     },
     // 添加文章按钮
@@ -328,10 +330,11 @@ export default {
     },
     // 修改按钮
     handleEdit(item) {
-      this.editEditorDialog = true;
+      this.editEditorForm.editorId = item.editorId;
       this.editEditorForm.title = item.title;
       this.editEditorForm.content = item.content;
       this.editEditorForm.compiledContent = item.compiledContent;
+      this.editEditorDialog = true;
       this.bindEvents();
       this.setMarked();
     },
@@ -343,20 +346,6 @@ export default {
         }
       });
     },
-    // 获取文章列表数据
-    getEditorListData() {
-      this.$api.editor.getEditorList(this.pages).then((res) => {
-        if (res.code == 200) {
-          if (res.data.totalPage) {
-            this.pages.totalPage = res.data.totalPage;
-          }
-          if (res.data.page) {
-            this.tableData = res.data.page;
-          }
-        }
-      });
-    },
-
     // 发送添加文章接口
     sendAddEditor() {
       this.$refs.addEditorRules.validate((valid) => {
@@ -375,7 +364,24 @@ export default {
           this.$api.editor
             .addEditor(this.addEditorForm)
             .then((res) => {
-              console.log(res);
+              if (res.code == 200) {
+                Message({
+                  message: "添加成功",
+                  type: "success",
+                });
+                this.getEditorListData();
+                this.resetForm("add");
+              } else if (res.code == -2) {
+                Message({
+                  type: "warning",
+                  message: res.message,
+                });
+              } else {
+                Message({
+                  type: "error",
+                  message: res.message,
+                });
+              }
             })
             .catch((err) => {
               console.log(err);
@@ -383,7 +389,57 @@ export default {
         }
       });
     },
-    sendEditEditor() {},
+    //更新文章
+    sendEditEditor() {
+      this.$refs.editEditorRules.validate((valid) => {
+        if (valid) {
+          this.editEditorForm.compiledContent = this.editCompiledContent;
+          if (
+            !this.editEditorForm.content ||
+            !this.editEditorForm.compiledContent
+          ) {
+            Message({
+              message: "文章内容不能为空",
+              type: "error",
+            });
+          }
+          this.$api.editor
+            .editorUpdate(this.editEditorForm)
+            .then((res) => {
+              if (res.code == 200) {
+                Message({
+                  message: "更新成功",
+                  type: "success",
+                });
+                this.getEditorListData();
+                this.resetForm("edit");
+              }
+              if (res.code == -1) {
+                Message({
+                  message: "更新失败",
+                  type: "warning",
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      });
+    },
+    // 获取文章列表数据
+    getEditorListData() {
+      this.$api.editor.getEditorList(this.pages).then((res) => {
+        if (res.code == 200) {
+          if (res.data.totalPage) {
+            this.pages.totalPage = res.data.totalPage;
+          }
+          if (res.data.page) {
+            this.tableData = res.data.page;
+          }
+        }
+      });
+    },
     update(e) {
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
