@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-01 17:17:39
+ * @LastEditTime: 2021-03-08 17:56:42
  */
 'use strict';
 
@@ -66,6 +66,7 @@ class UserService extends Service {
     }
     return result;
   }
+
   // 获取用户列表
   async getUserList(payLoad) {
     const { ctx } = this;
@@ -77,12 +78,14 @@ class UserService extends Service {
       .exec();
     return { totalPage, page: res };
   }
+
   // 删除用户
   async delUser(payLoad) {
     const { ctx } = this;
     return await ctx.model.AdminUser.findByIdAndDelete(payLoad.userid);
 
   }
+
   // 更新用户接口
   async updateUser(payLoad) {
     const { ctx } = this;
