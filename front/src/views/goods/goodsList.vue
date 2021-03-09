@@ -569,7 +569,6 @@ export default {
     },
     //修改按钮
     handleEdit(item) {
-      console.log(item);
       this.editGoodsDialog = true;
       this.fileName = "";
       this.editGoodsForm.goodsId = item.goodsId;
@@ -597,7 +596,6 @@ export default {
       this.$api.goods
         .getGoodsList(this.pages)
         .then((res) => {
-          console.log(res);
           if (res.code == 200) {
             if (res.data.totalPage) {
               this.pages.totalPage = res.data.totalPage;

@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-02 15:18:24
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-09 17:27:18
+ * @LastEditTime: 2021-03-09 17:47:14
 -->
 <template>
   <div class="editorList">
@@ -43,6 +43,11 @@
           prop="content"
           align="center"
           show-overflow-tooltip
+        ></el-table-column>
+        <el-table-column
+          label="点赞数"
+          prop="likenum"
+          align="center"
         ></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
@@ -452,7 +457,7 @@ export default {
             this.pages.totalPage = res.data.totalPage;
           }
           if (res.data.page) {
-            this.tableData = res.data.page;
+            this.tableData = this.formateListData(res.data.page);
           }
         }
       });
@@ -493,6 +498,15 @@ export default {
           e.preventDefault();
         });
       });
+    },
+    // 格式化数据处理
+    formateListData(data) {
+      data.map((item) => {
+        if (item.likenum == "") {
+          item.likenum = "0";
+        }
+      });
+      return data;
     },
   },
 };
