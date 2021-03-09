@@ -27,9 +27,14 @@ time, mark, audio, video {
 }
   h1 {
     font-size: 30px;
+    text-indent: 150px;
   }
-  h2 {
+   h2 {
     font-size: 24px;
+	text-indent: 50px;
+  }
+  p {
+	  text-indent: 50px;
   }
 /* make sure to set some focus styles for accessibility */
 :focus {

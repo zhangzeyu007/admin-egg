@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-05 22:16:32
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-08 17:55:12
+ * @LastEditTime: 2021-03-09 16:43:28
  */
 'use strict';
 const Service = require('egg').Service;
@@ -40,6 +40,7 @@ class EditorService extends Service {
 
     return result;
   }
+  // 获取文章列表数据
   async getEditorList(payLoad) {
     const { ctx } = this;
     const page = payLoad.pageNum; // 当前页数
@@ -49,6 +50,13 @@ class EditorService extends Service {
     const res = await ctx.model.AdminEditor.find().skip(start).limit(num)
       .exec();
     return { totalPage, page: res };
+  }
+
+  // 删除商品接口
+  async delEditor(payLoad) {
+    console.log(payLoad.editorId);
+    const { ctx } = this;
+    return await ctx.model.AdminEditor.findByIdAndDelete(payLoad.editorId);
   }
 }
 

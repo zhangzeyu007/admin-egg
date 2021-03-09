@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-02 15:18:24
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-06 22:37:46
+ * @LastEditTime: 2021-03-09 16:32:55
 -->
 <template>
   <div class="editorList">
@@ -30,18 +30,19 @@
       >
         <el-table-column
           label="编号"
-          prop="goodsId"
+          prop="editorId"
           align="center"
         ></el-table-column>
         <el-table-column
           label="标题"
-          prop="name"
+          prop="title"
           align="center"
         ></el-table-column>
         <el-table-column
           label="内容"
-          prop="name"
+          prop="content"
           align="center"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
@@ -111,14 +112,61 @@
               ></textarea>
             </el-col>
             <el-col :span="12">
-              <div class="markdown-body" v-html="addCompiledContent"></div>
+              <div class="markdown-body" v-html="editCompiledContent"></div>
             </el-col>
           </el-row>
         </div>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="resetForm()">取消</el-button>
+        <el-button @click="resetForm('add')">取消</el-button>
         <el-button type="primary" @click="sendAddEditor">确定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 修改弹窗 -->
+    <el-dialog
+      title="修改文章"
+      :visible.sync="editEditorDialog"
+      :fullscreen="true"
+      close-on-click-modal
+    >
+      <el-form
+        ref="addEditorRules"
+        :model="editEditorForm"
+        label-width="100px"
+        :rules="editEditorRules"
+      >
+        <el-form-item label="编号" prop="editorId">
+          <el-input
+            v-model.number="editEditorForm.editorId"
+            clearable
+            disabled
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="标题" prop="title">
+          <el-input v-model.number="editEditorForm.title" clearable></el-input>
+        </el-form-item>
+        <div>
+          <div class="content-title">内容区:</div>
+          <el-row>
+            <el-col :span="12">
+              <!-- markdown编辑器的基本操作 -->
+              <textarea
+                v-if="editEditorDialog"
+                ref="editor"
+                class="md-editor"
+                v-model="editEditorForm.content"
+                @input="update"
+              ></textarea>
+            </el-col>
+            <el-col :span="12">
+              <div class="markdown-body" v-html="editCompiledContent"></div>
+            </el-col>
+          </el-row>
+        </div>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resetForm('edit')">取消</el-button>
+        <el-button type="primary" @click="sendEditEditor">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -166,9 +214,17 @@ export default {
   data() {
     return {
       addEditorDialog: false,
+      editEditorDialog: false,
       search: "",
       tableData: [],
       addEditorForm: {
+        editorId: "",
+        title: "",
+        content: "",
+        compiledContent: "",
+        likenum: "",
+      },
+      editEditorForm: {
         editorId: "",
         title: "",
         content: "",
@@ -206,7 +262,19 @@ export default {
           },
         ],
       },
+      editEditorRules: {
+        title: [
+          {
+            required: true,
+            message: "请输入标题",
+            trigger: "change",
+          },
+        ],
+      },
     };
+  },
+  created() {
+    this.getEditorListData();
   },
   computed: {
     tableDatas() {
@@ -221,6 +289,9 @@ export default {
     addCompiledContent() {
       return marked(this.addEditorForm.content, {});
     },
+    editCompiledContent() {
+      return marked(this.editEditorForm.content, {});
+    },
   },
   methods: {
     handleSizeChange(val) {
@@ -232,19 +303,60 @@ export default {
       this.pages.pageNum = val;
       this.getEditorListData();
     },
-    handleEdit() {},
-    handleDelete() {},
-    // 获取文章列表数据
-    getEditorListData() {},
+    // 重置form
+    resetForm(name) {
+      if (name === "add") {
+        this.addEditorDialog = false;
+        this.addEditorForm.editorId = "";
+        this.addEditorForm.title = "";
+        this.addEditorForm.content = "";
+        this.addEditorForm.compiledContent = "";
+      }
+      if (name === "edit") {
+        this.editEditorDialog = false;
+        this.editEditorForm.editorId = "";
+        this.editEditorForm.title = "";
+        this.editEditorForm.content = "";
+        this.editEditorForm.compiledContent = "";
+      }
+    },
     // 添加文章按钮
     addEditor() {
       this.addEditorDialog = true;
       this.bindEvents();
       this.setMarked();
     },
-    resetForm() {
-      this.addEditorDialog = false;
+    // 修改按钮
+    handleEdit(item) {
+      this.editEditorDialog = true;
+      this.editEditorForm.title = item.title;
+      this.editEditorForm.content = item.content;
+      this.editEditorForm.compiledContent = item.compiledContent;
+      this.bindEvents();
+      this.setMarked();
     },
+    // 删除文章按钮
+    handleDelete(item) {
+      this.$api.editor.delEditor({ editorId: item._id }).then((res) => {
+        if (res.code == 200) {
+          this.getEditorListData();
+        }
+      });
+    },
+    // 获取文章列表数据
+    getEditorListData() {
+      this.$api.editor.getEditorList(this.pages).then((res) => {
+        if (res.code == 200) {
+          if (res.data.totalPage) {
+            this.pages.totalPage = res.data.totalPage;
+          }
+          if (res.data.page) {
+            this.tableData = res.data.page;
+          }
+        }
+      });
+    },
+
     // 发送添加文章接口
     sendAddEditor() {
       this.$refs.addEditorRules.validate((valid) => {
@@ -271,6 +383,7 @@ export default {
         }
       });
     },
+    sendEditEditor() {},
     update(e) {
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {

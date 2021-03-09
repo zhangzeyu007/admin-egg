@@ -3,12 +3,13 @@
  * @Author: 海象
  * @Date: 2021-03-05 21:05:52
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-08 17:55:57
+ * @LastEditTime: 2021-03-09 16:35:40
  */
 'use strict';
 const BaseController = require('./base');
 const addEditorRule = {};
 const getEditorListRule = {};
+const delEditorRule = {};
 
 class EditorController extends BaseController {
   async addEditor() {
@@ -45,9 +46,22 @@ class EditorController extends BaseController {
     // 组装参数
     const payload = ctx.request.body || {};
     // 查询结果
-    const response = await service.user.getEditorList(payload);
+    const response = await service.editor.getEditorList(payload);
     this.success(response);
 
+  }
+  // 删除商品接口
+  async delEditor() {
+    const { ctx, app, service } = this;
+    // 校验传递的参数
+    const errors = app.validator.validate(delEditorRule, ctx.request.body);
+    if (errors) {
+      return this.error('参数校验失败', -1, errors);
+    }
+    const payload = ctx.request.body || {};
+    // 查询结果
+    const response = await service.editor.delEditor(payload);
+    this.success(response);
   }
 }
 
