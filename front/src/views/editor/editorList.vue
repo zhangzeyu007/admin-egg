@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-02 15:18:24
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-09 17:06:34
+ * @LastEditTime: 2021-03-09 17:27:18
 -->
 <template>
   <div class="editorList">
@@ -276,12 +276,29 @@ export default {
   created() {
     this.getEditorListData();
   },
+  watch: {
+    search(old) {
+      if (!old) {
+        this.pages.pageNum = 1;
+      }
+      this.$api.editor
+        .editorSearch()
+        .then((res) => {
+          if (res.code === 200 && res.data.length > 0) {
+            this.tableData = res.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
   computed: {
     tableDatas() {
       const search = String(this.search).toLowerCase();
       if (search) {
         return this.tableData.filter((data) => {
-          return String(data.name).toLowerCase().indexOf(search) > -1;
+          return String(data.title).toLowerCase().indexOf(search) > -1;
         });
       }
       return this.tableData;

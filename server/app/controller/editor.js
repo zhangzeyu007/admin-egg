@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-05 21:05:52
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-09 17:08:58
+ * @LastEditTime: 2021-03-09 17:31:01
  */
 'use strict';
 const BaseController = require('./base');
@@ -80,6 +80,12 @@ class EditorController extends BaseController {
     } else {
       this.error('更新失败');
     }
+  }
+
+  async searchEditor() {
+    const { service } = this;
+    const response = await service.editor.searchEditor();
+    this.success(response);
   }
 
 }

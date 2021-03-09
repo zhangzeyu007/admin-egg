@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:21:47
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-09 17:09:39
+ * @LastEditTime: 2021-03-09 17:28:22
  */
 'use strict';
 
@@ -39,5 +39,6 @@ module.exports = app => {
   router.post('/editor/geteditorlist', jwt, controller.editor.getEditorList);
   router.post('/editor/deleditor', jwt, controller.editor.delEditor);
   router.post('/editor/updateeditor', jwt, controller.editor.updateEditor);
+  router.post('/editor/searcheditor', jwt, controller.editor.searchEditor);
 
 };

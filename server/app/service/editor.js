@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-05 22:16:32
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-09 17:21:14
+ * @LastEditTime: 2021-03-09 17:32:28
  */
 'use strict';
 const Service = require('egg').Service;
@@ -72,7 +72,11 @@ class EditorService extends Service {
     return { totalPage, page: res };
   }
 
-
+  // 查询文章所有数据
+  async searchEditor() {
+    const { ctx } = this;
+    return await ctx.model.AdminEditor.find();
+  }
 }
 
 

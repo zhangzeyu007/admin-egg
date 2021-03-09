@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-03 22:08:59
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-09 16:23:26
+ * @LastEditTime: 2021-03-09 17:32:53
  */
 import axios from '../http'
 
@@ -19,10 +19,14 @@ function delEditor(params) {
 function editorUpdate(params) {
     return axios.post('/editor/updateeditor', params)
 }
+function editorSearch(params) {
+    return axios.post('/editor/searcheditor', params)
+}
 
 export default {
     addEditor,
     getEditorList,
     delEditor,
-    editorUpdate
+    editorUpdate,
+    editorSearch
 }
