@@ -34,7 +34,7 @@ time, mark, audio, video {
 	text-indent: 50px;
   }
   p {
-	  text-indent: 50px;
+	  text-indent: 10px;
   }
 /* make sure to set some focus styles for accessibility */
 :focus {
