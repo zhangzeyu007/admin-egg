@@ -611,6 +611,7 @@ export default {
     },
     // 文件发生改变
     handleFileChange(e) {
+      console.log(e);
       const [file] = e.target.files;
       if (!file) return;
       this.resetForm();
@@ -626,7 +627,7 @@ export default {
     // 重置Form表单
     resetForm(name) {
       this.chunks = [];
-      this.showUpLoad = false;
+      // this.showUpLoad = false;
       this.isUpload = false;
       if (name == "add") {
         this.addGoodsDialog = false;
@@ -634,7 +635,7 @@ export default {
         this.addGoodsForm.price = "";
         this.addGoodsForm.discountPrice = "";
         this.addGoodsForm.desc = "";
-        this.addGoodsForm.file = {};
+        // this.addGoodsForm.file = {};
         this.$refs["addFormRules"].resetFields();
       }
       if (name == "edit") {
@@ -643,7 +644,7 @@ export default {
         this.editGoodsForm.price = "";
         this.editGoodsForm.discountPrice = "";
         this.editGoodsForm.desc = "";
-        this.editGoodsForm.file = {};
+        // this.editGoodsForm.file = {};
         this.file = "";
         this.$refs["editFormRules"].resetFields();
       }
