@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-02 16:08:29
+ * @LastEditTime: 2021-03-16 17:54:34
 -->
 
 <template>
@@ -81,7 +81,7 @@
     <video
       id="video"
       src="../assets/video_back.mp4"
-      autoplay="autoplay"
+      autoplay
       muted
       loop
     ></video>
