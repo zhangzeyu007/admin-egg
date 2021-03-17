@@ -659,7 +659,7 @@ export default {
         this.editGoodsForm.file = {};
         this.file = "";
         this.$refs["editFileInput"].type = "null";
-        this.$refs["addFileInput"].type = "file";
+        this.$refs["editFileInput"].type = "file";
         this.$refs["editFormRules"].resetFields();
       }
     },

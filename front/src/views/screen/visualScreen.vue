@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-17 10:08:33
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-17 15:45:45
+ * @LastEditTime: 2021-03-17 17:09:49
 -->
 <template>
   <div class="visual-main">
@@ -12,7 +12,7 @@
     <!-- 内容 -->
     <div class="cont">
       <div class="cont-edge">
-        <div id="chartL1" class="box"></div>
+        <div ref="chartL1" class="box"></div>
         <div id="chartL2" class="box"></div>
         <div id="chartL3" class="box"></div>
       </div>
@@ -49,12 +49,56 @@
 </template>
 
 <script>
+import echarts from "@/config/echarts";
+import "../../static/theme/walden.js";
+import Vue from "vue";
+
 export default {
   data() {
     return {};
   },
-  mounted() {},
-  methods: {},
+  created() {
+    this.initChartL1();
+  },
+  methods: {
+    initChartL1() {
+      /*数据源*/
+      const source = [
+        ["年", "2014", "2015", "2016", "2017", "2018", "2019", "2020"],
+        ["收入", 820, 932, 901, 934, 1290, 1330, 1520],
+        ["支出", 200, 632, 601, 634, 850, 1000, 1100],
+      ];
+      console.log(echarts);
+      Vue.nextTick(() => {
+        let chart = echarts.init(this.$refs["chartL1"], "walden");
+        const option = {
+          title: {
+            text: "",
+            left: "center",
+          },
+          legend: { left: "right" },
+          dataset: { source },
+          xAxis: {
+            type: "category",
+          },
+          yAxis: {
+            type: "value",
+          },
+          series: [
+            {
+              type: "line",
+              seriesLayoutBy: "row",
+            },
+            {
+              type: "line",
+              seriesLayoutBy: "row",
+            },
+          ],
+        };
+        chart.setOption(option);
+      });
+    },
+  },
 };
 </script>
 
