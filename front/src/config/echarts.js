@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-17 16:22:14
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-17 16:59:02
+ * @LastEditTime: 2021-03-17 22:04:51
  */
 // 引入主模块
 import * as echarts from 'echarts/lib/echarts';
@@ -16,8 +16,6 @@ import 'echarts/lib/component/legend'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/grid'
-
-
 
 
 
