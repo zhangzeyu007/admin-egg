@@ -128,7 +128,12 @@
           <div class="fileinput-button">
             <el-button type="primary" size="medium">选择文件</el-button>
             <el-button type="success" @click="uploadFile">上传</el-button>
-            <input type="file" name="file" @change="handleFileChange" />
+            <input
+              ref="addFileInput"
+              type="file"
+              name="file"
+              @change="handleFileChange"
+            />
           </div>
           <div class="upload-image" v-if="showUpLoad">
             <div class="image">
@@ -215,7 +220,12 @@
           <div class="fileinput-button">
             <el-button type="primary" size="medium">选择文件</el-button>
             <el-button type="success" @click="uploadFile">上传</el-button>
-            <input type="file" name="file" @change="handleFileChange" />
+            <input
+              ref="editFileInput"
+              type="file"
+              name="file"
+              @change="handleFileChange"
+            />
           </div>
           <div class="upload-image" v-if="showUpLoad">
             <div class="image">
@@ -611,7 +621,6 @@ export default {
     },
     // 文件发生改变
     handleFileChange(e) {
-      console.log(e);
       const [file] = e.target.files;
       if (!file) return;
       this.resetForm();
@@ -627,7 +636,7 @@ export default {
     // 重置Form表单
     resetForm(name) {
       this.chunks = [];
-      // this.showUpLoad = false;
+      this.showUpLoad = false;
       this.isUpload = false;
       if (name == "add") {
         this.addGoodsDialog = false;
@@ -635,7 +644,10 @@ export default {
         this.addGoodsForm.price = "";
         this.addGoodsForm.discountPrice = "";
         this.addGoodsForm.desc = "";
-        // this.addGoodsForm.file = {};
+        this.addGoodsForm.file = {};
+        this.file = "";
+        this.$refs["addFileInput"].type = "null";
+        this.$refs["addFileInput"].type = "file";
         this.$refs["addFormRules"].resetFields();
       }
       if (name == "edit") {
@@ -644,8 +656,10 @@ export default {
         this.editGoodsForm.price = "";
         this.editGoodsForm.discountPrice = "";
         this.editGoodsForm.desc = "";
-        // this.editGoodsForm.file = {};
+        this.editGoodsForm.file = {};
         this.file = "";
+        this.$refs["editFileInput"].type = "null";
+        this.$refs["addFileInput"].type = "file";
         this.$refs["editFormRules"].resetFields();
       }
     },
