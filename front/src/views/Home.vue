@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-03 15:42:03
+ * @LastEditTime: 2021-03-17 10:25:27
 -->
 <template>
   <el-container>
@@ -125,32 +125,47 @@ export default {
         },
         {
           id: "301",
+          authName: "可视化图表",
+          path: "",
+          icon: "tongjifenxi",
+          children: [
+            {
+              id: "301",
+              authName: "大屏",
+              path: "visualscreen",
+              icon: "jixiaoguanli",
+            },
+          ],
+        },
+        {
+          id: "401",
           authName: "用户管理",
           path: "",
           icon: "gangweiguanli",
           children: [
             {
-              id: "302",
+              id: "402",
               authName: "用户列表",
               path: "userlist",
               icon: "yuangongxinxi",
             },
             {
-              id: "303",
+              id: "403",
               authName: "权限",
               path: "userrole",
               icon: "quanxianguanli",
             },
           ],
         },
+
         {
-          id: "401",
+          id: "501",
           authName: "菜单管理",
           path: "",
           icon: "fenleiguanli",
           children: [
             {
-              id: "402",
+              id: "502",
               authName: "菜单列表",
               path: "menulist",
               icon: "jixiaoguanli",
