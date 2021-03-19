@@ -1,10 +1,4 @@
-<!--
- * @Description: 组件
- * @Author: 海象
- * @Date: 2021-03-17 10:08:33
- * @LastEditors: 海象
- * @LastEditTime: 2021-03-17 22:24:55
--->
+
 <template>
   <div class="visual-main">
     <!-- 标题 -->
@@ -37,6 +31,8 @@
             <!--流光-->
             <img class="img2" src="../../static/image/screen/jt.png" alt="" />
           </div>
+          <!--地图容器-->
+          <div ref="chartC" style="height: 100vh"></div>
         </div>
       </div>
       <div class="cont-edge">
@@ -52,18 +48,35 @@
 import echarts from "@/config/echarts";
 import "../../static/theme/walden.js";
 import dataJson from "../../static/json/table.json";
+import mapData from "../../static/json/table.json";
+import "../../static/js/China.js";
 
 export default {
   data() {
-    return {};
+    return {
+      map: {},
+    };
+  },
+  created() {
+    this.loadJScript();
   },
   mounted() {
     this.initChartL1();
     this.initChartL2();
     this.initChartL3();
     this.initChartR1();
+    this.initChartR2();
+    this.initChartR3();
+    this.initChartC();
   },
   methods: {
+    loadJScript() {
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src =
+        "https://api.map.baidu.com/api?v=3.0&ak=7X3oNfa5xW8CrXxG91IbXYSGqdYmVjHZ";
+      document.body.appendChild(script);
+    },
     /*chartL1 - 折线图*/
     initChartL1() {
       /*数据源*/
@@ -99,7 +112,6 @@ export default {
       };
       chart.setOption(option);
     },
-
     /*chartL2 - 饼图*/
     initChartL2() {
       /*数据源*/
@@ -248,7 +260,7 @@ export default {
          *   text 主标题，如'西虹市财务开销'
          * */
         title: {
-          text: "西虹市财务开销",
+          text: "财务开销",
         },
 
         /*
@@ -293,8 +305,286 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       chart.setOption(option);
     },
-    initChartR2() {},
-    initChartR3() {},
+    initChartR2() {
+      /*数据源*/
+      const source = [
+        ["时间", "小麦", "玉米", "高粱"],
+        [2017, 1000, 800, 900],
+        [2018, 500, 650, 800],
+        [2019, 800, 900, 1200],
+      ];
+
+      /*实例化echarts*/
+      const chart = echarts.init(this.$refs["chartR2"], "walden");
+
+      /*配置项*/
+      const option = {
+        /*
+         * title 标题
+         *   text 主标题，如'西虹市农作物收成'
+         * */
+        title: {
+          text: "农作物收成",
+          left: "center",
+        },
+        tooltip: {},
+        legend: {
+          top: 30,
+        },
+        grid: {
+          top: 72,
+          bottom: 28,
+        },
+        /*
+         * dataset 数据集
+         *   source 数据源
+         * */
+        dataset: { source },
+
+        /*  xAxis
+         *       type
+         *           category 类目轴
+         *   yAxis
+         *       type
+         *           value 数值轴
+         */
+        xAxis: {
+          type: "category",
+        },
+        yAxis: {
+          type: "value",
+        },
+
+        /*
+         * series系列集合
+         *   type 图表类型
+         *       bar 柱状图
+         *   color 颜色
+         *       image 图像源
+         *       repeat 图像的重复方式，如repeat
+         * */
+        series: [
+          {
+            id: "xm",
+            type: "bar",
+          },
+          {
+            id: "ym",
+            type: "bar",
+          },
+          {
+            id: "gl",
+            type: "bar",
+          },
+        ],
+      };
+      chart.setOption(option);
+    },
+    initChartR3() {
+      const chart = echarts.init(this.$refs["chartR3"], "walden");
+      const option = {
+        /*
+         * title 标题
+         *   text 主标题，如'西虹市在哪里'
+         *   left 左对齐方式
+         *   top 上边距，如12
+         * */
+        title: {
+          text: "空气质量",
+          left: "center",
+          top: 12,
+        },
+        /*
+         * bmap 百度地图
+         *   center[经度,纬度] 地图中心点位，如[121.48, 31.22]
+         *   zoom 缩放级别，如6
+         *   roam 是否可以拖拽缩放
+         *   mapStyleV2 地图样式
+         *       styleId 样式id
+         * */
+        bmap: {
+          center: [121.48, 31.22],
+          zoom: 6,
+          roam: true,
+          mapStyleV2: {
+            styleId: "319f90cf44006403b29a037371faab0f",
+          },
+        },
+        /*系列列表
+         *   type 系列类型
+         *       scatter 散点图
+         *       effectScatter 特效散点图
+         *   coordinateSystem 坐标类型，bmap
+         *   data 数据
+         *   symbolSize 尺寸
+         * */
+        series: [
+          {
+            id: "s1",
+            type: "scatter",
+            coordinateSystem: "bmap",
+            symbolSize: (param) => {
+              return param[2] / 10;
+            },
+          },
+          {
+            id: "s2",
+            type: "effectScatter",
+            coordinateSystem: "bmap",
+            symbolSize: (param) => {
+              return param[2] / 10;
+            },
+          },
+        ],
+      };
+
+      chart.setOption(option);
+      console.log(chart);
+      /*获取百度地图的实例 chart.getModel().getComponent('bmap').getBMap()*/
+      // const map = chart.getModel().getComponent("bmap").getBMap();
+      // map.enableScrollWheelZoom(true);
+      // map.addControl(new BMap.NavigationControl());
+      // map.addControl(new BMap.ScaleControl());
+      // map.addControl(new BMap.OverviewMapControl());
+      // map.addControl(new BMap.MapTypeControl());
+
+      // var point = new BMap.Point(121.48, 31.22);
+      // var marker = new BMap.Marker(point); // 创建标注
+      // map.addOverlay(marker);
+    },
+    initChartC() {
+      const chart = echarts.init(this.$refs["chartC"], "walden");
+      /*配置项*/
+      const option = {
+        /*
+         * title 标题
+         *   text 主标题，如'西虹市不同地区的平均收入'
+         *   textStyle 主题样式
+         *   left 左对齐方式
+         *   top 上边距，如12
+         * */
+        title: {
+          text: "不同地区的平均收入",
+          textStyle: {
+            fontSize: 24,
+          },
+          left: "center",
+          top: 32,
+        },
+
+        /*
+         * tooltip 提示
+         *   backgroundColor 背景色，如'rgba(2,177,236,0.6)'
+         * */
+        tooltip: {},
+        /*
+         *地理坐标系组件 geo
+         *   map 地图名称，如'china'
+         *   zoom 缩放比例，如1
+         *   roam 是否开启鼠标缩放和平移漫游
+         *       scale 缩放
+         *       move 平移
+         *       true 都开启
+         *   itemStyle 地图区样式
+         *       areaColor 地图区域的颜色，如 rgba(0,29,132,0.8)
+         *       borderColor 图形的描边颜色，如 #02c0ff
+         *   emphasis 高亮状态下的多边形和标签样式
+         *       itemStyle {} 项目样式
+         *           shadowColor 投影颜色
+         *
+         * */
+        geo: {
+          map: "china",
+          zoom: 1,
+          roam: true,
+          itemStyle: {
+            areaColor: "rgba(0,29,132,0.8)",
+            borderColor: "#02c0ff",
+          },
+          emphasis: {
+            itemStyle: {
+              shadowColor: "#000",
+              shadowOffsetY: 20,
+              shadowBlur: 20,
+            },
+          },
+        },
+        /*
+         * series系列集合
+         *   name 名称，如'旅游人数'
+         *   type 图表类型
+         *       scatter 散点图
+         *   coordinateSystem 坐标类型，如'geo'
+         *   data 数据
+         *   symbolSize 散点大小,可为函数(p)=>{return p[2]}
+         *   encode 编码映射
+         *       x  x坐标系的维度映射，如'收入'
+         *       y  y坐标系的维度映射，如'年龄'
+         *       tooltip 提示映射，如[0, 1, 2, 3, 4]
+         *   itemStyle 项目样式
+         *       color 项目颜色，如'rgba(255,255,255,0.6)'
+         *   emphasis 高亮状态
+         *       itemStyle 项目样式
+         *           color 颜色，如'yellow'
+         * */
+        series: [
+          {
+            id: "s",
+            type: "scatter",
+            coordinateSystem: "geo",
+            symbolSize: (param) => {
+              return param[2] / 15;
+            },
+            emphasis: {
+              itemStyle: {
+                color: "yellow",
+              },
+            },
+          },
+        ],
+      };
+      chart.setOption(option);
+      chart.setOption({
+        series: [
+          {
+            id: "s",
+            mapData,
+          },
+        ],
+      });
+      setInterval(anim, 1000);
+
+      let curInd = 0;
+      let dataLen = null;
+
+      function anim() {
+        /*取消之前高亮的图形
+         *   type 触发的行为类型，见action
+         *   seriesIndex 系列索引，用于寻找系列列表中的某个系列
+         *   dataIndex 数据所有，用于寻找系列中的某个元素
+         * */
+        chart.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: curInd,
+        });
+        /*当前索引递增，不能超过系列元素的总数*/
+        curInd = (curInd + 1) % dataLen;
+
+        /*高亮当前图形*/
+        chart.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: curInd,
+        });
+        /*显示 tooltip*/
+        chart.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: curInd,
+        });
+      }
+    },
   },
 };
 </script>
