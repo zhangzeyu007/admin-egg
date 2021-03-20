@@ -47,7 +47,6 @@
 <script>
 import echarts from "@/config/echarts";
 import "../../static/js/China.js";
-s;
 import "../../static/theme/walden.js";
 import dataJson from "../../static/json/table.json";
 import mapData from "../../static/json/income.json";
