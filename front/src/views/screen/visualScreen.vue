@@ -46,10 +46,11 @@
 
 <script>
 import echarts from "@/config/echarts";
+import "../../static/js/China.js";
+s;
 import "../../static/theme/walden.js";
 import dataJson from "../../static/json/table.json";
-import mapData from "../../static/json/table.json";
-import "../../static/js/China.js";
+import mapData from "../../static/json/income.json";
 
 export default {
   data() {
@@ -380,78 +381,7 @@ export default {
       };
       chart.setOption(option);
     },
-    initChartR3() {
-      const chart = echarts.init(this.$refs["chartR3"], "walden");
-      const option = {
-        /*
-         * title 标题
-         *   text 主标题，如'西虹市在哪里'
-         *   left 左对齐方式
-         *   top 上边距，如12
-         * */
-        title: {
-          text: "空气质量",
-          left: "center",
-          top: 12,
-        },
-        /*
-         * bmap 百度地图
-         *   center[经度,纬度] 地图中心点位，如[121.48, 31.22]
-         *   zoom 缩放级别，如6
-         *   roam 是否可以拖拽缩放
-         *   mapStyleV2 地图样式
-         *       styleId 样式id
-         * */
-        bmap: {
-          center: [121.48, 31.22],
-          zoom: 6,
-          roam: true,
-          mapStyleV2: {
-            styleId: "319f90cf44006403b29a037371faab0f",
-          },
-        },
-        /*系列列表
-         *   type 系列类型
-         *       scatter 散点图
-         *       effectScatter 特效散点图
-         *   coordinateSystem 坐标类型，bmap
-         *   data 数据
-         *   symbolSize 尺寸
-         * */
-        series: [
-          {
-            id: "s1",
-            type: "scatter",
-            coordinateSystem: "bmap",
-            symbolSize: (param) => {
-              return param[2] / 10;
-            },
-          },
-          {
-            id: "s2",
-            type: "effectScatter",
-            coordinateSystem: "bmap",
-            symbolSize: (param) => {
-              return param[2] / 10;
-            },
-          },
-        ],
-      };
-
-      chart.setOption(option);
-      console.log(chart);
-      /*获取百度地图的实例 chart.getModel().getComponent('bmap').getBMap()*/
-      // const map = chart.getModel().getComponent("bmap").getBMap();
-      // map.enableScrollWheelZoom(true);
-      // map.addControl(new BMap.NavigationControl());
-      // map.addControl(new BMap.ScaleControl());
-      // map.addControl(new BMap.OverviewMapControl());
-      // map.addControl(new BMap.MapTypeControl());
-
-      // var point = new BMap.Point(121.48, 31.22);
-      // var marker = new BMap.Marker(point); // 创建标注
-      // map.addOverlay(marker);
-    },
+    initChartR3() {},
     initChartC() {
       const chart = echarts.init(this.$refs["chartC"], "walden");
       /*配置项*/
@@ -544,6 +474,7 @@ export default {
         ],
       };
       chart.setOption(option);
+      console.log(mapData);
       chart.setOption({
         series: [
           {
@@ -556,7 +487,6 @@ export default {
 
       let curInd = 0;
       let dataLen = null;
-
       function anim() {
         /*取消之前高亮的图形
          *   type 触发的行为类型，见action
