@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2020-12-15 16:50:19
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-21 10:54:30
+ * @LastEditTime: 2021-03-21 11:00:01
  */
 /**
  * @用户权限管理
@@ -45,7 +45,6 @@ router.beforeEach(async (to, from, next) => {
 
           // 根据当前用户角色过滤出可访问路由
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
-
 
           // 添加路由
           router.addRoutes(accessRoutes)
