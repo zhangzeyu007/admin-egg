@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-18 20:52:01
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-20 09:39:27
+ * @LastEditTime: 2021-03-21 10:53:27
  */
 import { asyncRoutes, constRoutes } from '@/router'
 
@@ -36,6 +36,7 @@ const actions = {
         })
     }
 }
+
 /**
  * 递归过滤AsyncRoutes路由表
  * @routes 待过滤路由表, 首次传入的就是AsyncRoutes

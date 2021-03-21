@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-17 15:54:46
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-17 17:29:50
+ * @LastEditTime: 2021-03-21 09:43:44
  */
 
 'use strict';
@@ -37,7 +37,6 @@ module.exports = ({ app }) => {
           message: '用户信息出错',
         };
       }
-
     }
   };
 };
