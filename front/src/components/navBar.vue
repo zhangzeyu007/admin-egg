@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 10:54:57
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-06 20:42:03
+ * @LastEditTime: 2021-03-21 15:35:43
 -->
 <template>
   <div class="navBar">
@@ -24,10 +24,6 @@
 export default {
   props: {
     breadcrumbs: {},
-  },
-
-  data() {
-    return {};
   },
 };
 </script>
