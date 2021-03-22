@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:21:47
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-21 21:41:50
+ * @LastEditTime: 2021-03-22 14:33:52
  */
 'use strict';
 
@@ -42,5 +42,6 @@ module.exports = app => {
   router.post('/editor/searcheditor', jwt, controller.editor.searchEditor);
   // 视频网站
   router.post('/video/search', jwt, controller.video.getSearch);
+  router.post('/video/getvideosourse', jwt, controller.video.getVideoSourse);
 
 };

@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-21 20:24:40
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-22 14:22:20
+ * @LastEditTime: 2021-03-22 17:26:06
 -->
 <template>
   <div class="">
@@ -47,13 +47,13 @@
           prop="year"
           align="center"
         ></el-table-column>
-        <el-table-column label="海报" prop="img" align="center">
+        <el-table-column label="影视" prop="img" align="center">
           <template scope="scope">
             <img
               v-if="scope.row.img"
               :src="scope.row.img"
               alt=""
-              style="width: 100px; height: 110px"
+              style="width: 110px; height: 120px"
             />
           </template>
         </el-table-column>
@@ -71,8 +71,28 @@
       :visible.sync="videoDialog"
       :fullscreen="true"
       close-on-click-modal
+      @close="closeDialog"
     >
       <div id="wrapper"></div>
+      <div class="selections">
+        <el-collapse v-model="active">
+          <el-collapse-item
+            title="选集"
+            name="1"
+            v-for="(item, index) in sourseData"
+            :key="index"
+          >
+            <div class="title">{{ item.name }}</div>
+            <el-button
+              class="btn"
+              v-for="(it, idx) in item.source.eps"
+              :key="idx"
+              @click="selectionsPlay(it.url)"
+              >{{ it.name }}</el-button
+            >
+          </el-collapse-item>
+        </el-collapse>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -91,6 +111,9 @@ export default {
       tableDatas: [],
       videoDialog: false,
       chimee: "",
+      sourseData: [],
+      active: "1",
+      sourseUrl: "",
     };
   },
   watch: {
@@ -102,6 +125,8 @@ export default {
     },
   },
   methods: {
+    handleChange() {},
+    // 获取搜索数据
     getSearchList() {
       this.$api.video
         .getSearch({ keyName: this.search })
@@ -125,23 +150,27 @@ export default {
     handlePaly(item) {
       let that = this;
       this.videoDialog = true;
-      console.log(item);
-      this.getVideoUrl(item.title);
+      this.getVideoSourse(item.title);
       Vue.nextTick(() => {
         that.initVideo();
       });
     },
     // 获取视频播放地址
-    getVideoUrl(name) {
-      this.$api.video.getVideoUrl({ kayName: name }).then((res) => {
+    getVideoSourse(name) {
+      this.$api.video.getVideoSourse({ keyName: name }).then((res) => {
         console.log(res);
+        if (res.data) {
+          this.sourseData = res.data;
+        }
       });
     },
     // 初始化播放器
-    initVideo() {
+    initVideo(url) {
+      console.log(url + "打的费");
+      this.chimee = null;
       this.chimee = new Chimee({
         wrapper: "#wrapper",
-        src: "",
+        src: url,
         controls: true,
         autoplay: true,
         kernels: {
@@ -151,28 +180,35 @@ export default {
       });
       this.chimee.play();
     },
+    selectionsPlay(url) {
+      console.log(url);
+      this.sourseUrl = url;
+      console.log(this.sourseUrl + "我的");
+      this.initVideo(this.sourseUrl);
+      console.log(this.chimee);
+    },
+    closeDialog() {
+      this.chimee.pause();
+      this.chimee.src = "";
+      this.chimee = null;
+    },
   },
 };
 </script>
 
-<style lang="less"  scoped>
+<style lang="less" scoped>
 .search-input {
   width: 400px;
 }
-.list-item {
-  display: flex;
-  align-items: center;
-  padding: 10px 15px;
-  height: 60px;
-  .item-l {
-    flex-shrink: 0;
+.selections {
+  .title {
+    padding: 10px 0px;
+    font-size: 15px;
+    font-weight: 600;
+    box-sizing: border-box;
   }
-  .item-r {
-    margin-left: 10px;
-    > img {
-      width: 50px;
-      height: 60px;
-    }
+  .btn {
+    margin-top: 10px;
   }
 }
 </style>
