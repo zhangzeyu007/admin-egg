@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-21 21:42:04
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-22 20:28:05
+ * @LastEditTime: 2021-03-22 21:28:50
  */
 'use strict';
 const BaseController = require('./base');
@@ -13,6 +13,7 @@ const searchRule = {
 const sourseRule = {
   keyName: { required: true, type: 'string' },
 };
+
 class VideoController extends BaseController {
   async getSearch() {
     const { ctx, app } = this;
@@ -26,7 +27,7 @@ class VideoController extends BaseController {
     const result = await ctx.curl('https://movie.douban.com/j/subject_suggest?q=' + payload.keyName);
     ctx.status = result.status;
     ctx.set(result.headers);
-    ctx.body = result.data;
+    this.success(JSON.parse(result.data));
   }
   async getVideoSourse() {
 

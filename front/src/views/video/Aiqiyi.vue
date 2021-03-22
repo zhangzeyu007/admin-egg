@@ -3,13 +3,13 @@
  * @Author: 海象
  * @Date: 2021-03-21 20:24:40
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-22 20:29:03
+ * @LastEditTime: 2021-03-22 21:34:38
 -->
 <template>
-  <div class="">
+  <div class="Aiqiyi">
     <el-card>
       <el-input v-model="search" class="search-input">
-        <el-button slot="append">搜索全网</el-button>
+        <el-button type="success" slot="append">搜索全网</el-button>
       </el-input>
       <!-- table内容区 -->
       <el-table
@@ -130,7 +130,10 @@ export default {
       this.$api.video
         .getSearch({ keyName: this.search })
         .then((res) => {
-          this.tableDatas = res;
+          console.log(res);
+          if (res.code === 200) {
+            this.tableDatas = res.data;
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -178,12 +181,15 @@ export default {
       });
       this.chimee.play();
     },
+    // 选集
     selectionsPlay(url) {
       this.sourseUrl = url;
       this.initVideo(this.sourseUrl);
     },
+    // 关闭
     closeDialog() {
       this.chimee.pause();
+      this.chimee.stopLoad();
       this.chimee.src = "";
       this.chimee = null;
     },
