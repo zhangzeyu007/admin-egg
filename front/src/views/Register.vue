@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-02 16:05:40
+ * @LastEditTime: 2021-03-22 22:37:53
 -->
 <template>
   <div id="register">
@@ -12,11 +12,30 @@
         <img src="../assets/logo.jpg" alt="" />
       </div>
       <div class="register-form">
-        <el-form ref="registerForm" :model="form" label-width="60px">
+        <el-form
+          ref="registerForm"
+          :model="form"
+          :rules="registerRules"
+          label-width="100px"
+        >
           <el-form-item label="用户名">
             <el-input
               v-model="form.userName"
               prefix-icon="el-icon-user-solid"
+              clearable
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱">
+            <el-input
+              v-model="form.email"
+              prefix-icon="el-icon-message"
+              clearable
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱验证码">
+            <el-input
+              v-model="form.emailCode"
+              prefix-icon="el-icon-s-promotion"
               clearable
             ></el-input>
           </el-form-item>
@@ -58,18 +77,40 @@
 </template>
 
 <script>
+import roles from "../config/roleconfig";
 export default {
   data() {
     return {
       form: {
         userName: "",
         password: "",
+        email: "",
+        emailCode: "",
         permisstion: "",
       },
-      options: [
-        { name: "员工", value: 1 },
-        { name: "管理员", value: 0 },
-      ],
+      options: roles,
+      registerRules: {
+        userName: [
+          {
+            required: true,
+            message: "请输入用户名",
+            trigger: "change",
+          },
+          {
+            min: 3,
+            max: 20,
+            message: "长度在 3 到 20个字符",
+            trigger: "change",
+          },
+        ],
+        password: [
+          {
+            required: true,
+            message: "请输入密码",
+            trigger: "change",
+          },
+        ],
+      },
     };
   },
   methods: {
@@ -81,14 +122,14 @@ export default {
 </script>
 
 <style  lang="less" scoped>
-#login {
+#register {
   width: 100%;
   height: 100%;
   position: relative;
 }
 .register-main {
-  width: 450px;
-  height: 400px;
+  width: 510px;
+  height: 520px;
   background-color: #fff;
   opacity: 0.9;
   border-radius: 35px;

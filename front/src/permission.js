@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2020-12-15 16:50:19
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-21 11:00:01
+ * @LastEditTime: 2021-03-22 21:40:50
  */
 /**
  * @用户权限管理
@@ -12,7 +12,7 @@
 import router from "./router";
 import store from './store'
 
-const whiteList = ["/login"]; // 无需令牌白名单
+const whiteList = ["/login", '/register']; // 无需令牌白名单
 
 router.beforeEach(async (to, from, next) => {
   // 获取令牌判断用户是否是登录
