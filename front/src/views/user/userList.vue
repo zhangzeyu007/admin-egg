@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 10:16:53
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-28 09:22:05
+ * @LastEditTime: 2021-03-22 11:22:09
 -->
 <template>
   <div class="userList">
@@ -291,7 +291,6 @@ export default {
           return String(data.username).toLowerCase().indexOf(search) > -1;
         });
       }
-
       return this.tableData;
     },
   },
