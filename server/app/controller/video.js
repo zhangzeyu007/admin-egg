@@ -3,11 +3,13 @@
  * @Author: 海象
  * @Date: 2021-03-21 21:42:04
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-22 15:15:19
+ * @LastEditTime: 2021-03-22 20:28:05
  */
 'use strict';
 const BaseController = require('./base');
-const searchRule = {};
+const searchRule = {
+  keyName: { required: true, type: 'string' },
+};
 const sourseRule = {
   keyName: { required: true, type: 'string' },
 };
@@ -22,7 +24,6 @@ class VideoController extends BaseController {
     // 组装参数
     const payload = ctx.request.body || {};
     const result = await ctx.curl('https://movie.douban.com/j/subject_suggest?q=' + payload.keyName);
-    // console.log(result);
     ctx.status = result.status;
     ctx.set(result.headers);
     ctx.body = result.data;
@@ -37,10 +38,7 @@ class VideoController extends BaseController {
     }
     // 组装参数
     const payload = ctx.request.body || {};
-    console.log('你好');
-    console.log(payload.keyName);
     const result = await ctx.curl('https://z1.m1907.cn/api/v/?z=80cbcae8041527fc77204d82c3c725fd&jx=' + payload.keyName + '&s1ig=11398&g=www.hyx,youku.c,pingmu.,n1.szja,vod3.bu,cdn003.,mhcdn.m,vod.bun,www.369');
-    console.log(result);
     ctx.status = result.status;
     ctx.set(result.headers);
     ctx.body = result.data;

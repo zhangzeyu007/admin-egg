@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-21 20:24:40
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-22 17:26:06
+ * @LastEditTime: 2021-03-22 20:29:03
 -->
 <template>
   <div class="">
@@ -125,7 +125,6 @@ export default {
     },
   },
   methods: {
-    handleChange() {},
     // 获取搜索数据
     getSearchList() {
       this.$api.video
@@ -166,7 +165,6 @@ export default {
     },
     // 初始化播放器
     initVideo(url) {
-      console.log(url + "打的费");
       this.chimee = null;
       this.chimee = new Chimee({
         wrapper: "#wrapper",
@@ -181,11 +179,8 @@ export default {
       this.chimee.play();
     },
     selectionsPlay(url) {
-      console.log(url);
       this.sourseUrl = url;
-      console.log(this.sourseUrl + "我的");
       this.initVideo(this.sourseUrl);
-      console.log(this.chimee);
     },
     closeDialog() {
       this.chimee.pause();
