@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-23 08:32:38
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-01 17:20:15
+ * @LastEditTime: 2021-03-23 11:32:20
  */
 import axios from '../http'
 
@@ -21,8 +21,12 @@ function mergeFile(params) {
     return axios.post('/util/mergefile', params)
 }
 
+function sendEmail(params) {
+    return axios.post('/util/sendemail', params)
+}
 export default {
     upload,
     checkFile,
-    mergeFile
+    mergeFile,
+    sendEmail
 }

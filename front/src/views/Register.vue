@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-23 10:14:43
+ * @LastEditTime: 2021-03-23 12:25:32
 -->
 <template>
   <div id="register">
@@ -13,26 +13,26 @@
       </div>
       <div class="register-form">
         <el-form
-          ref="registerForm"
+          ref="registerRules"
           :model="form"
           :rules="registerRules"
           label-width="100px"
         >
-          <el-form-item label="用户名">
+          <el-form-item label="用户名" prop="userName">
             <el-input
               v-model="form.userName"
               prefix-icon="el-icon-user-solid"
               clearable
             ></el-input>
           </el-form-item>
-          <el-form-item label="邮箱">
+          <el-form-item label="邮箱" prop="email">
             <el-input
               v-model="form.email"
               prefix-icon="el-icon-message"
               clearable
             ></el-input>
           </el-form-item>
-          <el-form-item label="邮箱验证码">
+          <el-form-item label="邮箱验证码" prop="emailCode">
             <el-input
               v-model="form.emailCode"
               prefix-icon="el-icon-s-promotion"
@@ -50,7 +50,7 @@
               </el-button>
             </div>
           </el-form-item>
-          <el-form-item label="密码">
+          <el-form-item label="密码" prop="password">
             <el-input
               type="password"
               v-model="form.password"
@@ -58,7 +58,7 @@
               clearable
             ></el-input>
           </el-form-item>
-          <el-form-item label="权限">
+          <el-form-item label="权限" prop="permisstion">
             <el-select
               v-model="form.permisstion"
               placeholder="请选择"
@@ -76,7 +76,13 @@
         </el-form>
       </div>
       <div class="register-button">
-        <el-button type="primary" size="medium" class="btn">注册</el-button>
+        <el-button
+          type="primary"
+          size="medium"
+          class="btn"
+          @click="registerClick"
+          >注册</el-button
+        >
       </div>
       <div class="back" @click="goBack">back</div>
     </div>
@@ -91,6 +97,7 @@
 </template>
 
 <script>
+import { Message } from "element-ui";
 import roles from "../config/roleconfig";
 export default {
   data() {
@@ -120,10 +127,35 @@ export default {
             trigger: "change",
           },
         ],
+        email: [
+          {
+            required: true,
+            message: "请输入邮箱",
+            trigger: "change",
+          },
+          {
+            message: "邮箱格式不正确",
+            pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
+          },
+        ],
+        emailCode: [
+          {
+            required: true,
+            message: "请输入验证码",
+            trigger: "change",
+          },
+        ],
         password: [
           {
             required: true,
             message: "请输入密码",
+            trigger: "change",
+          },
+        ],
+        permisstion: [
+          {
+            required: true,
+            message: "请选择用户权限",
             trigger: "change",
           },
         ],
@@ -145,12 +177,34 @@ export default {
     // 发送邮箱
     sendEmailCode() {
       this.send.timer = 10;
+      this.$api.util.sendEmail({ email: this.form.email }).then((res) => {
+        console.log(res);
+        if (res.code === 200) {
+          Message({
+            message: "邮箱发送成功请注意查收",
+            type: "success",
+          });
+        } else {
+          Message({
+            message: "邮箱发送失败稍后再试",
+            type: "warning",
+          });
+        }
+      });
       this.timer = setInterval(() => {
         this.send.timer -= 1;
         if (this.send.timer === 0) {
           clearInterval(this.timer);
         }
       }, 1000);
+    },
+    // 注册按钮
+    registerClick() {
+      this.$refs["registerRules"].validate((valid) => {
+        if (valid) {
+          console.log();
+        }
+      });
     },
   },
 };

@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-01 10:22:33
+ * @LastEditTime: 2021-03-23 12:43:54
  */
 'use strict';
 
@@ -81,6 +81,23 @@ class UtilController extends BaseController {
     this.success({
       url: `/public/${hash}.${ext}`,
     });
+  }
+  // 发送邮件
+  async sendEmail() {
+    const { ctx } = this;
+    const email = ctx.request.body.email;
+    const code = Math.random().toString().slice(2, 8);
+    ctx.session.emailcode = code;
+    const subject = '泽雨后台系统验证码';
+    const text = '泽雨科技';
+    const html = `<h2>泽雨github社区</h2><a href="">${code}</a> `;
+    const hasSend = await ctx.service.tools.sendEmail(email, subject, text, html);
+
+    if (hasSend) {
+      this.message('发送成功');
+    } else {
+      this.error('发送失败');
+    }
   }
 }
 

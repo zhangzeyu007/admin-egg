@@ -3,13 +3,24 @@
  * @Author: 海象
  * @Date: 2021-02-24 09:23:40
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-16 22:08:51
+ * @LastEditTime: 2021-03-23 12:51:04
  */
 'use strict';
 const Service = require('egg').Service;
 const path = require('path');
 const fse = require('fs-extra');
 const fs = require('fs');
+const nodemailer = require('nodemailer');
+const userEmail = 'zhangzeyu_work@163.com';
+
+const transporter = nodemailer.createTransport({
+  service: '163',
+  secureConnection: true,
+  auth: {
+    user: userEmail,
+    pass: 'VMAXBKBHXHEEIROP',
+  },
+});
 
 class ToolService extends Service {
 
@@ -63,6 +74,24 @@ class ToolService extends Service {
         if (err) throw err;
         console.log('删除文件夹成功');
       });
+    }
+  }
+  // 发送邮件
+  async sendEmail(email, subject, text, html) {
+    const maiOptions = {
+      from: userEmail,
+      cc: userEmail,
+      to: email,
+      subject,
+      text,
+      html,
+    };
+    try {
+      await transporter.sendMail(maiOptions);
+      return true;
+    } catch (e) {
+      console.log('发送失败错误信息:' + e);
+      return false;
     }
   }
 }
