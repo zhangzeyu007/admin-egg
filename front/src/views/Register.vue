@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-22 22:37:53
+ * @LastEditTime: 2021-03-23 09:26:43
 -->
 <template>
   <div id="register">
@@ -36,8 +36,19 @@
             <el-input
               v-model="form.emailCode"
               prefix-icon="el-icon-s-promotion"
+              style="width: 260px"
               clearable
-            ></el-input>
+            >
+            </el-input>
+            <div class="captcha">
+              <el-button
+                type="primary"
+                @click="sendEmailCode"
+                :disabled="send.timer > 0"
+                style="width: 100px"
+                >{{ sendText }}
+              </el-button>
+            </div>
           </el-form-item>
           <el-form-item label="密码">
             <el-input
@@ -47,7 +58,11 @@
             ></el-input>
           </el-form-item>
           <el-form-item label="权限">
-            <el-select v-model="form.permisstion" placeholder="请选择">
+            <el-select
+              v-model="form.permisstion"
+              placeholder="请选择"
+              style="width: 370px"
+            >
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -60,9 +75,7 @@
         </el-form>
       </div>
       <div class="register-button">
-        <el-button type="primary" size="medium" class="btn" round
-          >注册</el-button
-        >
+        <el-button type="primary" size="medium" class="btn">注册</el-button>
       </div>
       <div class="back" @click="goBack">back</div>
     </div>
@@ -81,6 +94,9 @@ import roles from "../config/roleconfig";
 export default {
   data() {
     return {
+      send: {
+        timer: 0,
+      },
       form: {
         userName: "",
         password: "",
@@ -113,9 +129,27 @@ export default {
       },
     };
   },
+  computed: {
+    sendText() {
+      if (this.send.timer <= 0) {
+        return "发送";
+      }
+      return `${this.send.timer}s后发送`;
+    },
+  },
   methods: {
     goBack() {
       this.$router.push("/login");
+    },
+    // 发送邮箱
+    sendEmailCode() {
+      this.send.timer = 10;
+      this.timer = setInterval(() => {
+        this.send.timer -= 1;
+        if (this.send.timer === 0) {
+          clearInterval(this.timer);
+        }
+      }, 1000);
     },
   },
 };
@@ -234,5 +268,9 @@ export default {
   right: 50px;
   bottom: 50px;
   color: #409eff;
+}
+.captcha {
+  display: inline;
+  margin-left: 10px;
 }
 </style>
