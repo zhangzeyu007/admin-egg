@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-21 20:24:40
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-23 10:25:18
+ * @LastEditTime: 2021-03-23 23:09:06
 -->
 <template>
   <div class="Aiqiyi">
@@ -124,6 +124,9 @@ export default {
       }, 1000);
     },
   },
+  mounted() {
+    this.chimee = null;
+  },
   methods: {
     // 获取搜索数据
     getSearchList() {
@@ -210,6 +213,24 @@ export default {
   }
   .btn {
     margin-top: 10px;
+  }
+}
+/deep/ .el-dialog__wrapper {
+  .el-dialog {
+    .el-dialog__body {
+      background: #191a20;
+    }
+    .el-dialog__header {
+      background-color: #191a20;
+    }
+  }
+}
+/deep/.el-collapse {
+  .el-collapse-item__header {
+    padding: 0 15px;
+  }
+  .el-collapse-item__content {
+    padding: 10px 15px;
   }
 }
 </style>
