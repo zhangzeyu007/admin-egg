@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-23 12:25:32
+ * @LastEditTime: 2021-03-23 16:35:28
 -->
 <template>
   <div id="register">
@@ -18,9 +18,9 @@
           :rules="registerRules"
           label-width="100px"
         >
-          <el-form-item label="用户名" prop="userName">
+          <el-form-item label="用户名" prop="username">
             <el-input
-              v-model="form.userName"
+              v-model="form.username"
               prefix-icon="el-icon-user-solid"
               clearable
             ></el-input>
@@ -58,9 +58,9 @@
               clearable
             ></el-input>
           </el-form-item>
-          <el-form-item label="权限" prop="permisstion">
+          <el-form-item label="权限" prop="role">
             <el-select
-              v-model="form.permisstion"
+              v-model="form.role"
               placeholder="请选择"
               style="width: 370px"
             >
@@ -99,6 +99,7 @@
 <script>
 import { Message } from "element-ui";
 import roles from "../config/roleconfig";
+import Md5 from "md5";
 export default {
   data() {
     return {
@@ -106,15 +107,15 @@ export default {
         timer: 0,
       },
       form: {
-        userName: "zzy",
-        password: "123456",
+        username: "",
+        password: "",
         email: "951642243@qq.com",
         emailCode: "",
-        permisstion: "",
+        role: "",
       },
       options: roles,
       registerRules: {
-        userName: [
+        username: [
           {
             required: true,
             message: "请输入用户名",
@@ -152,7 +153,7 @@ export default {
             trigger: "change",
           },
         ],
-        permisstion: [
+        role: [
           {
             required: true,
             message: "请选择用户权限",
@@ -202,7 +203,31 @@ export default {
     registerClick() {
       this.$refs["registerRules"].validate((valid) => {
         if (valid) {
-          console.log();
+          let params = {
+            username: this.form.username,
+            password: Md5(this.form.password),
+            email: this.form.email,
+            emailCode: this.form.emailCode,
+            role: this.form.role,
+          };
+          this.$api.user.registerUser(params).then((res) => {
+            console.log(res);
+            if (res.code === 200) {
+              Message({
+                type: "success",
+                message: res.message,
+              });
+              let timer = setTimeout(() => {
+                this.$router.push({ path: "/login" });
+                clearTimeout(timer);
+              }, 1000);
+            } else {
+              Message({
+                type: "warning",
+                message: res.message,
+              });
+            }
+          });
         }
       });
     },

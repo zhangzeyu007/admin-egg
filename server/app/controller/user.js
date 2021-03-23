@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-08 17:49:39
+ * @LastEditTime: 2021-03-23 15:02:23
  */
 'use strict';
 const BaseController = require('./base');
@@ -40,6 +40,13 @@ const loginRule = {
 
 const userinfoRule = {
   token: { required: true, type: 'string' },
+};
+const registerRule = {
+  username: { required: true, type: 'string' },
+  password: { required: true, type: 'string' },
+  email: { required: true, type: 'string' },
+  emailCode: { required: true, type: 'string' },
+  role: { required: true, type: 'string' },
 };
 
 class UserController extends BaseController {
@@ -164,6 +171,30 @@ class UserController extends BaseController {
     this.success(response);
   }
 
+  // 注册用户
+  async registerUser() {
+    const { ctx, app, service } = this;
+    // 校验传递的参数
+    const errors = app.validator.validate(registerRule, ctx.request.body);
+    if (errors) {
+      return this.error('参数校验失败', -1, errors);
+    }
+    // 组装参数
+    const payload = ctx.request.body || {};
+    if (payload.emailCode.toUpperCase() !== ctx.session.emailcode.toUpperCase()) {
+      this.error('邮箱验证码错误');
+      return;
+    }
+    const res = await service.user.registerUser(payload);
+    console.log(res);
+    if (res.code === 1) {
+      this.message('用户注册成功');
+    } else if (res.code === 0) {
+      this.error('用户已存在');
+    } else {
+      this.error('服务端错误');
+    }
+  }
 }
 
 

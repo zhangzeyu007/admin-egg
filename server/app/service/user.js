@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-08 17:56:42
+ * @LastEditTime: 2021-03-23 14:59:02
  */
 'use strict';
 
@@ -111,6 +111,37 @@ class UserService extends Service {
   async userInfo(payLoad) {
     const { ctx } = this;
     return await ctx.model.AdminUser.find({ username: payLoad });
+  }
+  async registerUser(payLoad) {
+    const { ctx } = this;
+    const result = {
+      code: '',
+    };
+    payLoad.password = md5(payLoad.password + HashSalt);
+    const isEmpty = await ctx.model.AdminUser.findOne({
+      username: payLoad.username,
+    });
+    if (isEmpty) {
+      if (isEmpty.username === payLoad.username) {
+        result.code = 0;
+      } else {
+        const isSave = await ctx.model.AdminUser.create({ username: payLoad.username, email: payLoad.email, password: payLoad.password, role: payLoad.role });
+        if (isSave) {
+          result.code = 1;
+        } else {
+          result.code = -1;
+        }
+      }
+    } else {
+      const isSave = await ctx.model.AdminUser.create({ username: payLoad.username, email: payLoad.email, password: payLoad.password, role: payLoad.role });
+      if (isSave) {
+        result.code = 1;
+      } else {
+        result.code = -1;
+      }
+    }
+    return result;
+
   }
 }
 

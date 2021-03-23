@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-24 09:23:40
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-23 12:51:04
+ * @LastEditTime: 2021-03-23 16:11:57
  */
 'use strict';
 const Service = require('egg').Service;
@@ -11,14 +11,14 @@ const path = require('path');
 const fse = require('fs-extra');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
-const userEmail = 'zhangzeyu_work@163.com';
+const userEmail = 'zhangzeyu_work@126.com';
 
 const transporter = nodemailer.createTransport({
-  service: '163',
+  service: '126',
   secureConnection: true,
   auth: {
     user: userEmail,
-    pass: 'VMAXBKBHXHEEIROP',
+    pass: 'QPTQIUVELTEEEMWI',
   },
 });
 
