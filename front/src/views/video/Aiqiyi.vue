@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-21 20:24:40
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-23 23:26:56
+ * @LastEditTime: 2021-03-23 23:41:55
 -->
 <template>
   <div class="Aiqiyi">
@@ -175,6 +175,8 @@ export default {
             this.sourseData[0].source.eps[0].url
           ) {
             this.chimee.src = this.sourseData[0].source.eps[0].url;
+            // this.chimee.paly();
+            this.chimee.autoplay();
           }
         }
       });
