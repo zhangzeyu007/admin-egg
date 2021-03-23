@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-21 21:42:04
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-23 10:32:34
+ * @LastEditTime: 2021-03-23 18:06:12
  */
 'use strict';
 const BaseController = require('./base');
@@ -30,7 +30,6 @@ class VideoController extends BaseController {
     this.success(JSON.parse(result.data));
   }
   async getVideoSourse() {
-
     const { ctx, app } = this;
     // 校验传递的参数
     const errors = app.validator.validate(sourseRule, ctx.request.body);

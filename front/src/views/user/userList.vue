@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-06 10:16:53
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-22 11:22:09
+ * @LastEditTime: 2021-03-23 22:18:37
 -->
 <template>
   <div class="userList">
@@ -37,6 +37,11 @@
         <el-table-column
           label="角色"
           prop="roleName"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          label="邮箱"
+          prop="email"
           align="center"
         ></el-table-column>
         <el-table-column label="创建时间" align="center">
@@ -103,6 +108,13 @@
             clearable
           ></el-input>
         </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input
+            v-model="addForm.email"
+            prefix-icon="el-icon-message"
+            clearable
+          ></el-input>
+        </el-form-item>
         <el-form-item label="角色" prop="role">
           <el-select v-model="addForm.role" placeholder="请选择">
             <el-option
@@ -117,7 +129,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="resetForm('add')"> 取 消 </el-button>
-        <el-button type="primary" @click="addUserComfirm">确 定 </el-button>
+        <el-button type="primary" @click="addUserComfirm">确定</el-button>
       </span>
     </el-dialog>
     <!-- 修改弹窗 -->
@@ -157,6 +169,14 @@
             clearable
           ></el-input>
         </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input
+            v-model="editForm.email"
+            prefix-icon="el-icon-message"
+            clearable
+          ></el-input>
+        </el-form-item>
+
         <el-form-item label="角色" prop="role">
           <el-select v-model="editForm.role" placeholder="请选择">
             <el-option
@@ -191,12 +211,14 @@ export default {
         username: "",
         password: "",
         role: "",
+        email: "",
       },
       editForm: {
         username: "",
         oldpassword: "",
         newpassword: "",
         role: "",
+        email: "",
       },
       addUserRules: {
         username: [
@@ -216,6 +238,12 @@ export default {
           {
             required: true,
             message: "请输入密码",
+            trigger: "change",
+          },
+        ],
+        email: [
+          {
+            message: "请输入邮箱地址",
             trigger: "change",
           },
         ],
@@ -252,6 +280,12 @@ export default {
           {
             required: true,
             message: "请输入密码",
+            trigger: "change",
+          },
+        ],
+        email: [
+          {
+            message: "请输入邮箱地址",
             trigger: "change",
           },
         ],
@@ -326,6 +360,7 @@ export default {
       this.editUserDialog = true;
       this.userid = item._id;
       this.editForm.username = item.username;
+      this.editForm.email = item.email;
       this.editForm.role = String(item.role);
     },
     // 修改提交
@@ -338,6 +373,7 @@ export default {
               username: this.editForm.username,
               oldpassword: md5(this.editForm.oldpassword),
               newpassword: md5(this.editForm.newpassword),
+              email: this.editForm.email,
               role: this.editForm.role,
             })
             .then((res) => {
@@ -351,7 +387,7 @@ export default {
               }
               if (res.code == -1) {
                 Message({
-                  message: "修改失败",
+                  message: res.message,
                   type: "warning",
                 });
               }
@@ -378,6 +414,7 @@ export default {
             .addUser({
               username: this.addForm.username,
               password: md5(this.addForm.password),
+              email: this.addForm.email,
               role: this.addForm.role,
             })
             .then((res) => {
@@ -409,6 +446,7 @@ export default {
         this.addForm.username = "";
         this.addForm.password = "";
         this.addForm.role = "";
+        this.addForm.email = "";
         this.$refs["addFormRules"].resetFields();
       }
       if (name === "edit") {
@@ -417,6 +455,7 @@ export default {
         this.editForm.newpassword = "";
         this.editForm.oldpassword = "";
         this.editForm.role = "";
+        this.editForm.email = "";
         this.$refs["editFormRules"].resetFields();
       }
     },

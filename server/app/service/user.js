@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-02 18:04:49
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-23 14:59:02
+ * @LastEditTime: 2021-03-23 22:16:07
  */
 'use strict';
 
@@ -94,7 +94,7 @@ class UserService extends Service {
     const newhash = md5(payLoad.newpassword + HashSalt);
     const res = await ctx.model.AdminUser.findById(payLoad.userid);
     if (res.password === oldhash) {
-      result = await ctx.model.AdminUser.findById(payLoad.userid).update({ role: payLoad.role, password: newhash });
+      result = await ctx.model.AdminUser.findById(payLoad.userid).update({ role: payLoad.role, password: newhash, email: payLoad.email });
     } else {
       result = { ok: -1 };
     }

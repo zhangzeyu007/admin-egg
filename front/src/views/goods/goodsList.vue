@@ -359,7 +359,7 @@ export default {
       tableData: [],
       pages: {
         totalPage: 0,
-        pageSize: 5,
+        pageSize: 10,
         pageNum: 1,
       },
       file: "",

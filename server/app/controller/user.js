@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-23 15:02:23
+ * @LastEditTime: 2021-03-23 22:14:00
  */
 'use strict';
 const BaseController = require('./base');
@@ -14,6 +14,7 @@ const addUserRule = {
   password: { required: true, type: 'string' },
   username: { required: true, type: 'string' },
   role: { required: true, type: 'string' },
+  email: { required: false, type: 'string' },
 };
 
 const getUserListRule = {
@@ -30,6 +31,7 @@ const updateUserRule = {
   newpassword: { required: true, type: 'string' },
   username: { required: true, type: 'string' },
   role: { required: true, type: 'string' },
+  email: { required: false, type: 'string' },
 };
 
 const loginRule = {
@@ -150,11 +152,9 @@ class UserController extends BaseController {
     const { ctx, app, service } = this;
     // 校验传递的参数
     const errors = app.validator.validate(updateUserRule, ctx.request.body);
-
     if (errors) {
       return this.error('参数校验失败', -1, errors);
     }
-
     // 组装参数
     const payload = ctx.request.body || {};
     const response = await service.user.updateUser(payload);
