@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-23 09:26:43
+ * @LastEditTime: 2021-03-23 10:14:43
 -->
 <template>
   <div id="register">
@@ -52,6 +52,7 @@
           </el-form-item>
           <el-form-item label="密码">
             <el-input
+              type="password"
               v-model="form.password"
               prefix-icon="el-icon-unlock"
               clearable
@@ -98,9 +99,9 @@ export default {
         timer: 0,
       },
       form: {
-        userName: "",
-        password: "",
-        email: "",
+        userName: "zzy",
+        password: "123456",
+        email: "951642243@qq.com",
         emailCode: "",
         permisstion: "",
       },
@@ -166,7 +167,7 @@ export default {
   height: 520px;
   background-color: #fff;
   opacity: 0.9;
-  border-radius: 35px;
+  border-radius: 15px;
   position: absolute;
   top: 50%;
   left: 50%;
