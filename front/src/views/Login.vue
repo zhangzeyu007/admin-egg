@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-24 12:13:37
+ * @LastEditTime: 2021-03-24 14:46:17
 -->
 
 <template>
@@ -238,8 +238,8 @@ export default {
   width: 36px;
   height: 32px;
   position: absolute;
-  right: 10px;
-  top: 5px;
+  right: 15px;
+  top: 10px;
 }
 .login-form {
   padding: 0px 20px;
