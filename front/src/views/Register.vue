@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-24 12:14:15
+ * @LastEditTime: 2021-03-24 14:22:27
 -->
 <template>
   <div id="register">
@@ -34,6 +34,7 @@
           </el-form-item>
           <el-form-item label="邮箱验证码" prop="emailCode">
             <el-input
+              placeholder="确认验证码"
               v-model="form.emailCode"
               prefix-icon="el-icon-s-promotion"
               style="width: 260px"
@@ -177,27 +178,30 @@ export default {
     },
     // 发送邮箱
     sendEmailCode() {
-      this.send.timer = 10;
-      this.$api.util.sendEmail({ email: this.form.email }).then((res) => {
-        console.log(res);
-        if (res.code === 200) {
-          Message({
-            message: "邮箱发送成功请注意查收",
-            type: "success",
+      this.$refs["registerRules"].validateField("email", (valid) => {
+        if (!valid) {
+          this.send.timer = 10;
+          this.$api.util.sendEmail({ email: this.form.email }).then((res) => {
+            if (res.code === 200) {
+              Message({
+                message: "邮箱发送成功请注意查收",
+                type: "success",
+              });
+            } else {
+              Message({
+                message: "邮箱发送失败稍后再试",
+                type: "warning",
+              });
+            }
           });
-        } else {
-          Message({
-            message: "邮箱发送失败稍后再试",
-            type: "warning",
-          });
+          this.timer = setInterval(() => {
+            this.send.timer -= 1;
+            if (this.send.timer === 0) {
+              clearInterval(this.timer);
+            }
+          }, 1000);
         }
       });
-      this.timer = setInterval(() => {
-        this.send.timer -= 1;
-        if (this.send.timer === 0) {
-          clearInterval(this.timer);
-        }
-      }, 1000);
     },
     // 注册按钮
     registerClick() {
