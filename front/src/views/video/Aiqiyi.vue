@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-21 20:24:40
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-24 09:11:10
+ * @LastEditTime: 2021-03-24 23:08:01
 -->
 <template>
   <div class="Aiqiyi">
@@ -83,13 +83,16 @@
             :key="index"
           >
             <div class="title">{{ item.name }}</div>
-            <el-button
+            <el-radio
               class="btn"
+              :label="idx + '-' + index"
+              v-model="radioIdx"
               v-for="(it, idx) in item.source.eps"
               :key="idx"
-              @click="selectionsPlay(it.url)"
-              >{{ it.name }}</el-button
-            >
+              @change="selectionsPlay(it.url, idx + '-' + index)"
+              border
+              >{{ it.name }}
+            </el-radio>
           </el-collapse-item>
         </el-collapse>
       </div>
@@ -114,6 +117,8 @@ export default {
       sourseData: [],
       active: "1",
       sourseUrl: "",
+      videoId: "",
+      radioIdx: "0-0",
     };
   },
   watch: {
@@ -155,15 +160,14 @@ export default {
     handlePaly(item) {
       let that = this;
       this.videoDialog = true;
-      this.getVideoSourse(item.title);
+      this.getVideoSourse(item.title, item.id);
       Vue.nextTick(() => {
         that.initVideo();
       });
     },
     // 获取视频播放地址
-    getVideoSourse(name) {
+    getVideoSourse(name, id) {
       this.$api.video.getVideoSourse({ keyName: name }).then((res) => {
-        console.log(res);
         if (res.data) {
           this.sourseData = res.data;
           console.log(this.sourseData);
@@ -174,39 +178,46 @@ export default {
             this.sourseData[0].source.eps[0] &&
             this.sourseData[0].source.eps[0].url
           ) {
-            this.chimee.src = this.sourseData[0].source.eps[0].url;
-            console.log(this.chimee.src);
+            if (this.videoId != id) {
+              this.chimee.src = this.sourseData[0].source.eps[0].url;
+              this.radioIdx = "0-0";
+            }
             this.chimee.play();
+            this.videoId = id;
           }
         }
       });
     },
     // 初始化播放器
     initVideo(url) {
-      this.chimee = null;
-      this.chimee = new Chimee({
-        wrapper: "#wrapper",
-        src: url,
-        controls: true,
-        autoplay: true,
-        kernels: {
-          hls,
-          flv,
-        },
-      });
-      this.chimee.play();
+      if (!this.chimee) {
+        this.chimee = new Chimee({
+          wrapper: "#wrapper",
+          src: url,
+          controls: true,
+          autoplay: true,
+          kernels: {
+            hls,
+            flv,
+          },
+        });
+      } else {
+        if (url) {
+          this.chimee.src = url;
+          this.chimee.play();
+        }
+      }
     },
     // 选集
-    selectionsPlay(url) {
+    selectionsPlay(url, idx) {
+      this.radioIdx = idx;
       this.sourseUrl = url;
       this.initVideo(this.sourseUrl);
     },
     // 关闭
     closeDialog() {
-      this.chimee.pause();
       this.chimee.stopLoad();
-      this.chimee.src = "";
-      this.chimee = null;
+      this.chimee.pause();
     },
   },
 };
@@ -225,6 +236,7 @@ export default {
   }
   .btn {
     margin-top: 10px;
+    margin-left: 10px;
   }
 }
 /deep/ .el-dialog__wrapper {
