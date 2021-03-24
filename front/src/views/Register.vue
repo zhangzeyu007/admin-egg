@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-23 16:35:28
+ * @LastEditTime: 2021-03-24 12:14:15
 -->
 <template>
   <div id="register">
@@ -88,7 +88,7 @@
     </div>
     <video
       id="video"
-      src="../assets/video_back3.mp4"
+      src="../assets/video_back2.mp4"
       autoplay="autoplay"
       muted
       loop

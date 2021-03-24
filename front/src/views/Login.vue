@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-16 17:54:34
+ * @LastEditTime: 2021-03-24 12:13:37
 -->
 
 <template>
@@ -13,6 +13,12 @@
         <img src="../assets/logo.jpg" alt="" />
       </div>
       <div class="login-form">
+        <img
+          @click="goRegister"
+          class="icon-register"
+          src="../static/image/login/icon_register.png"
+          alt=""
+        />
         <el-form
           ref="loginForm"
           :model="form"
@@ -76,7 +82,6 @@
           </el-row>
         </div>
       </div>
-      <!-- <div class="register" @click="goRegister">注册</div> -->
     </div>
     <video
       id="video"
@@ -171,6 +176,9 @@ export default {
     resetForm() {
       this.$refs["loginForm"].resetFields();
     },
+    goRegister() {
+      this.$router.push({ path: "/register" });
+    },
     resetCaptcha() {
       this.$api.user
         .getCaptcha()
@@ -225,6 +233,13 @@ export default {
       overflow: hidden;
     }
   }
+}
+.icon-register {
+  width: 36px;
+  height: 32px;
+  position: absolute;
+  right: 10px;
+  top: 5px;
 }
 .login-form {
   padding: 0px 20px;
@@ -306,20 +321,11 @@ export default {
     z-index: -100;
   }
 }
-
 .login-info {
   padding: 0 35px;
   box-sizing: border-box;
 }
-.login-footer {
-  // margin-top: 5px;
-}
-.register {
-  position: absolute;
-  right: 50px;
-  bottom: 50px;
-  color: #409eff;
-}
+
 .captcha-icon {
   width: 100px;
   height: 40px;
