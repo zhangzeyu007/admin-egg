@@ -473,7 +473,6 @@ export default {
         ],
       };
       chart.setOption(option);
-      console.log(mapData);
       chart.setOption({
         series: [
           {
