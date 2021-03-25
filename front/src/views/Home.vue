@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-25 18:08:53
+ * @LastEditTime: 2021-03-25 23:50:20
 -->
 <template>
   <el-container>
@@ -119,7 +119,7 @@ export default {
               id: "202",
               authName: "文章列表",
               path: "editorlist",
-              icon: "guanggaoguanli",
+              icon: "wenzhangliebiaoxiangqing",
             },
           ],
         },
@@ -133,7 +133,7 @@ export default {
               id: "301",
               authName: "大屏",
               path: "visualscreen",
-              icon: "jixiaoguanli",
+              icon: "dakaidaping",
             },
           ],
         },
@@ -141,13 +141,13 @@ export default {
           id: "401",
           authName: "视频网站管理",
           path: "",
-          icon: "gangweiguanli",
+          icon: "shipin",
           children: [
             {
               id: "402",
               authName: "爱奇艺",
               path: "aiqiyi",
-              icon: "yuangongxinxi",
+              icon: "changyonglogo32",
             },
           ],
         },
@@ -155,7 +155,7 @@ export default {
           id: "501",
           authName: "用户管理",
           path: "",
-          icon: "gangweiguanli",
+          icon: "yuangongguanli-",
           children: [
             {
               id: "502",

@@ -3,10 +3,13 @@
  * @Author: 海象
  * @Date: 2020-11-02 19:36:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-05 22:54:06
+ * @LastEditTime: 2021-03-25 23:34:02
 -->
 <template>
-  <i :class="iconFontClass" class="svg-icon" v-on="$listeners"></i>
+  <!-- <i :class="iconFontClass" class="svg-icon" v-on="$listeners"></i> -->
+  <svg class="svg-icon" aria-hidden="true">
+    <use :xlink:href="iconName"></use>
+  </svg>
 </template>
 
 <script>
@@ -20,7 +23,7 @@ export default {
   },
   computed: {
     iconName() {
-      return `icon-${this.iconClass}`;
+      return `#icon-${this.iconClass}`;
     },
     iconFontClass() {
       if (this.iconName) {
@@ -35,9 +38,10 @@ export default {
 
 <style scoped>
 .svg-icon {
-  font-size: 20px;
-  margin-right: 5px;
-  vertical-align: -0.15em;
+  width: 1.6em;
+  height: 1.6em;
+  margin-right: 10px;
+  vertical-align: center;
   fill: currentColor;
   overflow: hidden;
 }
