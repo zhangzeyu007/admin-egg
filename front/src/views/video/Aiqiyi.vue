@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-21 20:24:40
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-24 23:08:01
+ * @LastEditTime: 2021-03-25 08:45:01
 -->
 <template>
   <div class="Aiqiyi">
@@ -85,11 +85,11 @@
             <div class="title">{{ item.name }}</div>
             <el-radio
               class="btn"
-              :label="idx + '-' + index"
+              :label="index + '-' + idx"
               v-model="radioIdx"
               v-for="(it, idx) in item.source.eps"
               :key="idx"
-              @change="selectionsPlay(it.url, idx + '-' + index)"
+              @change="selectionsPlay(it.url, index + '-' + idx)"
               border
               >{{ it.name }}
             </el-radio>
