@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 12:14:06
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-24 14:46:17
+ * @LastEditTime: 2021-03-25 22:52:13
 -->
 
 <template>
@@ -45,6 +45,7 @@
                 <el-input
                   v-model="form.captcha"
                   placeholder="请输入验证码"
+                  @change="goLogin"
                 ></el-input>
               </el-col>
               <el-col :span="4">

@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-21 20:58:30
+ * @LastEditTime: 2021-03-25 18:08:53
 -->
 <template>
   <el-container>
@@ -188,9 +188,13 @@ export default {
       ],
     };
   },
-
   components: {
     NavBar,
+  },
+  computed: {
+    key() {
+      return this.$route.path.replace(/\//g, "_");
+    },
   },
   created() {
     let path = window.sessionStorage.getItem("activePath");
