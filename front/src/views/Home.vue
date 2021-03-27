@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-25 23:50:20
+ * @LastEditTime: 2021-03-27 09:34:24
 -->
 <template>
   <el-container>
@@ -175,13 +175,13 @@ export default {
           id: "601",
           authName: "菜单管理",
           path: "",
-          icon: "fenleiguanli",
+          icon: "caidanguanli2",
           children: [
             {
               id: "602",
               authName: "菜单列表",
               path: "menulist",
-              icon: "jixiaoguanli",
+              icon: "caidan",
             },
           ],
         },
