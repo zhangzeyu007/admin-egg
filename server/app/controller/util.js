@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-23 15:40:27
+ * @LastEditTime: 2021-03-28 11:57:54
  */
 'use strict';
 
@@ -90,7 +90,7 @@ class UtilController extends BaseController {
     ctx.session.emailcode = code;
     const subject = '泽雨后台系统验证码';
     const text = '泽雨科技';
-    const html = `<h1>泽雨github社区</h1><h2>验证码:</h2><p>${code}</p> `;
+    const html = `<h1>泽雨github社区</h1><h2>验证码:</h2><span>${code}</span> `;
     const hasSend = await ctx.service.tools.sendEmail(email, subject, text, html);
 
     if (hasSend) {
