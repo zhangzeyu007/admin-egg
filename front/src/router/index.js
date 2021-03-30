@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-21 20:55:21
+ * @LastEditTime: 2021-03-30 09:51:08
  */
 
 import Vue from "vue";
@@ -17,7 +17,6 @@ import videoRouteList from './video/videoRoutes.js'
 
 
 Vue.use(VueRouter);
-
 
 
 // 2.声明一个路由表
