@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-01-09 22:09:44
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-27 22:30:45
+ * @LastEditTime: 2021-04-02 15:52:03
  */
 
 import axios from 'axios'
@@ -26,10 +26,14 @@ switch (process.env.NODE_ENV) {
 }
 
 /**
- * 设置超时时间和跨域是否允许携带凭证
+ * 设置超时时间
  * 
 */
 // axios.defaults.timeout = 10000;
+
+/**
+ * 跨域是否允许携带凭证
+*/
 axios.defaults.withCredentials = true;
 
 /**
@@ -63,7 +67,6 @@ axios.interceptors.request.use(config => {
     if (config.url.includes('/util/upload' || '/util/checkfile')) {
         config.headers['Content-Type'] = 'multipart/form-data;charet=utf-8'
     }
-
     return config
 }, error => {
     return Promise.reject(error)
@@ -73,6 +76,7 @@ axios.interceptors.request.use(config => {
  *响应拦截器
  服务返回信息 -> [拦截统一处理] -> 客户端JS获取到的信息
 */
+
 // axios.defaults.validateStatus = status => {
 //   * 自定义响应成功的HTTP 状态码
 //     return /^(2|3)\d{2}$/.test(status)
