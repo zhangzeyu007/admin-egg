@@ -4,5 +4,7 @@
 ## 数据库  使用mongodb
 ## 登入界面
 ![01](https://user-images.githubusercontent.com/30886537/113469314-35d76c80-947f-11eb-8747-45d7a0ef093f.png)
-后台管理界面![Uploading 02.png…]()
+## 后台管理界面
+![02](https://user-images.githubusercontent.com/30886537/113469352-733bfa00-947f-11eb-9cc4-db99bb22729a.png)
+
 
