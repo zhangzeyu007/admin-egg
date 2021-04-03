@@ -6,5 +6,8 @@
 ![01](https://user-images.githubusercontent.com/30886537/113469314-35d76c80-947f-11eb-8747-45d7a0ef093f.png)
 ## 后台管理界面
 ![02](https://user-images.githubusercontent.com/30886537/113469352-733bfa00-947f-11eb-9cc4-db99bb22729a.png)
+## 可视化数据分析
+![03](https://user-images.githubusercontent.com/30886537/113470373-a2566980-9487-11eb-976d-2978b14118b3.png)
+
 
 
