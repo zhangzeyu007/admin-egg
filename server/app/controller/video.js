@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-03-21 21:42:04
  * @LastEditors: 海象
- * @LastEditTime: 2021-04-03 16:21:13
+ * @LastEditTime: 2021-04-05 20:29:52
  */
 'use strict';
 const BaseController = require('./base');
@@ -40,7 +40,7 @@ class VideoController extends BaseController {
 
     // 组装参数
     const payload = ctx.request.body || {};
-    const key = '31c496f82ffd897502f58e71c7150edf';
+    const key = 'e090d9a71dfabaeefd49ff1c6afcdfae';
     const s1ig = '11403';
     const result = await ctx.curl('https://z1.m1907.cn/api/v/?z=' + key + '&jx=' + payload.keyName + '&s1ig=' + s1ig + '&g=www.hyx,youku.c,pingmu.,n1.szja,vod3.bu,cdn003.,mhcdn.m,vod.bun,www.369');
     ctx.status = result.status;
