@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-21 15:51:33
  * @LastEditors: 海象
- * @LastEditTime: 2021-02-25 22:16:40
+ * @LastEditTime: 2021-04-06 20:38:40
  */
 /**
  * 处理图片类型判断
@@ -48,7 +48,7 @@ async function isJpg(file) {
 }
 
 async function isGif(file) {
-    // GIF89a 和GIF87a
+    // GIF89a 和 GIF87a
     // 前面6个16进制，'47 49 46 38 39 61' '47 49 46 38 37 61'
     // 16进制的抓安环
     const ret = await blobToString(file.slice(0, 6));

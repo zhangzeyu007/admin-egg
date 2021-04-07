@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-02-24 09:23:40
  * @LastEditors: 海象
- * @LastEditTime: 2021-03-24 12:36:13
+ * @LastEditTime: 2021-04-07 09:41:55
  */
 
 'use strict';
@@ -24,7 +24,6 @@ const transporter = nodemailer.createTransport({
 });
 
 class ToolService extends Service {
-
   async mergeFile(filePath, filehash, size) {
     const chunkdDir = path.join(this.config.UPLOAD_DIR, filehash);// 切片文件夹
     let chunks = [];
