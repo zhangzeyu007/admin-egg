@@ -813,7 +813,6 @@ export default {
         // 中间的, 取前中后各两个字节
         let chunks = [file.slice(0, offset)];
         let cur = offset;
-
         while (cur < size) {
           if (cur + offset >= size) {
             // 最后 一个区块
@@ -828,7 +827,7 @@ export default {
           }
           cur += offset;
         }
-        // 中间的, 取前中后各两个字节
+        // 中间的,取前中后各两个字节
         reader.readAsArrayBuffer(new Blob(chunks));
         reader.onload = (e) => {
           spark.append(e.target.result);
