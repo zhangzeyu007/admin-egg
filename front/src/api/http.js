@@ -3,7 +3,7 @@
  * @Author: 海象
  * @Date: 2021-01-09 22:09:44
  * @LastEditors: 海象
- * @LastEditTime: 2021-04-02 15:52:03
+ * @LastEditTime: 2021-04-23 10:16:25
  */
 
 import axios from 'axios'
@@ -54,8 +54,8 @@ axios.defaults.transformRequest = [function (data, config) {
 
 /**
  * 设置请求截器
- * 客户端发送请求 -> [请求拦截器] -> 服务器 
- * TOKEN校验(JWT), 接收服务器返回的token,存储到 vuex中
+ * 客户端发送请求 ->[请求拦截器] ->服务器 
+ * TOKEN校验(JWT),接收服务器返回的token,存储到 vuex中
  * 每一次向服务器发请求, 我们应该把token带上
 */
 axios.interceptors.request.use(config => {
@@ -63,7 +63,7 @@ axios.interceptors.request.use(config => {
     let token = localStorage.getItem('token');
     token && (config.headers.Authorization = 'Bearer ' + token);
     // 对请求头处理
-    // formData类型 如果url 包含以下路径 使用formData 上传
+    // formData类型如果url包含以下路径使用formData上传
     if (config.url.includes('/util/upload' || '/util/checkfile')) {
         config.headers['Content-Type'] = 'multipart/form-data;charet=utf-8'
     }

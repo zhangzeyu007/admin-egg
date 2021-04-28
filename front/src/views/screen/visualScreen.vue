@@ -305,6 +305,7 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       chart.setOption(option);
     },
+    /*柱状图*/
     initChartR2() {
       /*数据源*/
       const source = [
