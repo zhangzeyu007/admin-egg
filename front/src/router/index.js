@@ -42,6 +42,7 @@ export const constRoutes = [
     meta: {
       title: "Home" // 导航菜单项标题
     },
+    
     component: () => import("@/views/Home"),
     children: [
       {

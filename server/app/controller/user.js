@@ -186,7 +186,7 @@ class UserController extends BaseController {
       return;
     }
     const res = await service.user.registerUser(payload);
-    console.log(res);
+
     if (res.code === 1) {
       this.message('用户注册成功');
     } else if (res.code === 0) {

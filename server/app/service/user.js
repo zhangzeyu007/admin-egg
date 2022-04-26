@@ -117,10 +117,12 @@ class UserService extends Service {
     const result = {
       code: '',
     };
+    
     payLoad.password = md5(payLoad.password + HashSalt);
     const isEmpty = await ctx.model.AdminUser.findOne({
       username: payLoad.username,
     });
+
     if (isEmpty) {
       if (isEmpty.username === payLoad.username) {
         result.code = 0;

@@ -82,6 +82,7 @@ class UtilController extends BaseController {
       url: `/public/${hash}.${ext}`,
     });
   }
+
   // 发送邮件
   async sendEmail() {
     const { ctx } = this;

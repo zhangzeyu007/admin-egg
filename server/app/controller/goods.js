@@ -22,7 +22,6 @@ const getGoodsListRule = {
 const delGoodsRule = {
   goodsid: { required: true, type: 'string' },
 };
-
 const updateGoodsRule = {
   goodsId: { required: true, type: 'string' },
   name: { required: true, type: 'string' },

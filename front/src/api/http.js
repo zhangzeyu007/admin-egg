@@ -39,9 +39,10 @@ axios.defaults.withCredentials = true;
 /**
  * 设置数据请求传递的格式x-www-form-urlencoded
  * (看服务器要求什么格式)
+ * 默认格式x-www-form-urlencoded
 */
 
-axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'; 
 
 // 请求发送前对数据处理fromData
 axios.defaults.transformRequest = [function (data, config) {
@@ -67,6 +68,7 @@ axios.interceptors.request.use(config => {
     if (config.url.includes('/util/upload' || '/util/checkfile')) {
         config.headers['Content-Type'] = 'multipart/form-data;charet=utf-8'
     }
+    
     return config
 }, error => {
     return Promise.reject(error)

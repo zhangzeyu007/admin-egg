@@ -40,7 +40,7 @@ class VideoController extends BaseController {
     // 组装参数
     // https://z1.m1907.cn/?jx=
     const payload = ctx.request.body || {};
-    const key = '27a9e6d51c8cbc2e461c2bc5eef2481f';
+    const key = '5117f1b038516d559d873674092a53e5';
     const s1ig = '11403';
     const result = await ctx.curl('https://z1.m1907.cn/api/v/?z=' + key + '&jx=' + payload.keyName + '&s1ig=' + s1ig + '&g=www.hyx,youku.c,pingmu.,n1.szja,vod3.bu,cdn003.,mhcdn.m,vod.bun,www.369');
     ctx.status = result.status;
