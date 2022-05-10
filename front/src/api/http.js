@@ -1,10 +1,4 @@
-/*
- * @Description: 组件
- * @Author: 海象
- * @Date: 2021-01-09 22:09:44
- * @LastEditors: 海象
- * @LastEditTime: 2021-04-23 10:16:25
- */
+
 
 import axios from 'axios'
 import qs from 'qs'

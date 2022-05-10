@@ -730,11 +730,11 @@ export default {
         }
       });
     },
-    // 创建切片
+    //TODO: 创建切片
     createFileChunk(file, size = CHUNK_SIZE) {
       const chunks = [];
       let cur = 0;
-      // 切片分区
+      // todo 切片分区
       while (cur < file.size) {
         chunks.push({ index: cur, file: file.slice(cur, cur + size) });
         cur += size;
@@ -894,7 +894,7 @@ export default {
       this.addGoodsForm.file.hash = hash;
       this.editGoodsForm.file.hash = hash;
 
-      // 问一下后端, 文件是否上传过, 如果没有  是否存在切片
+      //TODO 问一下后端, 文件是否上传过, 如果没有  是否存在切片
       const {
         data: { uploaded, uploadedList },
       } = await this.$api.util.checkFile({
@@ -908,14 +908,14 @@ export default {
       }
 
       this.chunks = chunks.map((chunk, index) => {
-        // 切片的名字 hash+index
+        //TODO 切片的名字 hash+index
         const name = hash + "-" + index;
         return {
           hash,
           name,
           index,
           chunk: chunk.file,
-          // 设置进度条，已经上传的设为100
+          // 设置进度条，已经上传的设为 100
           progress: uploadedList.indexOf(name) > -1 ? 100 : 0,
         };
       });

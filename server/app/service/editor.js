@@ -2,8 +2,8 @@
  * @Description: 组件
  * @Author: 海象
  * @Date: 2021-03-05 22:16:32
- * @LastEditors: 海象
- * @LastEditTime: 2021-03-09 17:32:28
+ * @LastEditors: 张泽雨
+ * @LastEditTime: 2022-04-26 13:01:39
  */
 'use strict';
 const Service = require('egg').Service;
@@ -42,7 +42,6 @@ class EditorService extends Service {
   }
   // 删除商品接口
   async delEditor(payLoad) {
-    console.log(payLoad.editorId);
     const { ctx } = this;
     return await ctx.model.AdminEditor.findByIdAndDelete(payLoad.editorId);
   }

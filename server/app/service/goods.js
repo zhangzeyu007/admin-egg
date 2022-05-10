@@ -2,8 +2,8 @@
  * @Description: 组件
  * @Author: 海象
  * @Date: 2021-02-28 11:39:38
- * @LastEditors: 海象
- * @LastEditTime: 2021-03-02 21:06:20
+ * @LastEditors: 张泽雨
+ * @LastEditTime: 2022-04-26 13:02:07
  */
 'use strict';
 const Service = require('egg').Service;
@@ -116,7 +116,6 @@ class GoodsService extends Service {
         }
       }
     } else {
-      console.log('你好');
       result.code = -1;
     }
     return result;
