@@ -1,10 +1,4 @@
-<!--
- * @Description: 组件
- * @Author: 海象
- * @Date: 2021-02-04 12:14:06
- * @LastEditors: 海象
- * @LastEditTime: 2021-03-24 14:22:27
--->
+
 <template>
   <div id="register">
     <div class="register-main">

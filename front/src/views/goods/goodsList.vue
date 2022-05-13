@@ -271,7 +271,7 @@
   </div>
 </template>
 
-<style  lang="less" scoped>
+<style lang="less" scoped>
 .fileinput-button {
   position: relative;
   display: inline-block;
@@ -536,7 +536,11 @@ export default {
       const search = String(this.search).toLowerCase();
       if (search) {
         return this.tableData.filter((data) => {
-          return String(data.name).toLowerCase().indexOf(search) > -1;
+          return (
+            String(data.name)
+              .toLowerCase()
+              .indexOf(search) > -1
+          );
         });
       }
       return this.tableData;
@@ -734,7 +738,7 @@ export default {
     createFileChunk(file, size = CHUNK_SIZE) {
       const chunks = [];
       let cur = 0;
-      // todo 切片分区
+      // 切片分区
       while (cur < file.size) {
         chunks.push({ index: cur, file: file.slice(cur, cur + size) });
         cur += size;
@@ -759,7 +763,7 @@ export default {
       });
     },
     /**
-     * 利用空闲时间 进行计算 hash
+     * 利用空闲时间 进行计算hash
      */
     async calculateHashIdle() {
       const chunks = this.chunks;
@@ -889,7 +893,7 @@ export default {
       const chunks = this.createFileChunk(this.file);
       this.chunks = chunks;
       // const hash = await this.calculateHashIdle();
-      const hash = await this.calculateHashSample();
+      const hash = await this.calculateHashWorker();
       this.hash = hash;
       this.addGoodsForm.file.hash = hash;
       this.editGoodsForm.file.hash = hash;
@@ -931,11 +935,13 @@ export default {
         let counter = 0;
         let last = 0;
         let isStop = false;
+        // 任务开启异步方法
         const start = async () => {
           if (isStop) {
             return;
           }
           const task = chunks.shift();
+
           if (task) {
             const { form, index } = task;
             await that.$api.util
@@ -1000,4 +1006,3 @@ export default {
   },
 };
 </script>
-
