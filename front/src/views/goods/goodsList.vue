@@ -746,8 +746,8 @@ export default {
       return chunks;
     },
     /**
-     * 使用 web worker 计算 hash
-     * todo 存在 bug
+     * todo 使用 webWorker 计算 hash
+     *
      */
     async calculateHashWorker() {
       return new Promise((resolve) => {
@@ -763,7 +763,7 @@ export default {
       });
     },
     /**
-     * 利用空闲时间 进行计算hash
+     *todo 利用空闲时间 进行计算hash
      */
     async calculateHashIdle() {
       const chunks = this.chunks;
@@ -800,7 +800,7 @@ export default {
       });
     },
     /**
-     * 抽样hash计算
+     * todo 抽样hash计算
      *  布隆过滤器  判断一个数据存在与否
          1个G的文件，抽样后5M以内
         hash一样，文件不一定一样
@@ -840,40 +840,7 @@ export default {
         };
       });
     },
-    // 上传切片处理方法
-    async uploadChunks(uploadedList = []) {
-      const requests = await this.chunks
-        .filter((chunk) => uploadedList.indexOf(chunk.name) == -1)
-        .map((chunk) => {
-          // 转成 promise
-          const form = new FormData();
-          form.append("chunk", chunk.chunk);
-          form.append("hash", chunk.hash);
-          form.append("name", chunk.name);
-          return {
-            form,
-            index: chunk.index,
-            error: 0,
-          };
-        });
-      // .map(({ form, index }) => {
-      //   console.log("调用2");
-      //   this.$api.util.upload(form, {
-      //     onUploadProgress: (progress) => {
-      //       console.log("哈哈哈哈");
-      //       // 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
-      //       this.chunks[index].progress = Number(
-      //         ((progress.loaded / progress.total) * 100).toFixed(2)
-      //       );
-      //       console.log(this.chunks[index].progress);
-      //     },
-      //   });
-      // });
-      // TODO 并发量控制
-      //尝试申请tcp链接过多,也会造成卡顿
-      // await Promise.all(requests);
-      await this.sendRequest(requests);
-    },
+
     // 上传文件
     async uploadFile() {
       if (!this.file) {
@@ -926,6 +893,40 @@ export default {
 
       await this.uploadChunks(uploadedList);
     },
+    // 上传切片处理方法
+    async uploadChunks(uploadedList = []) {
+      const requests = await this.chunks
+        .filter((chunk) => uploadedList.indexOf(chunk.name) == -1)
+        .map((chunk) => {
+          // 转成 promise
+          const form = new FormData();
+          form.append("chunk", chunk.chunk);
+          form.append("hash", chunk.hash);
+          form.append("name", chunk.name);
+          return {
+            form,
+            index: chunk.index,
+            error: 0,
+          };
+        });
+      // .map(({ form, index }) => {
+      //   console.log("调用2");
+      //   this.$api.util.upload(form, {
+      //     onUploadProgress: (progress) => {
+      //       console.log("哈哈哈哈");
+      //       // 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
+      //       this.chunks[index].progress = Number(
+      //         ((progress.loaded / progress.total) * 100).toFixed(2)
+      //       );
+      //       console.log(this.chunks[index].progress);
+      //     },
+      //   });
+      // });
+      // TODO 并发量控制
+      //尝试申请tcp链接过多,也会造成卡顿
+      // await Promise.all(requests);
+      await this.sendRequest(requests);
+    },
     // 发送请求
     sendRequest(chunks, limit = 3) {
       let that = this;
@@ -941,7 +942,6 @@ export default {
             return;
           }
           const task = chunks.shift();
-
           if (task) {
             const { form, index } = task;
             await that.$api.util

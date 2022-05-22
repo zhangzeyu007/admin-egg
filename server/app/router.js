@@ -2,8 +2,8 @@
  * @Description: 组件
  * @Author: 海象
  * @Date: 2021-02-04 10:21:47
- * @LastEditors: 海象
- * @LastEditTime: 2021-03-23 15:08:11
+ * @LastEditors: 张泽雨
+ * @LastEditTime: 2022-05-22 16:01:29
  */
 'use strict';
 
@@ -12,7 +12,6 @@
  */
 
 module.exports = app => {
-
   const { router, controller } = app;
   const jwt = app.middleware.jwt({ app });
   // 用户
@@ -46,5 +45,4 @@ module.exports = app => {
   // 视频网站
   router.post('/video/search', jwt, controller.video.getSearch);
   router.post('/video/getvideosourse', jwt, controller.video.getVideoSourse);
-
 };
