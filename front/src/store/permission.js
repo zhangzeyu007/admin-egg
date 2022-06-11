@@ -2,8 +2,8 @@
  * @Description: 组件
  * @Author: 海象
  * @Date: 2021-02-18 20:52:01
- * @LastEditors: 海象
- * @LastEditTime: 2021-03-21 10:53:27
+ * @LastEditors: 张泽雨
+ * @LastEditTime: 2022-06-11 13:35:17
  */
 import { asyncRoutes, constRoutes } from '@/router'
 
@@ -29,7 +29,7 @@ const mutations = {
 const actions = {
     generateRoutes({ commit }, roles) {
         return new Promise(resolve => {
-            // 根据角色做过滤处理
+            // * 根据角色做过滤处理
             const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
             commit('setRoutes', accessedRoutes)
             resolve(state.routes)
@@ -38,7 +38,7 @@ const actions = {
 }
 
 /**
- * 递归过滤AsyncRoutes路由表
+ * * 递归过滤AsyncRoutes路由表
  * @routes 待过滤路由表, 首次传入的就是AsyncRoutes
  * @roles 用户拥有角色
 */

@@ -746,7 +746,7 @@ export default {
       return chunks;
     },
     /**
-     * todo 使用 webWorker 计算 hash
+     * * 使用 webWorker 计算 hash
      *
      */
     async calculateHashWorker() {
@@ -763,7 +763,7 @@ export default {
       });
     },
     /**
-     *todo 利用空闲时间 进行计算hash
+     * * 利用空闲时间 进行计算hash
      */
     async calculateHashIdle() {
       const chunks = this.chunks;
@@ -800,7 +800,7 @@ export default {
       });
     },
     /**
-     * todo 抽样hash计算
+     * * 抽样hash计算
      *  布隆过滤器  判断一个数据存在与否
          1个G的文件，抽样后5M以内
         hash一样，文件不一定一样

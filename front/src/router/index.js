@@ -2,8 +2,8 @@
  * @Description: 组件
  * @Author: 海象
  * @Date: 2021-02-04 10:03:41
- * @LastEditors: 海象
- * @LastEditTime: 2021-03-30 09:51:08
+ * @LastEditors: 张泽雨
+ * @LastEditTime: 2022-06-11 13:39:02
  */
 
 import Vue from "vue";
@@ -42,7 +42,6 @@ export const constRoutes = [
     meta: {
       title: "Home" // 导航菜单项标题
     },
-    
     component: () => import("@/views/Home"),
     children: [
       {
