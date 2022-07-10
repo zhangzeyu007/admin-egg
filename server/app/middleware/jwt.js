@@ -2,8 +2,8 @@
  * @Description: 组件
  * @Author: 海象
  * @Date: 2021-02-17 15:54:46
- * @LastEditors: 海象
- * @LastEditTime: 2021-03-21 09:43:44
+ * @LastEditors: 张泽雨
+ * @LastEditTime: 2022-06-11 14:49:02
  */
 
 'use strict';
@@ -19,6 +19,7 @@ module.exports = ({ app }) => {
       };
       return;
     }
+    // * token 请求头设置
     const token = ctx.request.header.authorization.replace('Bearer ', '');
     try {
       const ret = await jwt.verify(token, app.config.jwt.secret);

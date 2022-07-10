@@ -2,8 +2,8 @@
  * @Description: 组件
  * @Author: 海象
  * @Date: 2021-02-07 11:38:58
- * @LastEditors: 海象
- * @LastEditTime: 2021-03-28 11:57:54
+ * @LastEditors: 张泽雨
+ * @LastEditTime: 2022-06-14 15:54:10
  */
 'use strict';
 
@@ -46,6 +46,7 @@ class UtilController extends BaseController {
       uploadedList,
     });
   }
+
   // 对上传文件夹进行过滤
   async getUploadedList(dirPath) {
     return fse.existsSync(dirPath)

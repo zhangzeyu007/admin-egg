@@ -1,7 +1,8 @@
+
 // 引入spark-md5
 self.importScripts('spark-md5.min.js')
 self.onmessage = e => {
-    // 接受主线程传递的数据
+    // * 接受主线程传递的数据
     const { chunks } = e.data
     const spark = new self.SparkMD5.ArrayBuffer();
 

@@ -2,8 +2,8 @@
  * @Description: 组件
  * @Author: 海象
  * @Date: 2021-02-24 09:23:40
- * @LastEditors: 海象
- * @LastEditTime: 2021-04-07 09:41:55
+ * @LastEditors: 张泽雨
+ * @LastEditTime: 2022-06-14 14:24:43
  */
 
 'use strict';
@@ -25,7 +25,7 @@ const transporter = nodemailer.createTransport({
 
 class ToolService extends Service {
   async mergeFile(filePath, filehash, size) {
-    const chunkdDir = path.join(this.config.UPLOAD_DIR, filehash);// 切片文件夹
+    const chunkdDir = path.join(this.config.UPLOAD_DIR, filehash); // 切片文件夹
     let chunks = [];
     const that = this;
     fs.readdir(chunkdDir, 'utf8', async function(err, files) {
@@ -41,6 +41,7 @@ class ToolService extends Service {
       await that.mergeChunks(chunks, filePath, size);
     });
   }
+
   async mergeChunks(files, dest, size) {
     const pipStream = (filePath, writeStream) => new Promise(resolve => {
       const readStream = fse.createReadStream(filePath);

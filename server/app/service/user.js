@@ -1,10 +1,4 @@
-/*
- * @Description: 组件
- * @Author: 海象
- * @Date: 2021-02-02 18:04:49
- * @LastEditors: 海象
- * @LastEditTime: 2021-03-23 22:16:07
- */
+
 'use strict';
 
 const Service = require('egg').Service;
@@ -117,7 +111,7 @@ class UserService extends Service {
     const result = {
       code: '',
     };
-    
+
     payLoad.password = md5(payLoad.password + HashSalt);
     const isEmpty = await ctx.model.AdminUser.findOne({
       username: payLoad.username,

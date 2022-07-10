@@ -581,7 +581,7 @@ export default {
       this.addGoodsDialog = true;
       this.resetForm();
     },
-    //修改按钮
+    // 修改按钮
     handleEdit(item) {
       this.editGoodsDialog = true;
       this.fileName = "";
@@ -747,7 +747,6 @@ export default {
     },
     /**
      * * 使用 webWorker 计算 hash
-     *
      */
     async calculateHashWorker() {
       return new Promise((resolve) => {
@@ -801,7 +800,7 @@ export default {
     },
     /**
      * * 抽样hash计算
-     *  布隆过滤器  判断一个数据存在与否
+     * *  布隆过滤器  判断一个数据存在与否
          1个G的文件，抽样后5M以内
         hash一样，文件不一定一样
         hash不一样，文件一定不一样
@@ -923,7 +922,7 @@ export default {
       //   });
       // });
       // TODO 并发量控制
-      //尝试申请tcp链接过多,也会造成卡顿
+      // * 尝试申请tcp链接过多,也会造成卡顿
       // await Promise.all(requests);
       await this.sendRequest(requests);
     },
@@ -947,8 +946,8 @@ export default {
             await that.$api.util
               .upload(form, {
                 onUploadProgress: (progress) => {
-                  // console.log(progress);
-                  // 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
+                  //  console.log(progress);
+                  //* 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
                   this.chunks[index].progress = Number(
                     ((progress.loaded / progress.total) * 100).toFixed(2)
                   );

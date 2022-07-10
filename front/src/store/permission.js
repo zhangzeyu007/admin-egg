@@ -1,10 +1,12 @@
 /*
- * @Description: 组件
- * @Author: 海象
- * @Date: 2021-02-18 20:52:01
+ * @Description: 
+ * @Author: 张泽雨
+ * @Date: 2021-03-08 16:45:30
  * @LastEditors: 张泽雨
- * @LastEditTime: 2022-06-11 13:35:17
+ * @LastEditTime: 2022-06-13 15:15:43
+ * @FilePath: \admin-egg\front\src\store\permission.js
  */
+
 import { asyncRoutes, constRoutes } from '@/router'
 
 
