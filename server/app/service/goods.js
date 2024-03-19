@@ -5,9 +5,9 @@
  * @LastEditors: 张泽雨
  * @LastEditTime: 2022-04-26 13:02:07
  */
-'use strict';
-const Service = require('egg').Service;
-const fullPath = 'http://localhost:7001/public/';
+"use strict";
+const Service = require("egg").Service;
+const fullPath = "http://localhost:7001/public/";
 // const fse = require('fs-extra');
 // const path = require('path');
 
@@ -16,7 +16,7 @@ class GoodsService extends Service {
   async addGoods(payLoad) {
     const { ctx } = this;
     const result = {
-      code: '',
+      code: "",
     };
     const hash = payLoad.file.hash;
     const ext = payLoad.file.ext;
@@ -31,7 +31,10 @@ class GoodsService extends Service {
       if (isEmpty.goodsId === payLoad.goodsId) {
         result.code = 0;
       } else {
-        const isSave = await ctx.model.AdminGoods.create({ ...payLoad, url: fullPath + `${hash}.${ext}` });
+        const isSave = await ctx.model.AdminGoods.create({
+          ...payLoad,
+          url: fullPath + `${hash}.${ext}`,
+        });
         if (isSave) {
           result.code = 1;
         } else {
@@ -39,7 +42,10 @@ class GoodsService extends Service {
         }
       }
     } else {
-      const isSave = await ctx.model.AdminGoods.create({ ...payLoad, url: fullPath + `${hash}.${ext}` });
+      const isSave = await ctx.model.AdminGoods.create({
+        ...payLoad,
+        url: fullPath + `${hash}.${ext}`,
+      });
       if (isSave) {
         result.code = 1;
       } else {
@@ -56,8 +62,7 @@ class GoodsService extends Service {
     const num = payLoad.pageSize ? Number(payLoad.pageSize) : 10; // 每页最大显示条数
     const start = (page - 1) * num; // 开始位置
     const totalPage = (await ctx.model.AdminGoods.find()).length;
-    const res = await ctx.model.AdminGoods.find().skip(start).limit(num)
-      .exec();
+    const res = await ctx.model.AdminGoods.find().skip(start).limit(num).exec();
     return { totalPage, page: res };
   }
   // 删除商品接口
@@ -88,15 +93,31 @@ class GoodsService extends Service {
       code: 1,
     };
     console.log(payLoad.name);
-    const response = await ctx.model.AdminGoods.find({ goodsId: payLoad.goodsId }).updateOne({ name: payLoad.name, price: payLoad.price, discountPrice: payLoad.discountPrice, desc: payLoad.desc });
+    const response = await ctx.model.AdminGoods.find({
+      goodsId: payLoad.goodsId,
+    }).updateOne({
+      name: payLoad.name,
+      price: payLoad.price,
+      discountPrice: payLoad.discountPrice,
+      desc: payLoad.desc,
+    });
     if (response) {
       // const url = payLoad.url;
       // const fileName = url.split('public/')[1];
       // const filePath = path.resolve(this.config.UPLOAD_DIR, fileName);
       // const hash = fileName.split('.')[0];
       // const hashPath = path.resolve(this.config.UPLOAD_DIR, hash);
-      if (payLoad.file && payLoad.file.name && payLoad.file.ext && payLoad.file.hash) {
-        const res = await ctx.model.AdminGoods.find({ goodsId: payLoad.goodsId }).updateOne({ url: fullPath + `${payLoad.file.hash}.${payLoad.file.ext}` });
+      if (
+        payLoad.file &&
+        payLoad.file.name &&
+        payLoad.file.ext &&
+        payLoad.file.hash
+      ) {
+        const res = await ctx.model.AdminGoods.find({
+          goodsId: payLoad.goodsId,
+        }).updateOne({
+          url: fullPath + `${payLoad.file.hash}.${payLoad.file.ext}`,
+        });
         if (res) {
           // if (fse.existsSync(filePath)) {
           //   fse.unlink(filePath, err => {
@@ -110,7 +131,6 @@ class GoodsService extends Service {
           //     console.log('删除文件夹成功');
           //   });
           // }
-
         } else {
           result.code = -1;
         }

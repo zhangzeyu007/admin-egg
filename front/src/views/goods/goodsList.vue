@@ -864,7 +864,7 @@ export default {
       this.addGoodsForm.file.hash = hash;
       this.editGoodsForm.file.hash = hash;
 
-      //TODO 问一下后端, 文件是否上传过, 如果没有  是否存在切片
+      //TODO 问一下后端, 文件是否上传过, 如果没有是否存在切片
       const {
         data: { uploaded, uploadedList },
       } = await this.$api.util.checkFile({
