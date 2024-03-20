@@ -351,6 +351,7 @@ import Util from "../../util/util.js";
 import sparkMD5 from "spark-md5";
 import moment from "moment";
 const CHUNK_SIZE = 2 * 1024 * 1024;
+import { useWatermark } from "../../util/water.js";
 
 export default {
   data() {
@@ -566,6 +567,14 @@ export default {
   created() {
     this.getGoodsListData();
   },
+
+  mounted() {
+    const { setWatermark, clearWatermark } = useWatermark();
+    this.$nextTick(() => {
+      setWatermark("只有张泽雨有权限", {});
+    });
+  },
+
   methods: {
     handleSizeChange(val) {
       this.pages.pageSize = val;
