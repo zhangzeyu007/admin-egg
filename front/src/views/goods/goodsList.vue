@@ -564,6 +564,7 @@ export default {
       return parseInt(((loaded * 100) / this.file.size).toFixed(2) / 100);
     },
   },
+
   created() {
     this.getGoodsListData();
   },
@@ -571,7 +572,7 @@ export default {
   mounted() {
     const { setWatermark, clearWatermark } = useWatermark();
     this.$nextTick(() => {
-      setWatermark("只有张泽雨有权限", {});
+      setWatermark("张泽雨", {});
     });
   },
 
@@ -743,9 +744,12 @@ export default {
         }
       });
     },
+
     //TODO: 创建切片
     createFileChunk(file, size = CHUNK_SIZE) {
+      // 切片数组集合
       const chunks = [];
+      // 切片
       let cur = 0;
       // 切片分区
       while (cur < file.size) {
@@ -808,7 +812,7 @@ export default {
       });
     },
     /**
-     * * 抽样hash计算
+     * *   抽样hash计算
      * *  布隆过滤器  判断一个数据存在与否
          1个G的文件，抽样后5M以内
         hash一样，文件不一定一样
@@ -867,8 +871,9 @@ export default {
       }
       const chunks = this.createFileChunk(this.file);
       this.chunks = chunks;
-      // const hash = await this.calculateHashIdle();
-      const hash = await this.calculateHashWorker();
+      // 获取hash
+      const hash = await this.calculateHashIdle();
+      // const hash = await this.calculateHashWorker();
       this.hash = hash;
       this.addGoodsForm.file.hash = hash;
       this.editGoodsForm.file.hash = hash;
@@ -901,6 +906,7 @@ export default {
 
       await this.uploadChunks(uploadedList);
     },
+
     // 上传切片处理方法
     async uploadChunks(uploadedList = []) {
       const requests = await this.chunks

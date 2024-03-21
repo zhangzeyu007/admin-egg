@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2024-03-19 20:48:17
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-20 12:42:12
+ * @LastEditTime: 2024-03-20 13:02:58
  * @FilePath: \admin-egg\front\src\util\water.js
  */
 
@@ -156,9 +156,9 @@ export function useWatermark(parentEl = bodyEl) {
   };
   const removeListener = (kind) => {
     if (kind === "mutation" || kind === "all") {
-      observer.watermarkElMutationObserver.disconnet();
-      observer.parentElMutationObserver.disconnet();
+      observer.watermarkElMutationObserver?.disconnect();
       observer.watermarkElMutationObserver = undefined;
+      observer.parentElMutationObserver?.disconnect();
       observer.parentElMutationObserver = undefined;
     }
     // 移除 resize 监听

@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --mode production",
+    "build:dev": "vue-cli-service build --mode dev",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -35,7 +36,9 @@
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
     "prettier": "^1.19.1",
+    "terser-webpack-plugin": "^4.0.0",
     "vue-template-compiler": "^2.6.11",
+    "webpack-bundle-analyzer": "^4.10.1",
     "worker-loader": "^3.0.8"
   },
   "browserslist": [
