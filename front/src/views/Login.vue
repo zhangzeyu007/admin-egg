@@ -1,15 +1,14 @@
-
 <template>
   <div id="login">
     <div class="login-main">
       <div class="avatar-box">
-        <img src="../assets/logo.jpg" alt="" />
+        <img :src="require('../assets/logo.jpg')" alt="" />
       </div>
       <div class="login-form">
         <img
           @click="goRegister"
           class="icon-register"
-          src="../static/image/login/icon_register.png"
+          :src="require('../static/image/login/icon_register.png')"
           alt=""
         />
         <el-form
@@ -187,7 +186,7 @@ export default {
 };
 </script>
 
-<style  lang="less" scoped>
+<style lang="less" scoped>
 #login {
   width: 100%;
   height: 100%;

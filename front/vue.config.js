@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2021-03-08 16:45:31
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-21 12:48:34
+ * @LastEditTime: 2024-03-22 14:15:27
  * @FilePath: \admin-egg\front\vue.config.js
  */
 const path = require("path");
@@ -11,20 +11,36 @@ const webpack = require("webpack");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
 const TerserWebpackPlugin = require("terser-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const PrefetchDNS = require("./prefetch-dns");
+console.log("------------------------------------------------");
 console.log("当前项目使用的 webpack 版本为:", webpack.version);
 console.log(process.env.NODE_ENV, "---process.env.NODE_ENV");
+console.log("-------------------------------------");
 
 module.exports = {
-  publicPath:
-    process.env.NODE_ENV === "production" ? "https://example.com" : "/",
+  // publicPath:
+  //   process.env.NODE_ENV === "production" ? "https://example.com" : "",
   assetsDir: "static",
+  productionSourceMap: true, // sourceMap 配置
   configureWebpack: {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "src"),
       },
     },
+    // devServer: {
+    //   proxy: {
+    //     "/api": {
+    //       target: "",
+    //       ws: true,
+    //       changeOrigin: true,
+    //     },
+    //     "/foo": {
+    //       target: "",
+    //     },
+    //   },
+    // },
     optimization: {
       minimize: false,
       splitChunks: {
@@ -32,7 +48,7 @@ module.exports = {
         // chunks: all 具体是什么意思, 他都做了什么
         // chunk 分割的最小文件为 30 kb (比如一个js文件很小只有 4 kb, 那么就不需要提取为公共的 chunk)
         minSize: 20 * 1024, // 最小分割的包体积
-        maxSize: 0, // 没有限制
+        maxSize: 10, // 没有限制
         minChunks: 1, // 要提取的 chunks 最少被引用 1 次
         maxAsyncRequests: 30, // 按需加载时 ( import('路径') ), 并行加载的文件的最大数量为 4
         maxInitialRequests: 30, // 入口 js 文件最大并行请求数量为3个
@@ -75,12 +91,37 @@ module.exports = {
     },
     module: {
       rules: [
+        // {
+        //   test: /\.(gif|png|jpe?g|svg)$/i,
+        //   use: [
+        //     "file-loader",
+        //     {
+        //       loader: "image-webpack-loader",
+        //       options: {
+        //         disable: true, // webpack@2.x and newer
+        //       },
+        //     },
+        //   ],
+        // },
         {
           test: /\.hash.js$/,
           use: {
             loader: "worker-loader",
             options: { inline: true, name: "workerName.[hash].js" },
           },
+        },
+        // {
+        //   test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        //   loader: "url-loader",
+        //   options: {
+        //     limit: 10000, // 小于 10kb 的图片将被转换为 base64 编码
+        //     name: "img/[name].[hash:7].[ext]",
+        //   },
+        // },
+
+        {
+          test: /\.less$/,
+          use: ["less-loader"],
         },
         {
           // 在 package.json 中 eslientConfig 继承 airbnb-base
@@ -119,6 +160,7 @@ module.exports = {
         prefetchKeys: ["dns-prefetch", "preconnect"],
         domains: ["https://example.com", "https://cdn.example.com"],
       }),
+      // new HtmlWebpackPlugin(),
     ],
   },
   parallel: false,
