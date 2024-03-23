@@ -1,9 +1,10 @@
 <!--
- * @Description: 组件
- * @Author: 海象
- * @Date: 2020-11-02 19:36:41
- * @LastEditors: 海象
- * @LastEditTime: 2021-03-25 23:34:02
+ * @Description: 
+ * @Author: 张泽雨
+ * @Date: 2021-03-08 16:45:30
+ * @LastEditors: 张泽雨
+ * @LastEditTime: 2024-03-23 11:38:17
+ * @FilePath: \admin-egg\front\src\components\IconFont.vue
 -->
 <template>
   <!-- <i :class="iconFontClass" class="svg-icon" v-on="$listeners"></i> -->

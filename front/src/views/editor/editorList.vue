@@ -1,10 +1,3 @@
-<!--
- * @Description: 组件
- * @Author: 海象
- * @Date: 2021-03-02 15:18:24
- * @LastEditors: 海象
- * @LastEditTime: 2021-03-09 17:47:14
--->
 <template>
   <div class="editorList">
     <el-card>
@@ -22,50 +15,52 @@
         </el-col>
       </el-row>
       <!-- table内容区 -->
-      <el-table
-        :data="tableDatas"
-        style="margin-top: 20px"
-        border
-        size="medium"
+      <virtualScroll
+        :data="tableData"
+        :totalHeight="tableHeight"
+        @update:visibleRange="handleVisibleRangeUpdate"
       >
-        <el-table-column
-          label="编号"
-          prop="editorId"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          label="标题"
-          prop="title"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          label="内容"
-          prop="content"
-          align="center"
-          show-overflow-tooltip
-        ></el-table-column>
-        <el-table-column
-          label="点赞数"
-          prop="likenum"
-          align="center"
-        ></el-table-column>
-        <el-table-column label="操作" align="center">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="primary"
-              icon="el-icon-edit"
-              @click="handleEdit(scope.row)"
-            ></el-button>
-            <el-button
-              icon="el-icon-delete"
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.row)"
-            ></el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+        <el-table style="margin-top: 20px" size="medium" :data="visibleData">
+          <el-table-column
+            label="编号"
+            prop="editorId"
+            align="center"
+          ></el-table-column>
+          <el-table-column
+            label="标题"
+            prop="title"
+            align="center"
+          ></el-table-column>
+          <el-table-column
+            label="内容"
+            prop="content"
+            align="center"
+            show-overflow-tooltip
+          ></el-table-column>
+          <el-table-column
+            label="点赞数"
+            prop="likenum"
+            align="center"
+          ></el-table-column>
+          <el-table-column label="操作" align="center">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="primary"
+                icon="el-icon-edit"
+                @click="handleEdit(scope.row)"
+              ></el-button>
+              <el-button
+                icon="el-icon-delete"
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.row)"
+              ></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </virtualScroll>
+
       <div class="pagination">
         <el-pagination
           style="width: 100%"
@@ -75,12 +70,11 @@
           :page-sizes="[5, 10, 20, 50]"
           :page-size="pages.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="pages.totalPage"
+          :total="pages.total"
         >
         </el-pagination>
       </div>
     </el-card>
-
     <!-- 添加弹窗 -->
     <el-dialog
       title="添加文章"
@@ -177,51 +171,28 @@
   </div>
 </template>
 
-<style lang="less" scoped>
-.md-editor {
-  width: 100%;
-  height: 60vh;
-  outline: none;
-  resize: none;
-  border: 1px solid #ccc;
-  background-color: #f8f9fa;
-}
-.content-title {
-  padding: 10px;
-  font-size: 14px;
-  vertical-align: middle;
-  box-sizing: border-box;
-}
-.markdown-body {
-  width: 100%;
-  height: 60vh;
-  margin-left: 10px;
-  border: 1px solid #ccc;
-}
-
-.pagination {
-  width: 100%;
-  margin-top: 15px;
-}
-.el-pagination {
-  text-align: right;
-}
-</style>
-
 <script>
 import { Message } from "element-ui";
 import marked from "marked";
 import hljs from "highlight.js";
-// import javascript from "highlight.js/lib/languages/javascript";
 import "highlight.js/styles/monokai-sublime.css";
 import Vue from "vue";
+import virtualScroll from "../../components/virtualScroll.vue";
+
 export default {
+  components: {
+    virtualScroll,
+  },
   data() {
     return {
       addEditorDialog: false,
       editEditorDialog: false,
       search: "",
+      tableHeight: 420,
       tableData: [],
+      visibleData: [],
+      visibleRange: { startIndex: 0, endIndex: 0 }, // 可视区域范围
+      bufferHeight: 200, // 缓冲高度,提前加载下一页
       addEditorForm: {
         editorId: "",
         title: "",
@@ -237,7 +208,7 @@ export default {
         likenum: "",
       },
       pages: {
-        totalPage: 10,
+        total: 10,
         pageSize: 10,
         pageNum: 1,
       },
@@ -281,6 +252,7 @@ export default {
   created() {
     this.getEditorListData();
   },
+
   watch: {
     search(old) {
       if (!old) {
@@ -303,7 +275,11 @@ export default {
       const search = String(this.search).toLowerCase();
       if (search) {
         return this.tableData.filter((data) => {
-          return String(data.title).toLowerCase().indexOf(search) > -1;
+          return (
+            String(data.title)
+              .toLowerCase()
+              .indexOf(search) > -1
+          );
         });
       }
       return this.tableData;
@@ -316,6 +292,19 @@ export default {
     },
   },
   methods: {
+    updateTableHeight() {
+      this.tableHeight = this.pages.total * 50; // 假设每行高度为 50px
+    },
+    handleVisibleRangeUpdate({ startIndex, endIndex }) {
+      this.visibleRange = { startIndex, endIndex };
+      console.log(this.visibleRange);
+      this.updateVisibleData();
+    },
+    updateVisibleData() {
+      const { startIndex, endIndex } = this.visibleRange;
+      console.log(this.tableData, "数据总量");
+      this.visibleData = this.tableData.slice(startIndex, endIndex);
+    },
     handleSizeChange(val) {
       this.pages.pageSize = val;
       this.pages.pageNum = 1;
@@ -453,9 +442,8 @@ export default {
     getEditorListData() {
       this.$api.editor.getEditorList(this.pages).then((res) => {
         if (res.code == 200) {
-          if (res.data.totalPage) {
-            this.pages.totalPage = res.data.totalPage;
-          }
+          console.log(res.data.total, "总数");
+          this.pages.total = res.data && res.data.totalPage;
           if (res.data.page) {
             this.tableData = this.formateListData(res.data.page);
           }
@@ -512,3 +500,35 @@ export default {
 };
 </script>
 
+<style lang="less" scoped>
+.editorList {
+}
+.md-editor {
+  width: 100%;
+  height: 60vh;
+  outline: none;
+  resize: none;
+  border: 1px solid #ccc;
+  background-color: #f8f9fa;
+}
+.content-title {
+  padding: 10px;
+  font-size: 14px;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+.markdown-body {
+  width: 100%;
+  height: 60vh;
+  margin-left: 10px;
+  border: 1px solid #ccc;
+}
+
+.pagination {
+  width: 100%;
+  margin-top: 15px;
+}
+.el-pagination {
+  text-align: right;
+}
+</style>
