@@ -66,7 +66,7 @@
         </el-menu>
       </el-aside>
       <!-- 内容显示区 -->
-      <el-main>
+      <el-main class="main">
         <nav-bar :breadcrumbs="breadcrumbs"></nav-bar>
         <keep-alive>
           <router-view />
@@ -255,6 +255,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.main {
+  overflow: hidden;
+}
 .el-header,
 .el-footer {
   background-color: #373d41;

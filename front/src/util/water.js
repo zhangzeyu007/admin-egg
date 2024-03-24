@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2024-03-19 20:48:17
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-20 13:02:58
+ * @LastEditTime: 2024-03-23 13:22:44
  * @FilePath: \admin-egg\front\src\util\water.js
  */
 
@@ -89,7 +89,6 @@ export function useWatermark(parentEl = bodyEl) {
     if (!watermarkEl) {
       return;
     }
-
     backupText &&
       (watermarkEl.style.background = `url(${createBase64()}) left top repeat`);
     options.clientWidth &&

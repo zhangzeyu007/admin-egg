@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2021-03-08 16:45:31
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-22 14:15:27
+ * @LastEditTime: 2024-03-23 13:45:03
  * @FilePath: \admin-egg\front\vue.config.js
  */
 const path = require("path");
@@ -166,5 +166,10 @@ module.exports = {
   parallel: false,
   chainWebpack: (config) => {
     config.output.globalObject("this");
+    // 开启协商缓存
+    config.plugin("html").tap((args) => {
+      args[0].hash = true;
+      return args;
+    });
   },
 };

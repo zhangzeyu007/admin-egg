@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2024-03-22 15:32:42
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-23 11:24:57
+ * @LastEditTime: 2024-03-23 12:34:26
  * @FilePath: \admin-egg\front\src\components\virtualScroll.vue
 -->
 <template>
@@ -41,6 +41,7 @@ export default {
   },
 
   computed: {
+    // 内容高度
     contentHeight() {
       return this.totalHeight;
     },
@@ -57,9 +58,9 @@ export default {
       return this.data.length * this.rowHeight;
     },
   },
+
   watch: {
     data: function(val) {
-      console.log(val, "实际监听数据");
       this.handleScroll();
     },
   },
