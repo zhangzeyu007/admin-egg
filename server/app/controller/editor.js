@@ -1,10 +1,3 @@
-/*
- * @Description: 组件
- * @Author: 海象
- * @Date: 2021-03-05 21:05:52
- * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-23 16:36:01
- */
 "use strict";
 const BaseController = require("./base");
 const addEditorRule = {};
@@ -48,7 +41,7 @@ class EditorController extends BaseController {
     const payload = ctx.request.body || {};
     // 查询结果
     const response = await service.editor.getEditorList(payload);
-    this.httpCache(response);
+    this.success(response);
   }
   // 删除商品接口
   async delEditor() {

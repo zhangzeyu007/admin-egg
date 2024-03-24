@@ -1,9 +1,10 @@
 /*
- * @Description: 组件
- * @Author: 海象
- * @Date: 2021-02-07 18:25:58
+ * @Description:
+ * @Author: 张泽雨
+ * @Date: 2021-03-08 16:45:31
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-23 17:59:10
+ * @LastEditTime: 2024-03-24 12:24:10
+ * @FilePath: \admin-egg\server\app\controller\base.js
  */
 "use strict";
 const { Controller } = require("egg");
