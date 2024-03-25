@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2024-03-19 20:48:17
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-23 13:22:44
+ * @LastEditTime: 2024-03-24 17:38:21
  * @FilePath: \admin-egg\front\src\util\water.js
  */
 
@@ -126,6 +126,7 @@ export function useWatermark(parentEl = bodyEl) {
       watermarkEl = null;
     }
   };
+
   /** 刷新水印（防御时调用） */
   const updateWatermark = debounce(() => {
     clearWatermark();

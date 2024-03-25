@@ -2,8 +2,8 @@
  * @Description: 组件
  * @Author: 海象
  * @Date: 2021-02-06 10:16:53
- * @LastEditors: 海象
- * @LastEditTime: 2021-03-23 22:18:37
+ * @LastEditors: 张泽雨
+ * @LastEditTime: 2024-03-24 13:38:42
 -->
 <template>
   <div class="userList">
@@ -23,11 +23,29 @@
         </el-col>
       </el-row>
       <!-- table内容区 -->
+      <!-- <div class="virtual-table__header">
+        <table>
+          <thead>
+            <tr>
+              <th
+                v-for="column in columns"
+                :key="column.key"
+                :style="{ width: column.width + 'px' }"
+              >
+                {{ column.label }}
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div> -->
       <el-table
         :data="tableDatas"
-        style="margin-top: 20px"
+        :row-style="{ height: '48px' }"
+        :cell-style="{ padding: '0 16px' }"
+        style="width: 100%;"
         border
         size="medium"
+        :height="400"
       >
         <el-table-column
           label="用户名"
@@ -307,6 +325,28 @@ export default {
       },
       tableData: [],
       userid: "",
+      columns: [
+        {
+          label: "用户名",
+          key: 1,
+        },
+        {
+          label: "用户名",
+          key: 1,
+        },
+        {
+          label: "角色",
+          key: 1,
+        },
+        {
+          label: "邮箱",
+          key: 1,
+        },
+        {
+          label: "操作",
+          key: 1,
+        },
+      ],
     };
   },
   created() {
@@ -322,7 +362,11 @@ export default {
       const search = String(this.search).toLowerCase();
       if (search) {
         return this.tableData.filter((data) => {
-          return String(data.username).toLowerCase().indexOf(search) > -1;
+          return (
+            String(data.username)
+              .toLowerCase()
+              .indexOf(search) > -1
+          );
         });
       }
       return this.tableData;
@@ -346,6 +390,10 @@ export default {
     },
   },
   methods: {
+    handleScroll(event) {
+      console.log(event.target);
+      const { scrollTop, offsetHeight, scrollHeight } = event.target;
+    },
     handleSizeChange(val) {
       this.pages.pageSize = val;
       this.pages.pageNum = 1;
@@ -496,12 +544,38 @@ export default {
 };
 </script>
 
-<style  scoped>
+<style scoped>
 .pagination {
   width: 100%;
   margin-top: 15px;
 }
 .el-pagination {
   text-align: right;
+}
+</style>
+
+<style scoped>
+.virtual-table {
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.virtual-table__header {
+  background-color: #f5f7fa;
+  border-bottom: 1px solid #dfe6ec;
+}
+
+.virtual-table__header table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.virtual-table__header th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 500;
+  color: #909399;
+  border-left: 1px solid #dfe6ec;
 }
 </style>

@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2021-03-08 16:45:31
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-23 13:45:03
+ * @LastEditTime: 2024-03-24 14:05:26
  * @FilePath: \admin-egg\front\vue.config.js
  */
 const path = require("path");
@@ -22,8 +22,18 @@ module.exports = {
   // publicPath:
   //   process.env.NODE_ENV === "production" ? "https://example.com" : "",
   assetsDir: "static",
-  productionSourceMap: true, // sourceMap 配置
+  productionSourceMap: false, // sourceMap 配置
   configureWebpack: {
+    output: {
+      filename:
+        process.env.NODE_ENV === "production"
+          ? "js/[name].[contenthash:8].js"
+          : "js/[name].js",
+      chunkFilename:
+        process.env.NODE_ENV === "production"
+          ? "js/[name].[contenthash:8].js"
+          : "js/[name].js",
+    },
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "src"),

@@ -1,11 +1,3 @@
-/*
- * @Description: 组件
- * @Author: 海象
- * @Date: 2021-02-19 10:59:43
- * @LastEditors: 张泽雨
- * @LastEditTime: 2022-05-22 15:59:49
- */
-
 import api from "../api/api";
 const state = {
   token: localStorage.getItem("token"),
