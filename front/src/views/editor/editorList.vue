@@ -295,21 +295,24 @@ export default {
     updateTableHeight() {
       this.tableHeight = this.pages.total * 50; // 假设每行高度为 50px
     },
+
     handleVisibleRangeUpdate({ startIndex, endIndex }) {
       this.visibleRange = { startIndex, endIndex };
       console.log(this.visibleRange);
       this.updateVisibleData();
     },
+
     updateVisibleData() {
       const { startIndex, endIndex } = this.visibleRange;
-      console.log(this.tableData, "数据总量");
       this.visibleData = this.tableData.slice(startIndex, endIndex);
     },
+
     handleSizeChange(val) {
       this.pages.pageSize = val;
       this.pages.pageNum = 1;
       this.getEditorListData();
     },
+
     handleCurrentChange(val) {
       this.pages.pageNum = val;
       this.getEditorListData();

@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2021-03-08 16:45:31
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-26 12:35:36
+ * @LastEditTime: 2024-03-26 19:24:49
  * @FilePath: \admin-egg\front\vue.config.js
  */
 const path = require("path");
@@ -60,7 +60,8 @@ module.exports = {
       "element-ui": "ELEMENT",
     },
     optimization: {
-      minimize: false,
+      usedExports: true, //启用 Tree-shaking,它会标记出那些被使用和未使用的代码
+      minimize: false, //启用代码压缩。
       splitChunks: {
         chunks: "async",
         // chunks: all 具体是什么意思, 他都做了什么
@@ -104,6 +105,16 @@ module.exports = {
           parallel: true,
           // 如果需要 sourceMap 这里一定要设置为 true
           sourceMap: false,
+          terserOptions: {
+            warnings: false,
+            compress: {
+              drop_console: true,
+              drop_debugger: true,
+            },
+            output: {
+              comments: false,
+            },
+          },
         }),
       ],
     },
