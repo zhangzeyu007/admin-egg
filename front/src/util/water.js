@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2024-03-19 20:48:17
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-24 17:38:21
+ * @LastEditTime: 2024-03-26 12:58:49
  * @FilePath: \admin-egg\front\src\util\water.js
  */
 
@@ -46,7 +46,6 @@ export function useWatermark(parentEl = bodyEl) {
   };
 
   const setWatermark = (text, config = {}) => {
-    console.log(parentEl);
     if (!parentEl) {
       console.warn("请在 DOM 挂载完成后再调用 setWatermark 方法设置水印");
       return;
@@ -75,12 +74,12 @@ export function useWatermark(parentEl = bodyEl) {
     watermarkEl.style.position = watermarkElPosition;
     watermarkEl.style.zIndex = "999999";
     const { clientWidth, clientHeight } = parentEl;
-    console.log(clientWidth, "到达");
+
     // 设置水印元素的宽高
     updateWatermarkEl({ clientWidth, clientHeight });
     // 设置水印容器为相对定位
     parentEl.style.position = parentElPosition;
-    console.log(watermarkEl);
+
     // 将水印元素添加到容器元素中
     parentEl.appendChild(watermarkEl);
   };
@@ -95,7 +94,6 @@ export function useWatermark(parentEl = bodyEl) {
       (watermarkEl.style.width = options.clientWidth + "px");
     options.clientHeight &&
       (watermarkEl.style.height = options.clientHeight + "px");
-    console.log(watermarkEl);
   };
 
   const createBase64 = () => {

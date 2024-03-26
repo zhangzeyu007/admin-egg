@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2021-03-08 16:45:31
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-24 14:05:26
+ * @LastEditTime: 2024-03-26 12:35:36
  * @FilePath: \admin-egg\front\vue.config.js
  */
 const path = require("path");
@@ -51,6 +51,14 @@ module.exports = {
     //     },
     //   },
     // },
+    externals: {
+      // 提取 Vue 相关库
+      // "vue-router": "VueRouter",
+      // vuex: "Vuex",
+      // 提取其他常用库
+      // axios: "axios",
+      "element-ui": "ELEMENT",
+    },
     optimization: {
       minimize: false,
       splitChunks: {
