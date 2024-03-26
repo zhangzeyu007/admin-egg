@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2024-03-26 12:45:42
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-26 12:55:08
+ * @LastEditTime: 2024-03-26 13:31:37
  * @FilePath: \admin-egg\front\src\mixin\uplaod.js
  */
 import Util from "../util/util.js";
@@ -214,9 +214,10 @@ const mixin = {
       let that = this;
       // limit 并发数
       return new Promise((resolve, reject) => {
-        const len = chunks.length;
+        const                                                                                                                                                                                                                                                                                                                                             = chunks.length;
         let counter = 0;
         let last = 0;
+        // 是否停止标记
         let isStop = false;
         // 任务开启异步方法
         const start = async () => {
