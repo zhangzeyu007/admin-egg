@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2024-03-26 12:45:42
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-26 13:49:04
+ * @LastEditTime: 2024-03-28 09:48:11
  * @FilePath: \admin-egg\front\src\mixin\uplaod.js
  */
 import Util from "../util/util.js";
@@ -140,8 +140,8 @@ const mixin = {
       const chunks = this.createFileChunk(this.file);
       this.chunks = chunks;
       // 获取hash
-      const hash = await this.calculateHashIdle();
-      // const hash = await this.calculateHashWorker();
+      // const hash = await this.calculateHashIdle();
+      const hash = await this.calculateHashWorker();
       this.hash = hash;
       this.addGoodsForm.file.hash = hash;
       this.editGoodsForm.file.hash = hash;

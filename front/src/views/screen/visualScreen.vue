@@ -1,6 +1,5 @@
-
 <template>
-  <div class="visual-main">
+  <div class="visual-main" style="transform: translateY(-22`%) scale(0.6);">
     <!-- 标题 -->
     <div class="header">可视化数据分析</div>
     <!-- 内容 -->
