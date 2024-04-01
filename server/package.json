@@ -20,8 +20,8 @@
     "nodemailer": "^6.5.0",
     "svg-captcha": "^1.4.0",
     "vue": "^2.7.16",
-    "vue-loader": "^17.4.2",
-    "vue-server-renderer": "^2.7.16"
+    "vue-server-renderer": "^2.7.16",
+    "vue-template-compiler": "^2.7.16"
   },
   "devDependencies": {
     "@babel/core": "^7.24.3",
