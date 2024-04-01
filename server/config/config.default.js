@@ -1,29 +1,30 @@
 /*
- * @Description: 组件
- * @Author: 海象
- * @Date: 2021-02-04 10:21:47
+ * @Description:
+ * @Author: 张泽雨
+ * @Date: 2021-03-08 16:45:31
  * @LastEditors: 张泽雨
- * @LastEditTime: 2022-06-11 14:37:04
+ * @LastEditTime: 2024-04-01 12:46:55
+ * @FilePath: \admin-egg\server\config\config.default.js
  */
 /* eslint valid-jsdoc: "off" */
 
-'use strict';
+"use strict";
 
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
+const path = require("path");
+// const vueSSR = require("../app/middleware/vuessr.js");
 
-const path = require('path');
-
-module.exports = appInfo => {
+module.exports = (appInfo) => {
   /**
    * built-in config
    * @type {Egg.EggAppConfig}
    **/
-  const config = exports = {};
+  const config = (exports = {});
 
   // use for cookie sign key, should change to your own and keep security
-  config.keys = appInfo.name + '_1612405279249_5180';
+  config.keys = appInfo.name + "_1612405279249_5180";
 
   // eggjs 安全配置
   config.security = {
@@ -33,7 +34,7 @@ module.exports = appInfo => {
   };
   // 配置moogose
   config.mongoose = {
-    url: 'mongodb://127.0.0.1:27017/shop',
+    url: "mongodb://127.0.0.1:27017/shop",
     options: {
       useUnifiedTopology: true,
       useCreateIndex: true,
@@ -42,10 +43,14 @@ module.exports = appInfo => {
   // 中间件配置
   config.middleware = [];
 
+  // config.vueSSR = {
+  //   renderFunction: path.join(appInfo.baseDir, "app/web/entry-server.js"),
+  // };
+
   // eggjs 跨域配置
   config.cors = {
-    origin: 'http://localhost:8080', // 表示允许的源
-    allowMethods: 'GET,HEAD,PUT,POST', // 表示允许的http请求方式
+    origin: "http://localhost:8080", // 表示允许的源
+    allowMethods: "GET,HEAD,PUT,POST", // 表示允许的http请求方式
     credentials: true, // 开启认证
   };
 
@@ -55,19 +60,19 @@ module.exports = appInfo => {
   };
 
   config.jwt = {
-    secret: 'kkbzhangzeyu',
+    secret: "kkbzhangzeyu",
   };
   // 上传文件配置
   config.multipart = {
-    mode: 'file',
+    mode: "file",
     whitelist: () => true,
   };
 
-  config.UPLOAD_DIR = path.resolve(__dirname, '..', 'app/public');
+  config.UPLOAD_DIR = path.resolve(__dirname, "..", "app/public");
 
   // add your user config here
   const userConfig = {
-    myAppName: 'admin-egg',
+    myAppName: "admin-egg",
   };
 
   return {

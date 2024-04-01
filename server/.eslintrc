@@ -1,0 +1,11 @@
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "plugins": ["import"],
+  "rules": {
+    "import/no-unresolved": "off"
+  },
+  "extends": ["plugin:import/errors", "plugin:import/warnings"]
+}

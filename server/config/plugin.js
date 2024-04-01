@@ -2,10 +2,10 @@
  * @Description: 组件
  * @Author: 海象
  * @Date: 2021-02-04 10:21:47
- * @LastEditors: 海象
- * @LastEditTime: 2021-02-08 19:28:54
+ * @LastEditors: 张泽雨
+ * @LastEditTime: 2024-04-01 12:17:38
  */
-'use strict';
+"use strict";
 
 /** @type Egg.EggPlugin */
 
@@ -17,20 +17,19 @@
 
 exports.cors = {
   enable: true,
-  package: 'egg-cors',
+  package: "egg-cors",
 };
 exports.validate = {
   enable: true,
-  package: 'egg-validate',
+  package: "egg-validate",
 };
 
 exports.mongoose = {
   enable: true,
-  package: 'egg-mongoose',
+  package: "egg-mongoose",
 };
 
 exports.bcrypt = {
   enable: true,
-  package: 'egg-bcrypt',
+  package: "egg-bcrypt",
 };
-
