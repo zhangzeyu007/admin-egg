@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2021-03-08 16:45:31
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-28 21:51:21
+ * @LastEditTime: 2024-04-06 17:51:21
  * @FilePath: \admin-egg\front\vue.config.js
  */
 const path = require("path");
@@ -194,16 +194,11 @@ module.exports = {
       // new HtmlWebpackPlugin(),
       // new CompressionWebpackPlugin({
       //   filename: "[path].gz[query]", // 目标资源名称。[file] 会被替换成原资源。[path] 会被替换成原资源路径，我们可以放在某个字段根目录中。可以使用 [query] 来允许查询字符串
-      //   algorithm: "gzip", // 压缩算法
-      //   test: new RegExp("\\.(" + productionGzipExtensions.join("|") + ")$"), // 匹配文件名
+      //   // algorithm: "gzip", // 压缩算法
+      //   test: /\.(js|css|html|svg|json)$/, // 匹配要压缩的文件
       //   threshold: 10240, // 对超过10k的数据进行压缩
       //   minRatio: 0.8, // 压缩比例，值为0 ~ 1
       //   deleteOriginalAssets: false, // 是否删除原文件
-      //   compressionOptions: {
-      //     level: 9,
-      //     memLevel: 9,
-      //   },
-      //   cache: true,
       // }),
     ],
   },
