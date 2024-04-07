@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2024-03-26 12:45:42
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-28 09:48:11
+ * @LastEditTime: 2024-04-07 18:22:27
  * @FilePath: \admin-egg\front\src\mixin\uplaod.js
  */
 import Util from "../util/util.js";
@@ -13,6 +13,61 @@ import { Message } from "element-ui";
 
 const mixin = {
   methods: {
+    //TODO 上传文件获取
+    async uploadFile() {
+      if (!this.file) {
+        Message({
+          message: "没有选择文件",
+          type: "warning",
+        });
+        return;
+      }
+      if (!(await Util.isImage(this.file))) {
+        Message({
+          message: "文件格式不对",
+          type: "warning",
+        });
+        return;
+      }
+      const chunks = this.createFileChunk(this.file);
+      this.chunks = chunks;
+      // 获取hash
+      // const hash = await this.calculateHashIdle();
+      const hash = await this.calculateHashWorker();
+      this.hash = hash;
+      this.addGoodsForm.file.hash = hash;
+      this.editGoodsForm.file.hash = hash;
+
+      //TODO 问一下后端, 文件是否上传过, 如果没有是否存在切片
+      // 先把所有 哈希发给后端, 后端返回没有上传过的切片, 前端根据切片上传
+      const {
+        data: { uploaded, uploadedList },
+      } = await this.$api.util.checkFile({
+        hash: this.hash,
+        ext: this.file.name.split(".").pop(),
+      });
+
+      if (uploaded) {
+        this.isUpload = true;
+        return Message.success("秒传成功");
+      }
+
+      this.chunks = chunks.map((chunk, index) => {
+        //TODO 切片的名字 hash+index
+        const name = hash + "-" + index;
+        return {
+          hash,
+          name,
+          index,
+          chunk: chunk.file,
+          // 设置进度条，已经上传的设为 100
+          progress: uploadedList.indexOf(name) > -1 ? 100 : 0,
+        };
+      });
+      //TODO 向后端发送需要上传的切片
+      await this.uploadChunks(uploadedList);
+    },
+
     //TODO: 创建切片
     createFileChunk(file, size = CHUNK_SIZE) {
       // 切片数组集合
@@ -121,66 +176,12 @@ const mixin = {
       });
     },
 
-    // 上传文件
-    async uploadFile() {
-      if (!this.file) {
-        Message({
-          message: "没有选择文件",
-          type: "warning",
-        });
-        return;
-      }
-      if (!(await Util.isImage(this.file))) {
-        Message({
-          message: "文件格式不对",
-          type: "warning",
-        });
-        return;
-      }
-      const chunks = this.createFileChunk(this.file);
-      this.chunks = chunks;
-      // 获取hash
-      // const hash = await this.calculateHashIdle();
-      const hash = await this.calculateHashWorker();
-      this.hash = hash;
-      this.addGoodsForm.file.hash = hash;
-      this.editGoodsForm.file.hash = hash;
-
-      //TODO 问一下后端, 文件是否上传过, 如果没有是否存在切片
-      const {
-        data: { uploaded, uploadedList },
-      } = await this.$api.util.checkFile({
-        hash: this.hash,
-        ext: this.file.name.split(".").pop(),
-      });
-
-      if (uploaded) {
-        this.isUpload = true;
-        return Message.success("秒传成功");
-      }
-
-      this.chunks = chunks.map((chunk, index) => {
-        //TODO 切片的名字 hash+index
-        const name = hash + "-" + index;
-        return {
-          hash,
-          name,
-          index,
-          chunk: chunk.file,
-          // 设置进度条，已经上传的设为 100
-          progress: uploadedList.indexOf(name) > -1 ? 100 : 0,
-        };
-      });
-
-      await this.uploadChunks(uploadedList);
-    },
-
     // 上传切片处理方法
     async uploadChunks(uploadedList = []) {
       const requests = await this.chunks
         .filter((chunk) => uploadedList.indexOf(chunk.name) == -1)
         .map((chunk) => {
-          // 转成 promise
+          //转成formData
           const form = new FormData();
           form.append("chunk", chunk.chunk);
           form.append("hash", chunk.hash);
@@ -229,7 +230,6 @@ const mixin = {
             await that.$api.util
               .upload(form, {
                 onUploadProgress: (progress) => {
-                  //  console.log(progress);
                   //* 不是整体的进度,而是每个区块有自己的进度条,整体的进度需要计算
                   this.chunks[index].progress = Number(
                     ((progress.loaded / progress.total) * 100).toFixed(2)
@@ -250,7 +250,7 @@ const mixin = {
               .catch(() => {
                 this.chunks[index].progress = -1;
                 if (task.error < 3) {
-                  task.error++;
+                  task.error++; // 错误次数 ++
                   chunks.unshift(task);
                   start();
                 } else {
