@@ -1,3 +1,11 @@
+/*
+ * @Description:
+ * @Author: 张泽雨
+ * @Date: 2021-03-08 16:45:31
+ * @LastEditors: 张泽雨
+ * @LastEditTime: 2024-04-07 13:03:44
+ * @FilePath: \admin-egg\server\app\router.js
+ */
 "use strict";
 
 /**
@@ -40,6 +48,7 @@ module.exports = (app) => {
   router.post("/video/getvideosourse", jwt, controller.video.getVideoSourse);
 
   // SSR 服务端渲染
+  router.post("/editor/ssr", controller.editor.getEditorList);
   app.get("/ssr", app.middlewares.vuessr(), async (ctx) => {
     try {
       const html = await ctx.state.renderVueApp();
