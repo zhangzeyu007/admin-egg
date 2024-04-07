@@ -17,6 +17,7 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@nuxt/eslint-config": "^0.3.1",
     "@pinia/nuxt": "^0.5.1",
     "@vueuse/nuxt": "^10.9.0"
   }
