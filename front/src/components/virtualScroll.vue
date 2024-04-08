@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2024-03-22 15:32:42
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-23 12:34:26
+ * @LastEditTime: 2024-04-08 12:42:35
  * @FilePath: \admin-egg\front\src\components\virtualScroll.vue
 -->
 <template>
@@ -71,14 +71,20 @@ export default {
       this.endIndex = this.startIndex + this.visibleCount;
       const scrollContainer = this.$refs.scrollContainer;
       const scrollTop = scrollContainer.scrollTop;
-      console.log(scrollTop, "scrollTop");
       // 此时的开始索引
       this.startIndex = Math.floor(scrollTop / this.rowHeight);
       // 此时的结束索引
       this.endIndex = this.startIndex + this.visibleCount;
       // 此时的偏移量
+      /*
+      对齐行高度: 由于滚动位置的偏移量 scrollTop 可能不是行高度 this.rowHeight 的整数倍,
+       因此需要将其对行高度取余,以确保 startOffset 总是从一个完整的行的顶部开始。
+      这样可以保证每个渲染的列表项都是完整的,避免出现视觉上的断层。
+      精确定位: 如果不进行取模运算,而直接使用原始的 scrollTop 作为起始偏移量,
+      可能会导致第一个渲染的列表项出现在视窗中间或其他位置,而不是从视窗顶部开始渲染。
+      通过取模运算,我们可以确保第一个渲染的列表项总是从视窗顶部开始,提高了定位的精确性
+      */
       this.startOffset = scrollTop - (scrollTop % this.rowHeight);
-      console.log(this.startOffset, "this.startOffset");
       this.$emit("update:visibleRange", {
         startIndex: this.startIndex,
         endIndex: this.endIndex,
