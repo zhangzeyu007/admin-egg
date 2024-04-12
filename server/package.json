@@ -13,6 +13,7 @@
     "egg-mongoose": "^3.3.1",
     "egg-validate": "^2.0.2",
     "egg-view-vue": "^1.0.0",
+    "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^9.0.0",
     "jsonwebtoken": "^8.5.1",
     "md5": "^2.3.0",

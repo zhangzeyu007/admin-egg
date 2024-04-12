@@ -142,6 +142,12 @@ export default {
               path: "aiqiyi",
               icon: "changyonglogo32",
             },
+            {
+              id: "403",
+              authName: "视频上传",
+              path: "video",
+              icon: "changyonglogo32",
+            },
           ],
         },
         {

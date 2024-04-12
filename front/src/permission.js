@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2021-03-08 16:45:30
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-03-25 16:52:21
+ * @LastEditTime: 2024-04-11 19:01:04
  * @FilePath: \admin-egg\front\src\permission.js
  */
 /**
@@ -49,7 +49,7 @@ router.beforeEach(async (to, from, next) => {
             "permission/generateRoutes",
             roles
           );
-
+          console.log(accessRoutes);
           // 添加路由
           router.addRoutes(accessRoutes);
 
