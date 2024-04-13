@@ -13,10 +13,10 @@ const routes = [
     path: "/video",
     name: "video",
     meta: {
-      title: "视频上传",
+      title: "抖音创作工具",
       roles: [1, 2, 3],
     },
-    component: () => import("@/views/video/Aiqiyi.vue"),
+    component: () => import("@/views/dou/video.vue"),
   },
 ];
 

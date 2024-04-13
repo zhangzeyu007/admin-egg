@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2021-03-08 16:45:31
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-04-01 12:46:55
+ * @LastEditTime: 2024-04-13 19:13:20
  * @FilePath: \admin-egg\server\config\config.default.js
  */
 /* eslint valid-jsdoc: "off" */
@@ -14,7 +14,6 @@
  * @param {Egg.EggAppInfo} appInfo app info
  */
 const path = require("path");
-// const vueSSR = require("../app/middleware/vuessr.js");
 
 module.exports = (appInfo) => {
   /**
@@ -42,10 +41,6 @@ module.exports = (appInfo) => {
   };
   // 中间件配置
   config.middleware = [];
-
-  // config.vueSSR = {
-  //   renderFunction: path.join(appInfo.baseDir, "app/web/entry-server.js"),
-  // };
 
   // eggjs 跨域配置
   config.cors = {

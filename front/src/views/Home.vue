@@ -144,7 +144,7 @@ export default {
             },
             {
               id: "403",
-              authName: "视频上传",
+              authName: "抖音创作工具",
               path: "video",
               icon: "changyonglogo32",
             },
