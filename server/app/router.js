@@ -51,13 +51,4 @@ module.exports = (app) => {
 
   // SSR 服务端渲染
   router.post("/editor/ssr", controller.editor.getEditorList);
-  app.get("/ssr", app.middlewares.vuessr(), async (ctx) => {
-    try {
-      const html = await ctx.state.renderVueApp();
-      ctx.body = html;
-    } catch (e) {
-      ctx.body = "Render error";
-      app.coreLogger.error(e);
-    }
-  });
 };

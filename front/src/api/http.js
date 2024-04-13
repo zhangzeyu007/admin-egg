@@ -20,7 +20,7 @@ switch (process.env.NODE_ENV) {
 /**
  * 设置超时时间
  */
-axios.defaults.timeout = 10000;
+axios.defaults.timeout = 10000000;
 
 /**
  * 跨域是否允许携带凭证

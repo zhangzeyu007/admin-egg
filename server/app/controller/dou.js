@@ -1,8 +1,10 @@
 "use strict";
-
+const fs = require("fs");
+const path = require("path");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const BaseController = require("./base");
+const puppeteer = require("puppeteer");
 
 const sourseRule = {
   url: { required: true, type: "string" },
@@ -18,46 +20,39 @@ class VideoController extends BaseController {
     }
     // 组装参数
     const { url } = ctx.request.body;
-
-    const response = await axios.get(url, {
-      maxRedirects: 0,
-    });
-
-    // if (response.status === 301 || response.status === 302) {
-    //   const redirectUrl = response.headers.location;
-    //   // 发送新的请求到重定向后的 URL
-    //   const redirectResponse = await axios.get(redirectUrl);
-    //   // 处理重定向响应
-    //   const html = redirectResponse.data;
-    //   // ... 继续解析 HTML 获取视频信息
-    //   console.log(html, "结果");
-    //   extractVideoInfo(html);
-    //   console.log("哈哈哈哈哈哈");
-    // }
-
-    function extractVideoInfo(html) {
-      const $ = cheerio.load(html);
-      const scriptTag = $('script[id="__NEXT_DATA__"]');
-      const jsonData = scriptTag.html();
-      const data = JSON.parse(jsonData).props.pageProps;
-      const videoInfo = {
-        caption: data.videoData.itemInfos.text,
-        videoUrl: data.videoData.itemInfos.video.urls[0],
-        // ... 提取其他视频信息
-      };
-      return videoInfo;
+    console.log(url, "地址");
+    try {
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+      await page.setDefaultNavigationTimeout(60000);
+      console.log("开启爬虫");
+      await page.goto(url);
+      console.log("开始解析");
+      // 获取页面 HTML 结构
+      const videoPlayerSelector = ".xg-video-container"; // 根据实际情况修改选择器
+      await page.waitForSelector(videoPlayerSelector);
+      const html = await page.content();
+      console.log("html获取成功");
+      // 将 HTML 写入文本文件
+      // const filePath = path.join(__dirname, "page.html");
+      // fs.writeFileSync(filePath, html);
+      // 获取所有 <source> 标签的 src 属性值
+      const sourceSrcPattern = /<source\s+(?:class="[^"]*")?\s+src="([^"]+)"/g;
+      const srcMatches = html.matchAll(sourceSrcPattern);
+      const srcValues = [...srcMatches].map((match) => match[1]);
+      console.log(srcValues, "srcValues");
+      const videoSrcPattern = /^\/\/www\.douyin\.com\/aweme\/v1\/play\/\?/;
+      const videoSrcs = srcValues.filter((src) => videoSrcPattern.test(src));
+      // 筛选出符合格式的视频地址
+      console.log("视频地址:", videoSrcs[0]);
+      await browser.close();
+    } catch (error) {
+      console.log("----" + error + "-----");
+      ctx.status = 500;
+      ctx.body = "下载视频失败";
     }
-
-    // try {
-    // } catch (error) {
-    //   // console.log("----" + error + "-----");
-    //   ctx.status = 500;
-    //   ctx.body = "下载视频失败";
-    // }
-
-    // ctx.status = result.status;
-    // ctx.set(result.headers);
-    // ctx.body = response;
+    ctx.status = 200;
+    ctx.body = videoSrcs[0];
   }
 }
 module.exports = VideoController;

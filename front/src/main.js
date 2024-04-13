@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2021-03-08 16:45:30
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-04-01 15:59:25
+ * @LastEditTime: 2024-04-13 21:56:22
  * @FilePath: \admin-egg\front\src\main.js
  */
 import Vue from "vue";
@@ -17,7 +17,6 @@ import "./static/icons/index.js";
 import api from "./api/api.js";
 import "element-ui/lib/theme-chalk/index.css";
 import "./permission";
-import "./entry-client.js";
 
 Vue.use(ElementUI);
 
