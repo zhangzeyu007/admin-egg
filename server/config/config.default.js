@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2021-03-08 16:45:31
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-04-14 13:03:23
+ * @LastEditTime: 2024-04-14 13:43:30
  * @FilePath: \admin-egg\server\config\config.default.js
  */
 /* eslint valid-jsdoc: "off" */
@@ -44,7 +44,7 @@ module.exports = (appInfo) => {
 
   // eggjs 跨域配置
   config.cors = {
-    origin: "http://localhost:8080", // 表示允许的源
+    origin: "*", // 表示允许的源
     allowMethods: "GET,HEAD,PUT,POST", // 表示允许的http请求方式
     credentials: true, // 开启认证
   };

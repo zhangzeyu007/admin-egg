@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2021-03-08 16:45:31
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-04-14 13:04:20
+ * @LastEditTime: 2024-04-14 14:26:42
  * @FilePath: \admin-egg\server\app\router.js
  */
 "use strict";
@@ -48,7 +48,7 @@ module.exports = (app) => {
   router.post("/video/getvideosourse", jwt, controller.video.getVideoSourse);
   // 抖音工具
   router.post("/dou/getvideourl", controller.dou.getvideourl);
-  io.of("/").route("message", io.controller.client.startIo);
+  io.of("/").route("message", io.controller.client.getvideourl);
   // console.log(io, "打印");
 
   // SSR 服务端渲染
