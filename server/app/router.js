@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2021-03-08 16:45:31
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-04-13 18:04:16
+ * @LastEditTime: 2024-04-14 13:04:20
  * @FilePath: \admin-egg\server\app\router.js
  */
 "use strict";
@@ -13,7 +13,7 @@
  */
 
 module.exports = (app) => {
-  const { router, controller } = app;
+  const { router, controller, io } = app;
   const jwt = app.middleware.jwt({ app });
   // 用户
   router.post("/user/login", controller.user.Login);
@@ -48,6 +48,8 @@ module.exports = (app) => {
   router.post("/video/getvideosourse", jwt, controller.video.getVideoSourse);
   // 抖音工具
   router.post("/dou/getvideourl", controller.dou.getvideourl);
+  io.of("/").route("message", io.controller.client.startIo);
+  // console.log(io, "打印");
 
   // SSR 服务端渲染
   router.post("/editor/ssr", controller.editor.getEditorList);

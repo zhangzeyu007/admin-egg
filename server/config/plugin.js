@@ -33,3 +33,8 @@ exports.bcrypt = {
   enable: true,
   package: "egg-bcrypt",
 };
+
+exports.io = {
+  enable: true,
+  package: "egg-socket.io",
+};

@@ -3,7 +3,7 @@
  * @Author: 张泽雨
  * @Date: 2021-03-08 16:45:31
  * @LastEditors: 张泽雨
- * @LastEditTime: 2024-04-13 19:13:20
+ * @LastEditTime: 2024-04-14 13:03:23
  * @FilePath: \admin-egg\server\config\config.default.js
  */
 /* eslint valid-jsdoc: "off" */
@@ -61,6 +61,18 @@ module.exports = (appInfo) => {
   config.multipart = {
     mode: "file",
     whitelist: () => true,
+  };
+
+  config.io = {
+    init: {
+      wsEngine: "ws",
+    }, // 传递给 Socket.IO 的初始化参数
+    namespace: {
+      "/": {
+        connectionMiddleware: ["auth"], // 连接中间件列表
+        packetMiddleware: [], // 数据包中间件列表
+      },
+    },
   };
 
   config.UPLOAD_DIR = path.resolve(__dirname, "..", "app/public");

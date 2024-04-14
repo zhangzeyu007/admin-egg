@@ -13,6 +13,7 @@
     "egg-bcrypt": "^1.1.0",
     "egg-cors": "^2.2.3",
     "egg-mongoose": "^3.3.1",
+    "egg-socket.io": "^4.1.6",
     "egg-validate": "^2.0.2",
     "egg-view-vue": "^1.0.0",
     "fluent-ffmpeg": "^2.1.2",
